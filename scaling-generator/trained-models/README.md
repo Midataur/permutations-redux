@@ -1,0 +1,1 @@
+Replace the model folder in scaling generator with this folder and swap out config.py with the relevant file (file must still be named config.py). Torn is the general transpositions one, elem is the elementary one.

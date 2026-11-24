@@ -1,0 +1,6 @@
+Here's some instructions on how to navigate this repository:
+1. All the data generation code is in fast-data-generation
+2. All the ML related code is in scaling-generator.
+3. In scaling generator there is a folder called trained models. It contains the two trained models in the paper, as well as a file called README.md with some more instructions.
+
+Note: elem-partitioned-long-boosted-1 is the elementary tranposition model from the paper. torn-bigger-13 is the general transposition model.

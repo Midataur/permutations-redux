@@ -1,0 +1,16 @@
+1. saved pictures (commit dcb73d1), decoded and compared with cos(position_embedding) of the checkpoint
+   elem-partitioned-long-boosted-1: correlation 0.9999, max |difference| 0.005
+   torn-bigger-13: correlation 1.0000, max |difference| 0.005
+
+2. square heatmaps in the notebook outputs, correlation with the checkpoint (all entries / off-band |i-j|>6, inputs only)
+   fdefb8c cell 11 (exec 21): 136x136  0.799 / 0.372
+   5863de5 cell 11 (exec 13): 136x136  0.898 / 0.799
+   f262ca2 cell 12 (exec 3): 50x50  1.000
+   f262ca2 cell 28: (652, 652), no matching checkpoint
+   dcb73d1 cell 12 (exec 3): 50x50  1.000
+   dcb73d1 cell 28 (exec 8): 136x136  0.534 / -0.004
+
+3. block boundaries of the 136x136 matrix (the saved picture = this matrix)
+   cosine between neighbouring positions (i, i+1) at the lowest values: [(119, 0.063), (125, 0.051), (127, 0.081)]
+   rows 60-119 compared over columns 0-52 (always off the diagonal): 1 - corr(row k, row k+1); median 0.63; largest: [(73, 1.07), (72, 1.05), (119, 0.9)]
+   (rows 72 and 73 are transitional; the matrix splits into [0,72) and [72,120) for the word positions, plus the 16 output positions [120,136))

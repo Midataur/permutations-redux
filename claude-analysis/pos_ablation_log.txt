@@ -1,0 +1,20 @@
+identity: accuracy 1.0000
+[  10s] within block 1, adjacent  [0,24)<->[24,48): slots 1723  original 0.062  rearranged 0.929  neither 0.010
+[  15s] within block 1, far  [0,24)<->[48,72): slots 1944  original 0.060  rearranged 0.933  neither 0.008
+[  20s] within block 2, adjacent  [72,96)<->[96,120): slots 1751  original 0.057  rearranged 0.936  neither 0.007
+[  25s] across 72, adjacent  [48,72)<->[72,96): slots 1766  original 0.062  rearranged 0.929  neither 0.008
+[  30s] across 72, far  [24,48)<->[96,120): slots 1953  original 0.060  rearranged 0.926  neither 0.013
+[  35s] across 72, far  [0,24)<->[96,120): slots 2024  original 0.059  rearranged 0.926  neither 0.015
+[  40s] adjacent swap (0,1): original 0.10256410256410256, rearranged 0.8717948717948718, n 39
+[  91s] adjacent swap (10,11): original 0.031746031746031744, rearranged 0.9682539682539683, n 63
+[ 142s] adjacent swap (20,21): original 0.09090909090909091, rearranged 0.9090909090909091, n 33
+[ 194s] adjacent swap (30,31): original 0.13333333333333333, rearranged 0.8666666666666667, n 45
+[ 245s] adjacent swap (40,41): original 0.047619047619047616, rearranged 0.9523809523809523, n 42
+[ 297s] adjacent swap (50,51): original 0.06349206349206349, rearranged 0.9365079365079365, n 63
+[ 349s] adjacent swap (60,61): original 0.07575757575757576, rearranged 0.9242424242424242, n 66
+[ 402s] adjacent swap (70,71): original 0.058823529411764705, rearranged 0.9411764705882353, n 51
+[ 456s] adjacent swap (80,81): original 0.05263157894736842, rearranged 0.9298245614035088, n 57
+[ 509s] adjacent swap (90,91): original 0.017543859649122806, rearranged 0.9824561403508771, n 57
+[ 561s] adjacent swap (100,101): original 0.06060606060606061, rearranged 0.9393939393939394, n 33
+[ 615s] adjacent swap (110,111): original 0.07407407407407407, rearranged 0.9259259259259259, n 54
+DONE

@@ -1,0 +1,50 @@
+train: words (400000, 120), perms (400000, 16); test: words (2000, 120), perms (2000, 16)
+token range train 0..15, test 0..15
+token frequencies  train: [0.0205 0.0394 0.057  0.0686 0.0765 0.0814 0.085  0.0854 0.0854 0.0854
+ 0.0805 0.0736 0.0637 0.0508 0.0313 0.0156]
+token frequencies  test : [0.0623 0.0611 0.063  0.0634 0.062  0.0623 0.0621 0.0622 0.0633 0.0617
+ 0.0628 0.062  0.0626 0.0633 0.063  0.0627]
+
+1. convention search on the first 3000 training rows (fraction of rows whose stored perm is reproduced):
+   token t swaps (t+-1, t+0), mode=positions: 1.0000
+   token t swaps (t+-1, t+0), mode=values   : 0.0193
+   token t swaps (t+0, t+1), mode=positions: 0.0003
+   token t swaps (t+0, t+1), mode=values   : 0.0003
+   -> using off=-1, mode=positions (match 1.0000)
+   identity tokens under this convention: [0]
+
+2. per-position token histogram (stationarity)
+   train: chi-square per position (dof 15): mean 13.7, z-scores min -1.90 max 1.64; positions with |z|>3: []
+      z at positions 40..50: [ 0.09  1.13 -0.29 -0.92 -0.09  0.03 -0.91 -0.14 -0.51  0.67  1.45]
+      total drift over the word, per token (frequency change first->last position): [ 0.     -0.0001  0.0001  0.0001  0.0002 -0.0001 -0.     -0.     -0.0001
+ -0.     -0.      0.0001  0.0001 -0.0001  0.     -0.0001]
+   test: chi-square per position (dof 15): mean 15.2, z-scores min -1.89 max 3.32; positions with |z|>3: [np.int64(14)]
+      z at positions 40..50: [-0.68  0.41  0.99 -1.84 -0.46 -1.4   0.1   2.56  0.18  0.21 -0.99]
+      total drift over the word, per token (frequency change first->last position): [ 0.0001  0.0006 -0.0007  0.0026 -0.0008  0.0013 -0.0016 -0.0012  0.0014
+ -0.0011  0.0002 -0.003   0.0023  0.0013  0.0007 -0.0022]
+
+3. prefix statistics by position (mean over rows)
+   train: Coxeter length after i letters, i = 0,10,20,30,40,45,50,60,80,100,120:
+       {0: 0.0, 10: 5.01, 20: 7.3, 30: 8.83, 40: 9.98, 45: 10.46, 50: 10.88, 60: 11.62, 80: 12.73, 100: 13.6, 120: 14.28}
+      distinct tokens seen after i letters (10,20,45,120): [5.8, 7.53, 8.46, 8.61]
+      largest |second difference| of mean length: at i=1 (0.2701); value near 45: [-0.0081 -0.004   0.0045 -0.0061  0.0094]
+      mean length at i=45: 10.46; max length of the group touched: 
+   test: Coxeter length after i letters, i = 0,10,20,30,40,45,50,60,80,100,120:
+       {0: 0.0, 10: 6.27, 20: 9.82, 30: 12.64, 40: 14.79, 45: 15.82, 50: 16.85, 60: 18.51, 80: 21.59, 100: 24.14, 120: 26.46}
+      distinct tokens seen after i letters (10,20,45,120): [7.62, 11.55, 15.09, 15.99]
+      largest |second difference| of mean length: at i=1 (0.1270); value near 45: [ 0.0105 -0.021  -0.0075  0.0155  0.015 ]
+      mean length at i=45: 15.82; max length of the group touched: 
+
+4. row structure (is the file ordered / which windows are used?)
+   window span (max-min+1 of tokens used) over rows:  {np.int64(4): np.int64(1615), np.int64(5): np.int64(10478), np.int64(6): np.int64(36220), np.int64(7): np.int64(57632), np.int64(8): np.int64(38151), np.int64(9): np.int64(35339), np.int64(10): np.int64(112379), np.int64(11): np.int64(29193), np.int64(12): np.int64(25172), np.int64(13): np.int64(20882), np.int64(14): np.int64(16080), np.int64(15): np.int64(11148), np.int64(16): np.int64(5711)}
+   number of distinct tokens per row (first 50000):   {np.int64(4): np.int64(216), np.int64(5): np.int64(1330), np.int64(6): np.int64(4558), np.int64(7): np.int64(8974), np.int64(8): np.int64(6218), np.int64(9): np.int64(4988), np.int64(10): np.int64(23716)}
+   P(consecutive rows have the same span) = 0.140  (iid rows would give 0.140)
+   first 12 rows: (min token, max token): [(1, 10), (4, 11), (8, 14), (4, 15), (0, 13), (3, 10), (0, 9), (8, 15), (0, 9), (3, 12), (0, 13), (7, 13)]
+   moved points of the output perm:  {np.int64(0): np.int64(114), np.int64(2): np.int64(279), np.int64(3): np.int64(4210), np.int64(4): np.int64(7255), np.int64(5): np.int64(21887), np.int64(6): np.int64(44845), np.int64(7): np.int64(61312), np.int64(8): np.int64(71944), np.int64(9): np.int64(72948), np.int64(10): np.int64(67764), np.int64(11): np.int64(40277), np.int64(12): np.int64(6965), np.int64(13): np.int64(200)}
+
+5. stored permutations and consistency between files
+   train: Coxeter length of the stored output perm: mean 14.34, max 42, P(length >= 45) = 0.00000; moved points: mean 8.22, max 13
+   test: Coxeter length of the stored output perm: mean 26.46, max 48, P(length >= 45) = 0.00350; moved points: mean 13.83, max 16
+   token histograms of file 1 vs file 2: max abs difference 0.00037
+   full window-span histogram: {np.int64(4): np.int64(1615), np.int64(5): np.int64(10478), np.int64(6): np.int64(36220), np.int64(7): np.int64(57632), np.int64(8): np.int64(38151), np.int64(9): np.int64(35339), np.int64(10): np.int64(112379), np.int64(11): np.int64(29193), np.int64(12): np.int64(25172), np.int64(13): np.int64(20882), np.int64(14): np.int64(16080), np.int64(15): np.int64(11148), np.int64(16): np.int64(5711)}
+   full moved-points histogram of train outputs: {np.int64(0): np.int64(114), np.int64(2): np.int64(279), np.int64(3): np.int64(4210), np.int64(4): np.int64(7255), np.int64(5): np.int64(21887), np.int64(6): np.int64(44845), np.int64(7): np.int64(61312), np.int64(8): np.int64(71944), np.int64(9): np.int64(72948), np.int64(10): np.int64(67764), np.int64(11): np.int64(40277), np.int64(12): np.int64(6965), np.int64(13): np.int64(200)}

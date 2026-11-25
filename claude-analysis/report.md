@@ -70,9 +70,20 @@ Code, raw results and the figures are in this folder; commands to reproduce are 
 ## 3. Results
 
 ### 3.1 The pointer-chase picture (used throughout)
-Reading a word right to left, output slot $k$ is
-$$p_k = t_1\bigl(t_2(\cdots t_N(k))\bigr).$$
-Start a "pointer" at $k$. At each letter $s_{a,b}$, if the pointer is at $a$ it moves to $b$ (and vice versa); otherwise it stays. A letter that moves it is a **hop**. For each slot I record $L$ (number of hops) and $s$ (number of distinct points visited, including the start). I check on every word that the pointer's final position equals the true $p_k$.
+
+*What a word means.* A word is a sequence of $N$ letters $t_1,\dots,t_N$ (written here left to right; the data generator indexes them $0,\dots,N-1$). Each letter is a transposition $s_{a,b}$ of two points $a\ne b$ among $n$ points, or the identity (a letter with $a=b$, which does nothing). The generator starts from the arrangement $[0,1,\dots,n-1]$ and applies the letters in order from the left end, each one swapping the entries at positions $a$ and $b$. The model's target for output slot $k$ is the entry $p_k$ of the final arrangement. I checked this in the generator (`fast-data-gen/src/main.rs`, `get_permutation`) and in `permdata.py::apply_words`, which uses the same convention.
+
+*Why the chase runs right to left.* The last letter is the last change to the arrangement, so the entry that ends in slot $k$ sat, just before that letter, at the place the last letter sends $k$ to: at $k$ itself if the letter does not touch $k$, and at the other endpoint if it does. Repeating this for the second-to-last letter, and so on, walks back through the word from the right end to the left end. The entry found in the initial arrangement is $p_k$, because the initial arrangement is the identity. In formula,
+$$p_k = t_1\bigl(t_2(\cdots t_N(k))\bigr),$$
+where each $t_j$ is read as the map that exchanges $a$ and $b$ and fixes every other point, and the innermost map $t_N$ acts first.
+
+*The pointer.* So for each slot $k$ I place a "pointer" at $k$ and read the word from the right end. At each letter $s_{a,b}$, if the pointer is at $a$ it moves to $b$, if it is at $b$ it moves to $a$, and otherwise it stays. The point where it stops after the left-most letter is $p_k$. Two things follow at once:
+- A letter that moves the pointer is a **hop** (a *hop letter*); the other letters are irrelevant to this slot. Different slots have different hop letters, and one letter can be a hop for several slots.
+- Only the hop letters decide $p_k$. If the pointer makes $L$ hops it visits at most $L+1$ distinct points, so the answer is determined by $L$ letters and nothing else in the word.
+
+*Worked example.* Take $n=13$ and the six letters (left to right) $\{9,12\}$, $\{4,5\}$, $\{1,9\}$, $\{2,8\}$, $\{7,1\}$, $\{3,7\}$, and slot $k=3$. Reading from the right: $\{3,7\}$ moves the pointer $3\to7$; $\{7,1\}$ moves it $7\to1$; $\{2,8\}$ does not touch point 1, so nothing happens; $\{1,9\}$ moves it $1\to9$; $\{4,5\}$ does nothing; $\{9,12\}$ moves it $9\to12$. So $p_3=12$, with $L=4$ hops and $s=5$ distinct points ($3,7,1,9,12$). As a check in the generator's own terms, swapping left to right carries the entry 12 along the same path backwards, $12\to9\to1\to7\to3$, and it ends in slot 3.
+
+*What I record.* For each slot I record $L$ (the number of hops) and $s$ (the number of distinct points visited, including the start). When I number the hop letters $1,\dots,L$ (§3.10), hop 1 is the one the pointer meets first, the right-most. On every word I check that the pointer's final position equals the true $p_k$. The elementary model (§3.8) uses letters that swap neighbouring points $i$ and $i-1$; the order of application and the chase are the same.
 
 ### 3.2 Stratified accuracy on natural words
 Source: `strat_summary.txt` (20,000 words, 500,000 slots, teacher-forced).

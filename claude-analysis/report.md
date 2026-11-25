@@ -3,7 +3,12 @@
 Run on 2026-11-25. Everything here uses the trained checkpoints as-is, with no retraining. Section 2.3 also uses one real training file and the real test file.
 Code, raw results and the figures are in this folder; commands to reproduce are in §7.
 
-**Version history.** Version 1: baseline, stratified accuracy, planted-chase tests and Gram spectrum (§2, §3.1–3.5). Version 2: layer-wise probes, irrelevance interventions and the elementary-transposition model (§3.6–3.8). Version 3: which model produced Figure 5b, and where its blocks are (§3.8). Version 4 (this one): the position-embedding ablation, Test 6b (§3.8).
+**Version history.**
+
+1. Version 1: baseline, stratified accuracy, planted-chase tests and Gram spectrum (§2, §3.1–3.5).
+2. Version 2: layer-wise probes, irrelevance interventions and the elementary-transposition model (§3.6–3.8).
+3. Version 3: which model produced Figure 5b, and where its blocks are (§3.8).
+4. Version 4 (this one): the position-embedding ablation, Test 6b (§3.8).
 
 **What is new in this version (version 4).** The markers **[NEW]** and **[UPDATED]** show only what changed since version 3. Text without a marker is unchanged from version 3. Each new version clears the previous version's markers.
 

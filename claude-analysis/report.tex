@@ -36,7 +36,7 @@
 \usepackage[headsepline,footsepline=false,plainheadsepline=false]{scrlayer-scrpage}
 \clearpairofpagestyles
 \ihead{\sffamily\small Inference-only tests on \texttt{torn-bigger-13}}
-\ohead{\sffamily\small Version 5 \textperiodcentered{} 26 November 2026}
+\ohead{\sffamily\small Version 6 \textperiodcentered{} 26 November 2026}
 \cfoot*{\sffamily\small\pagemark}
 
 \setkomafont{disposition}{\sffamily\bfseries\color{accent}}
@@ -86,12 +86,12 @@
   left=10pt,right=10pt,top=6pt,bottom=6pt,before skip=10pt,after skip=10pt}
 
 \usepackage[colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent,bookmarksnumbered=true,
-  pdftitle={Inference-only tests on torn-bigger-13 (general transpositions, S25)},pdfsubject={Version 5}]{hyperref}
+  pdftitle={Inference-only tests on torn-bigger-13 (general transpositions, S25)},pdfsubject={Version 6}]{hyperref}
 
 \begin{document}
 
 \begin{flushleft}
-{\sffamily\bfseries\color{accent}\small\MakeUppercase{Version 5}\hspace{0.7em}\textcolor{rulegray}{\textperiodcentered}\hspace{0.7em}\textcolor{rulegray}{26 November 2026}\par}
+{\sffamily\bfseries\color{accent}\small\MakeUppercase{Version 6}\hspace{0.7em}\textcolor{rulegray}{\textperiodcentered}\hspace{0.7em}\textcolor{rulegray}{26 November 2026}\par}
 \vspace{8pt}
 {\sffamily\bfseries\fontsize{24}{28}\selectfont Inference-only tests on\par}
 \vspace{2pt}
@@ -99,14 +99,14 @@
 \vspace{6pt}
 {\sffamily\large (general transpositions, $S_{25}$)\par}
 \vspace{6pt}
-{\sffamily\color{rulegray}Word-position probes and patching; the training experiment\par}
+{\sffamily\color{rulegray}Probes and patching on the elementary model\par}
 \vspace{6pt}
 {\color{accent}\rule{\linewidth}{1.1pt}}
 \end{flushleft}
 
-Run on 2026-11-25. Everything here uses the trained checkpoints as-is, with no retraining. Section~\ref{sec:2.3}
-also uses one real training file and the real test file. Code, raw results and the figures are in this folder;
-commands to reproduce are in \S\,\ref{sec:7}.
+Run on 2026-11-25 and 2026-11-26 (\S\,\ref{sec:3.11}). Everything here uses the trained checkpoints as-is, with
+no retraining. Section~\ref{sec:2.3} also uses one real training file and the real test file. Code, raw results
+and the figures are in this folder; commands to reproduce are in \S\,\ref{sec:7}.
 
 \begin{frontbox}
 \lead{Version history.}
@@ -118,25 +118,28 @@ commands to reproduce are in \S\,\ref{sec:7}.
   (\S\,\ref{sec:3.6}–\ref{sec:3.8}).
 \item Version 3: which model produced Figure 5b, and where its blocks are (\S\,\ref{sec:3.8}).
 \item Version 4: the position-embedding ablation, Test 6b (\S\,\ref{sec:3.8}).
-\item Version 5 (this one): probes and activation patching at the word positions (\S\,\ref{sec:3.9},
-  \S\,\ref{sec:3.10}), and the design of the training experiment for the Spartan cluster (\S\,\ref{sec:6.1};
-  code and README in \code{../\allowbreak{}hpc-\allowbreak{}experiment/}, not yet run).
+\item Version 5: probes and activation patching at the word positions (\S\,\ref{sec:3.9}, \S\,\ref{sec:3.10}),
+  and the design of the training experiment for the Spartan cluster (\S\,\ref{sec:6.1}; code and README in
+  \code{../\allowbreak{}hpc-\allowbreak{}experiment/}).
+\item Version 6 (this one): the same probes and patching on the elementary model (\S\,\ref{sec:3.11}).
 \end{enumerate}
 
-\lead{What is new in this version (version 5).} The markers \textbf{\tagnew{}} and \textbf{\tagupd{}} show only
-what changed since version 4. Text without a marker is unchanged from version 4. Each new version clears the
+\lead{What is new in this version (version 6).} The markers \textbf{\tagnew{}} and \textbf{\tagupd{}} show only
+what changed since version 5. Text without a marker is unchanged from version 5. Each new version clears the
 previous version’s markers.
 
 \begin{itemize}
-\item \lead{\S\,\ref{sec:3.9} \tagnew{}:} probes at the 25 word positions. \textbf{\S\,\ref{sec:3.10}
-  \tagnew{}:} activation patching at the word positions.
-\item \lead{\S\,\ref{sec:1} \tagupd{}:} items 6, 9 and 12 revised; new items 15, 16 and 17.
-\item \lead{\S\,\ref{sec:4} \tagupd{}:} two bullets revised (the second now has a fourth point): I no longer
-  lean towards “coverage” over “depth”.
-\item \lead{\S\,\ref{sec:5} \tagupd{}:} new item 8 (that change of lean).
-\item \lead{\S\,\ref{sec:6} \tagupd{}, with new \S\,\ref{sec:6.1} \tagnew{}:} the two tests are no longer
-  pending; the training experiment is designed, with predictions written down.
-\item \lead{\S\,\ref{sec:7} \tagupd{}:} new scripts, results files and figure; the experiment package.
+\item \lead{\S\,\ref{sec:3.11} \tagnew{}:} probes and activation patching at the word positions of the
+  elementary model, which follows chains of up to 80 hops.
+\item \lead{\S\,\ref{sec:3.9} \tagupd{}:} one sentence added to the second bullet of “What it shows”, pointing
+  to \S\,\ref{sec:3.11}.
+\item \lead{\S\,\ref{sec:1} \tagupd{}:} items 6 and 12 have a sentence added; new item 18.
+\item \lead{\S\,\ref{sec:4} \tagupd{}:} one sentence and a fifth point added to the bullets on depth versus
+  coverage.
+\item \lead{\S\,\ref{sec:5} \tagupd{}:} new item 9 (what \S\,\ref{sec:3.11} does to the argument I drew from
+  \S\,\ref{sec:3.9}).
+\item \lead{\S\,\ref{sec:6} \tagupd{}:} the elementary tests are done, and the open tests are revised.
+\item \lead{\S\,\ref{sec:7} \tagupd{}:} new scripts, results files and figure.
 \end{itemize}
 \end{frontbox}
 
@@ -171,11 +174,12 @@ previous version’s markers.
   were 99.8–100\% correct. In the fixed-hop sweep (\S\,\ref{sec:3.3}), crossing from $s\le10$ to $s\ge11$ costs
   a small, measurable amount, about 2 points at $L=16$ and 4 points at $L=20$ (standard errors about 1),
   compared with 30–35 points for going from $L=16$ to $L=20$.
-\item \lead{\tagupd{} Unresolved: why hop count matters.} Either the 5-layer network cannot follow longer
-  chains, or long chains are too rare in training, or both. The data is consistent with both
-  (\S\,\ref{sec:3.3}). Tests 1, 2 and 6a (\S\,\ref{sec:3.6}–\ref{sec:3.8}) narrow this but do not settle it, and
-  the tests at the word positions (\S\,\ref{sec:3.9}–\ref{sec:3.10}, items 15 and 16) make a depth limit a
-  serious candidate; see items 12, 15 and 16.
+\item \lead{Unresolved: why hop count matters.} Either the 5-layer network cannot follow longer chains, or long
+  chains are too rare in training, or both. The data is consistent with both (\S\,\ref{sec:3.3}). Tests 1, 2 and
+  6a (\S\,\ref{sec:3.6}–\ref{sec:3.8}) narrow this but do not settle it, and the tests at the word positions
+  (\S\,\ref{sec:3.9}–\ref{sec:3.10}, items 15 and 16) make a depth limit a serious candidate; see items 12, 15
+  and 16. \textbf{\tagupd{}} Item 18 adds that the elementary model, which follows 80 hops, shows the same
+  word-position staircase.
 \item \lead{Token embeddings are close to $S_{25}$-invariant} (\S\,\ref{sec:3.5}), but one of my earlier
   predictions about their spectrum failed.
 \item \lead{The training support is $m=10$}, measured from the real training data (\S\,\ref{sec:2.3}). The
@@ -186,8 +190,8 @@ previous version’s markers.
   3, for $r=4$ about 60\% at layers 4–5, and for $8\le r\le L-2$ it is at most 13\% (chance 4\%) in every layer.
   That holds even for $L=8$ and $L=12$, where the model is 100\% correct. The answer itself appears only after
   the last block. So the model does not keep a step-by-step record of the chain at the query position, and there
-  is no staircase of one hop per layer. \textbf{\tagupd{}} Composition at the input positions is probed in
-  \S\,\ref{sec:3.9} (item 15).
+  is no staircase of one hop per layer. Composition at the input positions is probed in \S\,\ref{sec:3.9} (item
+  15).
 \item \lead{Irrelevance interventions (\S\,\ref{sec:3.7}).} For $L\le 12$ and for natural words the prediction
   depends on the hop letters and on nothing else. Replacing every letter that cannot touch the pointer leaves
   the prediction unchanged in 98.1–100\% of 800 words per set, and replacing one hop letter changes it in about
@@ -207,9 +211,10 @@ previous version’s markers.
   The general-transposition model’s cliff at 15–20 hops sits where its own training data ends
   (\S\,\ref{sec:3.3}). That favoured “rare in training” over “five layers cannot do it”, but it was never a
   proof: the two tasks differ (\S\,\ref{sec:3.8}), and I have not trained the general model on longer chains.
-  \textbf{\tagupd{}} The word-position results (items 15 and 16) weaken that lean: chain continuations are built
-  layer by layer, which is how a depth limit would look, so I now treat the two readings as open
-  (\S\,\ref{sec:5} item 8).
+  The word-position results (items 15 and 16) weaken that lean: chain continuations are built layer by layer,
+  which is how a depth limit would look, so I now treat the two readings as open (\S\,\ref{sec:5} item 8).
+  \textbf{\tagupd{}} The elementary model has the same word-position staircase and follows 80 hops (item 18), so
+  the staircase does not by itself separate the two readings.
 \item \lead{Figure 5b (\S\,\ref{sec:3.8}).} The saved picture in the original repo’s
   \code{embedding\_\allowbreak{}pictures/} matches the
   \code{elem-\allowbreak{}partitioned-\allowbreak{}long-\allowbreak{}boosted-\allowbreak{}1} checkpoint in this
@@ -222,7 +227,7 @@ previous version’s markers.
   neither. Swaps that cross the block boundary at 72 behave the same as swaps inside a block (92.6–92.9\%
   against 92.9–93.6\%), so I find no sign that the boundary does anything the model relies on. The model reads
   the order of the letters from these vectors.
-\item \lead{\tagnew{} At the word positions, the continuation of a chain becomes readable one layer at a time
+\item \lead{At the word positions, the continuation of a chain becomes readable one layer at a time
   (\S\,\ref{sec:3.9}).} For a letter $(a,b)$ at word position $t$, the “continuation” of endpoint $a$ is where a
   pointer that leaves the letter at $a$ ends up after the remaining letters to the left. A linear probe trained
   on letters whose chain has $h$ hops still to go decodes it with the following accuracy (chance 4\%): at $h=1$,
@@ -232,24 +237,41 @@ previous version’s markers.
   4–5\% through layer 4 and 74\% at layer 5. The reach grows with depth, roughly 1, 1, 4, 8 and 13 or more hops
   at layers 1 to 5. That is the pattern a log-depth (“pointer-jumping”) composition would give, and it would cap
   five blocks near 16 hops. A probe does not show the algorithm, and the high-$h$ bins come from my planted
-  words only (\S\,\ref{sec:3.9}).
-\item \lead{\tagnew{} Activation patching agrees (\S\,\ref{sec:3.10}).} Corrupt one hop letter of a planted
-  chain ($L=8$, 12 or 16, model right on the clean word) and patch clean activations into the corrupted run. For
-  a middle or last hop, restoring the clean activations at \emph{all word positions} after block 4 brings back
-  the clean answer in every word (1.00 to two decimals in all six conditions), although the query position’s own
-  state was computed from the corrupted word: the late part of the chain reaches the answer through the word
-  positions, read in the last block. For the first hop, restoration falls to 33–51\% when the patch is made
-  after block 2 and to 8–10\% after block 3: the query position has taken in the first hops by then (consistent
-  with \S\,\ref{sec:3.6}). Patching only the letters to the \emph{right} of the corrupted one (read earlier in
-  the chase) restores the answer for a middle hop from layer 3 on (30–38\% after block 3, 72–93\% after block 4)
-  and for the last hop from layer 2 on (43–77\% after block 2, 97–100\% after block 3); patching only the
-  letters to its \emph{left} (read later) restores nothing in any condition. So the corrupted letter’s influence
-  travels towards the letters read before it, the direction in which continuations are built.
-\item \lead{\tagnew{} The training experiment is designed, with predictions written down, and not yet run
+  words only (\S\,\ref{sec:3.9}). \textbf{\tagupd{}} The elementary model shows the same staircase at its word
+  positions and still follows 80 hops (item 18).
+\item \lead{Activation patching agrees (\S\,\ref{sec:3.10}).} Corrupt one hop letter of a planted chain ($L=8$,
+  12 or 16, model right on the clean word) and patch clean activations into the corrupted run. For a middle or
+  last hop, restoring the clean activations at \emph{all word positions} after block 4 brings back the clean
+  answer in every word (1.00 to two decimals in all six conditions), although the query position’s own state was
+  computed from the corrupted word: the late part of the chain reaches the answer through the word positions,
+  read in the last block. For the first hop, restoration falls to 33–51\% when the patch is made after block 2
+  and to 8–10\% after block 3: the query position has taken in the first hops by then (consistent with
+  \S\,\ref{sec:3.6}). Patching only the letters to the \emph{right} of the corrupted one (read earlier in the
+  chase) restores the answer for a middle hop from layer 3 on (30–38\% after block 3, 72–93\% after block 4) and
+  for the last hop from layer 2 on (43–77\% after block 2, 97–100\% after block 3); patching only the letters to
+  its \emph{left} (read later) restores nothing in any condition. So the corrupted letter’s influence travels
+  towards the letters read before it, the direction in which continuations are built.
+\item \lead{The training experiment is designed, with predictions written down, and not yet run
   (\S\,\ref{sec:6.1}).} One Slurm job trains four models in parallel: the control, the same model with planted
   long chains (word support kept at 10 points), an 8-block model on the same data, and the elementary model with
   embedding snapshots during training. It writes one zip. The model matches \code{transformer.\allowbreak{}py}
   to 1e-6 and the data generators match your real training statistics, both tested on CPU only.
+\item \lead{\tagnew{} The elementary model shows the same word-position staircase, and follows 80 hops
+  (\S\,\ref{sec:3.11}).} I ran the tests of \S\,\ref{sec:3.9} and \S\,\ref{sec:3.10} on
+  \code{elem-\allowbreak{}partitioned-\allowbreak{}long-\allowbreak{}boosted-\allowbreak{}1}. On natural words,
+  a probe for the continuation of a chain is clearly above its layer-0 baseline for $h=1$ at layer 1 (86\%
+  against 56\%), $h\le2$ at layer 2, $h\le4$ at layer 3, $h\le8$ at layer 4 (50\% and 45\% at $h=5$–6 and 7–8,
+  against 18\% and 15\%), and only partly up to 12 to 16 at layer 5: about 1, 2, 4, 8 and 12 hops at layers 1 to
+  5, a doubling pattern like the general model’s (1, 1, 4, 8, 13 or more). Yet this model follows chains of 80
+  hops with 99.8\% accuracy (item 11), so a per-position reach of about $2^\ell$ does not by itself cap the hop
+  length, and the argument I drew from \S\,\ref{sec:3.9} for a depth limit in the general model is weaker
+  (\S\,\ref{sec:5} item 9). Patching agrees with \S\,\ref{sec:3.10} where it can be compared: with a middle or
+  last hop corrupted ($L=12$ to 80), restoring all word positions after block 4 brings back the clean answer in
+  every word, and with the first hop corrupted the repair works through layer 3 (0.97–1.00) and fails after
+  block 4, at every $L$. One difference: restoring only the letters read later also repairs a corrupted first or
+  middle hop (0.84 and 0.68 after block 3, $L=40$), which restored nothing in the general model. The probe
+  numbers above $h=16$ exist only in planted words and are confounded with position (\S\,\ref{sec:3.11},
+  Limits).
 \end{enumerate}
 
 % ====================================================================================================
@@ -357,7 +379,7 @@ order of application and the chase are the same.
 \subsection{Stratified accuracy on natural words}\label{sec:3.2}
 Source: \code{strat\_\allowbreak{}summary.\allowbreak{}txt} (20,000 words, 500,000 slots, teacher-forced).
 
-{\small
+{\small\nopagebreak[4]
 \begin{longtable}{@{}l r r@{}}
 \toprule
 \hdr{distinct points $s$} & \hdr{slots} & \hdr{errors} \\
@@ -401,7 +423,7 @@ letters sit at random word positions (“spread”) or in the last $L$ letters (
 
 \begin{figure}[htbp]\centering\includegraphics[width=0.88\linewidth]{fig_accuracy_vs_hops.png}\caption{Planted-chase accuracy against hop count $L$ (top), and the number of training slots with at least $L$ hops, from one real training file scaled to 8M words (bottom). Teacher-forced, 400 words per point, 95\% Wilson intervals.}\end{figure}
 
-{\small
+{\small\nopagebreak[4]
 \begin{longtable}{@{}l r r r l r@{}}
 \toprule
 \hdr{series} & \hdr{$L$} & \hdr{$s$} & \hdr{free-running word} & \hdr{teacher-forced slot [95\% CI]} & \hdr{median logit margin} \\
@@ -456,7 +478,7 @@ inside the training support ($s\le10$) to outside it ($s\ge11$). Script
 \code{run\_\allowbreak{}beyond\_\allowbreak{}support.\allowbreak{}py}, teacher-forced, 1,000 words per cell,
 seed 2027, result in \code{beyond\_\allowbreak{}support\_\allowbreak{}results.\allowbreak{}csv}.
 
-{\small
+{\small\nopagebreak[4]
 \begin{longtable}{@{}r r l r@{}}
 \toprule
 \hdr{$L$} & \hdr{$s$} & \hdr{teacher-forced slot [95\% CI]} & \hdr{median logit margin} \\
@@ -598,7 +620,7 @@ randomly shuffled training labels gave 3.7–4.6\% at layers 0 and 5 in every de
 Probe accuracy in percent, $L=12$, $s=13$ (the model is correct on all 800 test words here, so there is no split
 by outcome):
 
-{\small
+{\small\nopagebreak[4]
 \begin{longtable}{@{}l *{8}{r}@{}}
 \toprule
 \hdr{layer} & \hdr{$x_1$} & \hdr{$x_2$} & \hdr{$x_3$} & \hdr{$x_4$} & \hdr{$x_5$} & \hdr{$x_6$} & \hdr{$x_8$} & \hdr{$x_{12}$ (the answer)} \\
@@ -916,7 +938,7 @@ with the original word’s true outputs as the prefix.
 
 Segment swaps (two segments of 24 positions exchanged; 150 words):
 
-{\small
+{\small\nopagebreak[4]
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{6.0cm} r r r r@{}}
 \toprule
 \hdr{swap} & \hdr{slots} & \hdr{original} & \hdr{rearranged} & \hdr{neither} \\
@@ -956,7 +978,7 @@ slots per pair).
   slots per pair). Teacher forcing may help the model.
 \end{itemize}
 
-\subsection{Probes at the word positions (Test 7) \tagnew{}}\label{sec:3.9}
+\subsection{Probes at the word positions (Test 7)}\label{sec:3.9}
 \begin{figure}[htbp]\centering\includegraphics[width=1.00\linewidth]{fig_input_positions.png}\caption{Left: accuracy (\%) of a linear probe for the continuation of a chain, at the 25 word positions, by layer and by the number of hops $h$ still to go; chance is 4\%. Middle and right: activation patching (\S\,\ref{sec:3.10}) for planted chains of $L=12$ hops; “restored” is the share of words whose answer returns to the clean one.}\end{figure}
 
 \lead{Setup} (\code{run\_\allowbreak{}input\_\allowbreak{}probes.\allowbreak{}py}, results in
@@ -976,7 +998,7 @@ probe on all rows pooled; it was dominated by the many rows where the answer is 
 
 Accuracy (\%) on test rows, chance 4\%:
 
-{\small
+{\small\nopagebreak[4]
 \begin{longtable}{@{}l *{8}{r}@{}}
 \toprule
 \hdr{layer} & \hdr{$h=1$} & \hdr{2} & \hdr{3} & \hdr{4} & \hdr{5–6} & \hdr{7–8} & \hdr{9–12} & \hdr{13–24} \\
@@ -1009,6 +1031,8 @@ and 13–24.
 \item \lead{That is the pattern of log-depth composition, and it is a reason to take a depth limit seriously.}
   With about $2^\ell$ hops at layer $\ell$, five blocks would reach roughly 16 hops, close to where accuracy
   falls (\S\,\ref{sec:3.3}). This is a reading of the pattern; the probe does not show the algorithm.
+  \textbf{\tagupd{}} The elementary model has the same staircase and follows 80 hops (\S\,\ref{sec:3.11}), so
+  the staircase alone is not that reason.
 \item This is also where \S\,\ref{sec:3.6} left a gap: the query position holds the first few pointer states
   only, and the rest of the chain is held here, at the word positions.
 \end{itemize}
@@ -1027,7 +1051,7 @@ and 13–24.
 \end{itemize}
 \end{limbox}
 
-\subsection{Activation patching at the word positions (Test 8) \tagnew{}}\label{sec:3.10}
+\subsection{Activation patching at the word positions (Test 8)}\label{sec:3.10}
 \lead{Setup} (\code{run\_\allowbreak{}patching.\allowbreak{}py}, results in
 \code{patching\_\allowbreak{}results.\allowbreak{}json}, log in
 \code{patching\_\allowbreak{}log.\allowbreak{}txt}).
@@ -1084,9 +1108,10 @@ reads the word positions; it is the unpatched run, restored in 2–8\% of words.
 for chains with $L=8$, 12 and 16, with 143–160 words each. Every table cell below is the share of those words
 that are restored; the columns are the layer $\ell$ at which the patch is made (0–4).
 
-Patching \textbf{all 25 word positions} at layer $\ell$ (columns 0–4), by corrupted hop:
+\Needspace*{16\baselineskip}Patching \textbf{all 25 word positions} at layer $\ell$ (columns 0–4), by corrupted
+hop:
 
-{\small
+{\small\nopagebreak[4]
 \begin{longtable}{@{}r l r r *{5}{r}@{}}
 \toprule
 & & & & \multicolumn{5}{c}{\hdr{restored when patching at layer $\ell$}} \\
@@ -1102,22 +1127,22 @@ Patching \textbf{all 25 word positions} at layer $\ell$ (columns 0–4), by corr
 \endhead
 \bottomrule
 \endlastfoot
-8 & first & 160 & 0.96 & 1.00 & 1.00 & 0.51 & 0.10 & 0.05 \\
-8 & middle & 160 & 0.95 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+8 & first & 160 & 0.96 & 1.00 & 1.00 & 0.51 & 0.10 & 0.05 \\*
+8 & middle & 160 & 0.95 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\*
 8 & last & 160 & 0.95 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
 \addlinespace[4pt]
-12 & first & 160 & 0.97 & 1.00 & 1.00 & 0.43 & 0.10 & 0.04 \\
-12 & middle & 160 & 0.96 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+12 & first & 160 & 0.97 & 1.00 & 1.00 & 0.43 & 0.10 & 0.04 \\*
+12 & middle & 160 & 0.96 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\*
 12 & last & 160 & 0.95 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
 \addlinespace[4pt]
-16 & first & 143 & 0.98 & 1.00 & 1.00 & 0.33 & 0.08 & 0.03 \\
-16 & middle & 143 & 0.93 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+16 & first & 143 & 0.98 & 1.00 & 1.00 & 0.33 & 0.08 & 0.03 \\*
+16 & middle & 143 & 0.93 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\*
 16 & last & 143 & 0.84 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
 \end{longtable}}
 
-Patching \textbf{subsets} of positions, $L=12$, restored at layer 0 / 1 / 2 / 3 / 4:
+\Needspace*{16\baselineskip}Patching \textbf{subsets} of positions, $L=12$, restored at layer 0 / 1 / 2 / 3 / 4:
 
-{\small
+{\small\nopagebreak[4]
 \begin{longtable}{@{}l >{\raggedright\arraybackslash}p{5.4cm} *{5}{r}@{}}
 \toprule
 \hdr{corrupted hop} & \hdr{patched positions} & \multicolumn{5}{c}{\hdr{restored when patching at layer $\ell$}} \\
@@ -1178,6 +1203,233 @@ one head or one layer component at a time. “Restored” is the share of words 
 answer; the unpatched baseline is 2–8\%.
 \end{limbox}
 
+\subsection{Probes and patching at the word positions of the elementary model (Tests 9 and 10)
+\tagnew{}}\label{sec:3.11}
+\begin{figure}[htbp]\centering\includegraphics[width=1.00\linewidth]{fig_input_positions_elem.png}\caption{Left: accuracy (\%) of a linear probe for the continuation of a chain at the 120 word positions of the elementary model, natural words, by layer and by the number of hops $h$ still to go; chance is 6\%. Middle: activation patching of all word positions, for planted chains of $L=12$ to 80 hops. Right: which positions carry the answer, for $L=40$ with the last hop corrupted. “Restored” is the share of words whose answer returns to the clean one.}\end{figure}
+
+\lead{Why.} The elementary model follows chases of up to 80 hops (\S\,\ref{sec:3.8}), five times as far as the
+general model. In \S\,\ref{sec:3.9} I read the general model’s staircase of readable continuations (about 1, 1,
+4, 8 and 13 or more hops at layers 1 to 5) as log-depth composition, which would cap five blocks near 16 hops.
+If the elementary model shows the same staircase and still follows 80 hops, the staircase alone cannot be what
+sets a model’s hop limit. So I ran the tests of \S\,\ref{sec:3.9} and \S\,\ref{sec:3.10} on it.
+
+{\raggedright \lead{Setup}
+(\code{run\_\allowbreak{}input\_\allowbreak{}probes\_\allowbreak{}elem.\allowbreak{}py},
+\code{run\_\allowbreak{}patching\_\allowbreak{}elem.\allowbreak{}py}; results in
+\code{input\_\allowbreak{}probe\_\allowbreak{}elem\_\allowbreak{}results.\allowbreak{}json} and
+\code{patching\_\allowbreak{}elem\_\allowbreak{}results.\allowbreak{}json}, logs in
+\code{input\_\allowbreak{}probe\_\allowbreak{}elem\_\allowbreak{}log.\allowbreak{}txt} and
+\code{patching\_\allowbreak{}elem\_\allowbreak{}log.\allowbreak{}txt}). The designs are those of
+\S\,\ref{sec:3.9} (ridge probes per range of remaining hops) and \S\,\ref{sec:3.10} (corrupt one hop letter,
+patch clean activations back, teacher forcing with the clean outputs; the four steps are described there). The
+elementary letters force these changes:\par}
+
+\begin{itemize}
+\item A word has 120 letters. Token $\tau\ge1$ swaps positions $\tau-1$ and $\tau$, so a letter’s endpoints are
+  $a=\tau-1$ and $b=\tau$, and there are 16 points, so the probes have 16 classes (chance 6\%). Identity letters
+  (token 0) have no endpoints and are left out of the probes.
+\item Probes: 1,350 words, namely 450 natural words (120 uniform letters over the 16 tokens, as in the real test
+  file) and 450 planted words each with $L=40$ and with $L=80$ hops over a window of width 8, which supply the
+  long ranges. The hop ranges are extended to 25–48 and 49 or more. Words are split 60/20/20 into train,
+  validation and test as in \S\,\ref{sec:3.9}. The main table uses the natural words only, trained and tested
+  within them.
+\item Corruption: the hop letter that moves the pointer from $x_{j-1}$ to $x_j$ is replaced by the letter that
+  moves it to the other neighbour, $z=2x_{j-1}-x_j$. If $z$ is outside 0 to 15 no such letter exists and the
+  word is skipped (19 to 33 of 200 words when the first hop is corrupted, at most 6 otherwise). The corrupted
+  pointer then follows its own chain of hop letters, which differs from the clean chain, so besides the clean
+  chain I also patch the corrupted pointer’s hop letters, and the control “neither chain” excludes both.
+\item Patching: planted words with $L=12$, 24, 40 and 80 hops over width 8; the first, middle (hop $L/2+1$) and
+  last hop corrupted; 200 words per $L$ (the model is right on all 200 clean words at every $L$), 167 to 200 per
+  cell after skipping. A faster but equivalent computation recomputes only the blocks after the patched layer. I
+  checked it against the full forward pass of \S\,\ref{sec:3.10} on 30 words: identical predictions, logits
+  equal to $2\times10^{-7}$.
+\end{itemize}
+
+Accuracy (\%) on test rows of the probe, natural words only. Layer 0 is the baseline to compare with, because
+the token and position alone already give 40–56\% at $h\le4$, where the endpoint is only a few steps from where
+it started:
+
+{\small\nopagebreak[4]
+\begin{longtable}{@{}l *{9}{r}@{}}
+\toprule
+\hdr{layer} & \hdr{$h=1$} & \hdr{2} & \hdr{3} & \hdr{4} & \hdr{5–6} & \hdr{7–8} & \hdr{9–12} & \hdr{13–16} & \hdr{17–24} \\
+\midrule
+\endfirsthead
+\toprule
+\hdr{layer} & \hdr{$h=1$} & \hdr{2} & \hdr{3} & \hdr{4} & \hdr{5–6} & \hdr{7–8} & \hdr{9–12} & \hdr{13–16} & \hdr{17–24} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+0 (embeddings) & 56 & 50 & 44 & 40 & 18 & 15 & 14 & 13 & 10 \\
+1 & 86 & 53 & 45 & 39 & 19 & 16 & 15 & 12 & 10 \\
+2 & 92 & 68 & 51 & 41 & 18 & 17 & 14 & 13 & 11 \\
+3 & 91 & 76 & 70 & 57 & 21 & 17 & 13 & 12 & 11 \\
+4 & 89 & 77 & 71 & 66 & 50 & 45 & 23 & 13 & 11 \\
+5 & 88 & 76 & 71 & 66 & 51 & 45 & 25 & 19 & 15 \\
+test rows & 1,424 & 1,423 & 1,420 & 1,418 & 2,811 & 2,700 & 4,395 & 2,266 & 746 \\
+\end{longtable}}
+
+Label-shuffle controls (training labels permuted across rows) give 5.8–7.5\% at layer 0 and 6.0–9.3\% at layers
+4 and 5, for $h=1$, 5–6, 13–24 and 25–48.
+
+Long ranges exist only in my planted words (natural words have at most about 24 remaining hops). Accuracy (\%)
+there, trained and tested within each set, for layers 0, 4 and 5:
+
+{\small\nopagebreak[4]
+\begin{longtable}{@{}l l *{6}{r}@{}}
+\toprule
+\hdr{planted words} & \hdr{layer} & \hdr{9–12} & \hdr{13–16} & \hdr{17–24} & \hdr{25–32} & \hdr{33–48} & \hdr{49+} \\
+\midrule
+\endfirsthead
+\toprule
+\hdr{planted words} & \hdr{layer} & \hdr{9–12} & \hdr{13–16} & \hdr{17–24} & \hdr{25–32} & \hdr{33–48} & \hdr{49+} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+$L=40$ & 0 & 15 & 13 & 12 & 10 & 16 & – \\
+ & 4 & 26 & 16 & 14 & 15 & 17 & – \\
+ & 5 & 28 & 18 & 23 & 36 & 42 & – \\
+ & test rows & 3,642 & 1,821 & 1,313 & 729 & 630 & – \\
+$L=80$ & 0 & 18 & 16 & 15 & 17 & 16 & 11 \\
+ & 4 & 33 & 25 & 20 & 16 & 14 & 16 \\
+ & 5 & 33 & 25 & 32 & 54 & 66 & 66 \\
+ & test rows & 2,491 & 1,651 & 1,704 & 875 & 1,465 & 2,821 \\
+\end{longtable}}
+
+\Needspace*{16\baselineskip}Patching \textbf{all 120 word positions} at layer $\ell$ (columns 0–4), by corrupted
+hop (“follows corrupted” is the unpatched model’s share of answers equal to the corrupted word’s):
+
+{\small\nopagebreak[4]
+\begin{longtable}{@{}r l r r *{5}{r}@{}}
+\toprule
+& & & & \multicolumn{5}{c}{\hdr{restored when patching at layer $\ell$}} \\
+\cmidrule(lr){5-9}
+\hdr{$L$} & \hdr{corrupted hop} & \hdr{words} & \hdr{follows corrupted} & \hdr{0} & \hdr{1} & \hdr{2} & \hdr{3} & \hdr{4} \\
+\midrule
+\endfirsthead
+\toprule
+& & & & \multicolumn{5}{c}{\hdr{restored when patching at layer $\ell$}} \\
+\cmidrule(lr){5-9}
+\hdr{$L$} & \hdr{corrupted hop} & \hdr{words} & \hdr{follows corrupted} & \hdr{0} & \hdr{1} & \hdr{2} & \hdr{3} & \hdr{4} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+12 & first & 181 & 0.99 & 1.00 & 1.00 & 1.00 & 1.00 & .17 \\*
+12 & middle & 200 & 0.94 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\*
+12 & last & 196 & 0.94 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+\addlinespace[4pt]
+24 & first & 167 & 0.99 & 1.00 & 1.00 & 1.00 & 1.00 & .02 \\*
+24 & middle & 196 & 0.91 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\*
+24 & last & 200 & 0.90 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+\addlinespace[4pt]
+40 & first & 176 & 0.98 & 1.00 & 1.00 & 1.00 & .99 & .00 \\*
+40 & middle & 196 & 0.86 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\*
+40 & last & 199 & 0.86 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+\addlinespace[4pt]
+80 & first & 175 & 0.92 & 1.00 & 1.00 & 1.00 & .97 & .05 \\*
+80 & middle & 194 & 0.71 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\*
+80 & last & 196 & 0.69 & 1.00 & 1.00 & 1.00 & 1.00 & 1.00 \\
+\end{longtable}}
+
+\Needspace*{16\baselineskip}Patching \textbf{subsets} of positions, $L=40$, restored at layer 0 / 1 / 2 / 3 / 4:
+
+{\small\nopagebreak[4]
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{5.4cm} *{5}{r}@{}}
+\toprule
+\hdr{corrupted hop} & \hdr{patched positions} & \multicolumn{5}{c}{\hdr{restored when patching at layer $\ell$}} \\
+\cmidrule(lr){3-7}
+ & & \hdr{0} & \hdr{1} & \hdr{2} & \hdr{3} & \hdr{4} \\
+\midrule
+\endfirsthead
+\toprule
+\hdr{corrupted hop} & \hdr{patched positions} & \multicolumn{5}{c}{\hdr{restored when patching at layer $\ell$}} \\
+\cmidrule(lr){3-7}
+ & & \hdr{0} & \hdr{1} & \hdr{2} & \hdr{3} & \hdr{4} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\textbf{middle} & chain letters & 1.00 & 1.00 & .99 & .99 & .99 \\*
+ & corrupted pointer’s chain letters & 1.00 & .98 & .90 & .91 & .87 \\*
+ & letters to the right (read earlier) & .13 & .20 & .40 & .57 & .77 \\*
+ & letters to the left (read later) & .13 & .15 & .53 & .68 & .45 \\*
+ & the corrupted letter & 1.00 & .92 & .44 & .23 & .15 \\*
+ & neither chain & .13 & .13 & .14 & .15 & .15 \\
+\addlinespace[4pt]
+\textbf{last} & chain letters & \multicolumn{5}{c}{1.00 at every layer} \\*
+ & corrupted pointer’s chain letters & \multicolumn{5}{c}{1.00 at every layer} \\*
+ & letters to the right (read earlier) & .13 & .24 & .87 & 1.00 & 1.00 \\*
+ & letters to the left (read later) & \multicolumn{5}{c}{.13 at every layer} \\*
+ & the corrupted letter & 1.00 & .93 & .38 & .16 & .13 \\*
+ & neither chain & .13 & .13 & .14 & .17 & .21 \\
+\addlinespace[4pt]
+\textbf{first} & chain letters & 1.00 & 1.00 & .99 & .58 & .00 \\*
+ & corrupted pointer’s chain letters & 1.00 & .95 & .72 & .52 & .00 \\*
+ & letters to the right (read earlier) & \multicolumn{5}{c}{.00 at every layer} \\*
+ & letters to the left (read later) & .00 & .02 & .49 & .84 & .00 \\*
+ & the corrupted letter & 1.00 & .94 & .43 & .06 & .00 \\*
+ & neither chain & \multicolumn{5}{c}{.00 at every layer} \\
+\end{longtable}}
+
+\begin{findbox}{What it shows}
+\begin{itemize}
+\item \lead{The probes show the same doubling staircase.} On natural words the readable reach (accuracy clearly
+  above the layer-0 row) is $h=1$ at layer 1 (86\% against 56\%), $h\le2$ at layer 2 (68\% against 50\%),
+  $h\le4$ at layer 3 (70\% at $h=3$ and 57\% at $h=4$, against 44\% and 40\%), $h\le8$ at layer 4 (50\% and 45\%
+  at $h=5$–6 and 7–8, against 18\% and 15\%), and only partly beyond at layer 5 (25\% at $h=9$–12 and 19\% at
+  13–16, against 14\% and 13\%; nothing at 17–24). That is about 1, 2, 4, 8 and 12 hops at layers 1 to 5,
+  against 1, 1, 4, 8 and 13 or more for the general model (\S\,\ref{sec:3.9}): a doubling pattern with a short
+  last step.
+\item \lead{Yet this model follows 80 hops, so the staircase alone does not set the hop limit.} No word position
+  holds more than about 8 to 12 hops of continuation at any layer in natural words, and a chase of 80 hops is
+  still followed (\S\,\ref{sec:3.8}). Patching agrees that the first hops are not taken in later for longer
+  chains: with the first hop corrupted, restoring all word positions works through layer 3 (0.97–1.00 at every
+  $L$ from 12 to 80) and fails after block 4 (0.00–0.17). Whatever the elementary model does with long chains,
+  it is not capped by a per-position reach of about $2^\ell$. This weakens the argument I drew from
+  \S\,\ref{sec:3.9} for the general model (\S\,\ref{sec:5} item 9); it does not show that the general model is
+  not depth-limited, because the two tasks differ (a hop moves the pointer by one place, inside a window of at
+  most 11 positions in training).
+\item \lead{Late hops are still read from the word positions in the last block.} For a middle or last hop,
+  patching all word positions after block 4 restores the clean answer in every word (1.00 at every $L$ from 12
+  to 80), and the chain letters alone do almost as well (0.93–1.00), although the query position’s own state was
+  computed from the corrupted word. This is the same as in \S\,\ref{sec:3.10}.
+\item \lead{One difference from the general model: the letters read later also carry it.} For the first and the
+  middle hop, patching only the letters to the left of the corrupted one (read later) restores the answer: for
+  the first hop 0.49 after block 2 and 0.84 after block 3, for the middle hop 0.53, 0.68 and 0.45 after blocks
+  2, 3 and 4 ($L=40$). In \S\,\ref{sec:3.10} this set restored nothing in any condition. The right side restores
+  it, as in \S\,\ref{sec:3.10}, when it holds hop letters (middle or last hop; last hop, $L=40$: 0.87 after
+  block 2, 1.00 after blocks 3 and 4); the left side does so only in this model (first or middle hop), and not
+  when it holds no hop letters (last hop). The corrupted letter’s own state carries the answer through layer 1
+  (0.92–0.93) and not after layer 2 (0.38–0.44), and the “neither chain” control stays near the unpatched level
+  (0.13 to 0.21 at most).
+\item \lead{At $L=80$ the model partly ignores a corrupted middle or last hop.} Unpatched, 25–26\% of those
+  words still get the clean answer and only 69–71\% follow the corrupted word (86–94\% at $L\le40$). This is
+  like the general model at $L=20$ (\S\,\ref{sec:3.7}), and it puts a floor of 25\% under the restoration rates
+  in those rows.
+\end{itemize}
+\end{findbox}
+
+\begin{limbox}{Limits}
+\begin{itemize}
+\item The longest ranges ($h\ge13$ at layer 5 and the 25-or-more bins) exist only in planted words, which are
+  unlike natural ones: at $L=80$ two thirds of the letters are hops of one chain. All rows of one chain share a
+  label, and at layer 5 accuracy there jumps (54–66\% at 25–48 hops, against 14–16\% at layer 4). Nothing reads
+  the word positions after block 5, and the number of hops is confounded with the position of the letter in the
+  word: for letters in the left half, $t<60$, layer 4 already reads about 13–16 hops (43\%) and layer 5 up to 48
+  (70\%). I do not read the layer-5 jump as composition.
+\item The staircase is read from natural words, where $h\ge13$ has few rows (2,266 and 746 test rows) and the
+  layer-0 baseline is not chance. A linear probe can miss information that is present in another form.
+\item One corruption type (the other neighbour); the corrupted pointer then follows its own hops, which the
+  general-model design (a fresh point) avoids. Width 8 only, 167–200 words per cell, positions patched all at
+  once rather than one head or one component at a time.
+\item Probes are observational; the patching is the causal check. Neither says how the elementary model composes
+  80 hops. That needs, for example, attention patterns or head-level patching at long $L$ (\S\,\ref{sec:6}).
+\end{itemize}
+\end{limbox}
+
 % ====================================================================================================
 % 4 What this means for the density idea [UPDATED]
 % ====================================================================================================
@@ -1197,9 +1449,11 @@ answer; the unpatched baseline is 2–8\%.
   25 points, and sparse in long ones. A density argument would need a metric in which “long chain” is far from
   “short chain”.
 \item I can’t say from this evidence whether the limit is architectural (depth) or statistical (rarity in
-  training). Separating them needs experiments with new training runs (\S\,\ref{sec:6.1}). \textbf{\tagupd{}}
+  training). Separating them needs experiments with new training runs (\S\,\ref{sec:6.1}).
   \S\,\ref{sec:3.9}–\ref{sec:3.10} make the depth reading more plausible than I judged in version 4.
-\item \lead{\tagupd{}} Four results from \S\,\ref{sec:3.6}–\ref{sec:3.10} bear on this. (i) The elementary
+  \textbf{\tagupd{}} \S\,\ref{sec:3.11} qualifies that: the elementary model, which follows 80 hops, has the
+  same word-position staircase.
+\item \lead{\tagupd{}} Five results from \S\,\ref{sec:3.6}–\ref{sec:3.11} bear on this. (i) The elementary
   model, trained on far longer chases than the general model, shows no hop-count cliff up to 80 hops and loses
   accuracy only beyond the widths it was trained on. That supports reading the general model’s cliff as a
   coverage effect in hop count, though the two tasks differ, and the elementary model’s hops are $\pm1$ steps
@@ -1209,9 +1463,12 @@ answer; the unpatched baseline is 2–8\%.
   (\S\,\ref{sec:3.6}); the probes and patching at the word positions say they are built there, layer by layer,
   with a reach of roughly 1, 1, 4, 8 and 13 or more hops at layers 1 to 5, and read in the last block
   (\S\,\ref{sec:3.9}–\ref{sec:3.10}). (iv) If that is how five blocks compose chains, the hop limit may be set
-  by depth, and more long chains in the data would not move it, while a deeper model would. A density argument
-  built on chains would then need a second ingredient: the chain length the architecture can compose. The
-  training experiment in \S\,\ref{sec:6.1} is designed to tell these apart.
+  by depth, and more long chains in the data would not move it, while a deeper model would. (v) The elementary
+  model has the same word-position staircase (about 1, 2, 4, 8 and 12 hops at layers 1 to 5) and still follows
+  80 hops (\S\,\ref{sec:3.11}), so a per-position reach of about $2^\ell$ does not by itself cap the hop length,
+  and (iv) is weaker than I wrote in version 5. A density argument built on chains would then need a second
+  ingredient: the chain length the architecture can compose. The training experiment in \S\,\ref{sec:6.1} is
+  designed to tell these apart.
 \end{itemize}
 
 % ====================================================================================================
@@ -1240,11 +1497,17 @@ answer; the unpatched baseline is 2–8\%.
   example of the position-embedding block and that I had no seed that shows it. After finding that the saved
   picture in the original repo matches this checkpoint exactly, and you confirming it is Figure 5b, that was
   wrong. The blocks are at 72 and 120, not 45 (\S\,\ref{sec:3.8}).
-\item \lead{\tagnew{} Coverage versus depth.} In version 4 (\S\,\ref{sec:1} item 12, \S\,\ref{sec:4},
-  \S\,\ref{sec:6} item 1) I said that the elementary model’s results favoured “rare in training” over “five
-  layers cannot do it”, and called training on long-chain-enriched data “now more motivated”. The probes and
-  patching at the word positions (\S\,\ref{sec:3.9}–\ref{sec:3.10}) show a depth-like staircase, so I no longer
-  lean either way: it is open, and \S\,\ref{sec:6.1} is designed to settle it.
+\item \lead{Coverage versus depth.} In version 4 (\S\,\ref{sec:1} item 12, \S\,\ref{sec:4}, \S\,\ref{sec:6} item
+  1) I said that the elementary model’s results favoured “rare in training” over “five layers cannot do it”, and
+  called training on long-chain-enriched data “now more motivated”. The probes and patching at the word
+  positions (\S\,\ref{sec:3.9}–\ref{sec:3.10}) show a depth-like staircase, so I no longer lean either way: it
+  is open, and \S\,\ref{sec:6.1} is designed to settle it.
+\item \lead{\tagnew{} The depth reading of \S\,\ref{sec:3.9}.} In version 5 I wrote that the staircase of
+  \S\,\ref{sec:3.9} (about 1, 1, 4, 8 and 13 or more hops at layers 1 to 5) was “a reason to take a depth limit
+  seriously”, because about $2^\ell$ hops per layer would cap five blocks near 16 hops. The elementary model has
+  the same staircase at its word positions and follows 80 hops (\S\,\ref{sec:3.11}). So the staircase is
+  compatible with a depth limit but is not evidence for one by itself; I have marked the sentence in
+  \S\,\ref{sec:3.9} and the point in \S\,\ref{sec:4}.
 \end{enumerate}
 
 % ====================================================================================================
@@ -1253,33 +1516,39 @@ answer; the unpatched baseline is 2–8\%.
 \section{Not done, and suggested next steps \tagupd{}}\label{sec:6}
 \lead{Inference-only tests run in this version:} layer-wise probes (\S\,\ref{sec:3.6}), irrelevance
 interventions (\S\,\ref{sec:3.7}), the elementary-transposition port with baseline, width and hop-count tests
-(\S\,\ref{sec:3.8}, Tests 6a and 6b), and \textbf{\tagnew{}} probes and activation patching at the word
-positions (\S\,\ref{sec:3.9}, \S\,\ref{sec:3.10}).
+(\S\,\ref{sec:3.8}, Tests 6a and 6b), probes and activation patching at the word positions (\S\,\ref{sec:3.9},
+\S\,\ref{sec:3.10}), and \textbf{\tagnew{}} the same two tests on the elementary model (\S\,\ref{sec:3.11}).
 
 \lead{Inference-only tests not yet run:} gap/alignment variations beyond spread versus contiguous; attention
 patterns (of the general model at the word positions, and of the elementary model at long $L$); weight-level
 equivariance; removing the block structure itself from the elementary model’s position embeddings (for example
 by projecting out the directions that separate the blocks), and swaps involving the 16 output positions
-(\S\,\ref{sec:3.8}). \textbf{\tagnew{}} Patching for $L=20$ and above, and patching one head or one component at
-a time, which would say which heads move the continuations.
+(\S\,\ref{sec:3.8}). \textbf{\tagupd{}} Patching the general model for $L=20$ and above (the elementary model is
+patched up to $L=80$, \S\,\ref{sec:3.11}), and patching one head or one component at a time, which would say
+which heads move the continuations and, in the elementary model, how 80 hops are composed.
 
 \lead{Needs training (not possible in my environment):} the support-size sweep; models of different depth;
-training with long-chain-enriched data. \textbf{\tagupd{}} The experiment that does the first three is written
-and tested on CPU, and is waiting to be run on Spartan (\S\,\ref{sec:6.1}).
+training with long-chain-enriched data. The experiment that does the first three is written and tested on CPU,
+and is waiting to be run on Spartan (\S\,\ref{sec:6.1}).
 
 Given \S\,\ref{sec:3.6}–\ref{sec:3.10}, I would prioritise:
 
 \begin{enumerate}
 \item \lead{Run the Spartan job (\S\,\ref{sec:6.1}).} It is the only way to tell coverage from depth.
 \item \lead{Then repeat \S\,\ref{sec:3.9}–\ref{sec:3.10} on the new checkpoints.} The 8-block model should show
-  continuations readable at larger $h$ and an earlier layer, if depth is the limit.
+  continuations readable at larger $h$ and an earlier layer, if depth is the limit. \textbf{\tagupd{}} Read this
+  together with the accuracy by hop count: the elementary model has the same staircase and follows 80 hops
+  (\S\,\ref{sec:3.11}), so a staircase alone will not settle it.
 \item \lead{Attention patterns at the word positions} of \code{torn-\allowbreak{}bigger-\allowbreak{}13}, to see
   which heads build the continuations.
+\item \lead{\tagnew{} Head-level patching and attention patterns of the elementary model at long $L$}
+  (\S\,\ref{sec:3.11}), to see how 80 hops are composed from word-position states that hold at most 8 to 12
+  hops.
 \end{enumerate}
 
 \subsection{The training experiment
-(\texorpdfstring{\code{../\allowbreak{}hpc-\allowbreak{}experiment/}}{../hpc-experiment/}, not yet run)
-\tagnew{}}\label{sec:6.1}
+(\texorpdfstring{\code{../\allowbreak{}hpc-\allowbreak{}experiment/}}{../hpc-experiment/}, not yet
+run)}\label{sec:6.1}
 One \code{sbatch} trains four models in parallel (one per GPU) and writes one zip with everything needed.
 Details, assumptions and how to shorten or resume it are in
 \code{hpc-\allowbreak{}experiment/\allowbreak{}README.\allowbreak{}md}.
@@ -1334,7 +1603,7 @@ in a clone of \code{Midataur/\allowbreak{}permutations} for \code{train\_\allowb
 \code{test\_\allowbreak{}data.\allowbreak{}csv} and
 \code{test\_\allowbreak{}data\_\allowbreak{}perms.\allowbreak{}csv}.\par}
 
-{\footnotesize
+{\footnotesize\nopagebreak[4]
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{5.6cm} >{\raggedright\arraybackslash}p{8.6cm}@{}}
 \toprule
 \hdr{file} & \hdr{purpose} \\
@@ -1365,9 +1634,12 @@ in a clone of \code{Midataur/\allowbreak{}permutations} for \code{train\_\allowb
 \code{make\_\allowbreak{}elem\_\allowbreak{}figure.\allowbreak{}py} & draws \code{fig\_\allowbreak{}elem\_\allowbreak{}cells.\allowbreak{}png} \\
 \code{elem\_\allowbreak{}data\_\allowbreak{}stats.\allowbreak{}py DATA\_\allowbreak{}DIR}, \code{elem\_\allowbreak{}pos\_\allowbreak{}gram.\allowbreak{}py} & position-45 checks on the elementary data (\S\,\ref{sec:3.8}); the picture from \code{elem\_\allowbreak{}pos\_\allowbreak{}gram.\allowbreak{}py} uses a colour scale that hides the blocks, use \code{fig5b\_\allowbreak{}provenance.\allowbreak{}py} instead \\
 \code{fig5b\_\allowbreak{}provenance.\allowbreak{}py CLONE\_\allowbreak{}DIR} & searches the notebook history of \code{Midataur/\allowbreak{}permutations}, decodes the saved pictures, compares them with the checkpoints and locates the blocks (\S\,\ref{sec:3.8}); output \code{fig5b\_\allowbreak{}provenance.\allowbreak{}txt} \\
-\code{run\_\allowbreak{}input\_\allowbreak{}probes.\allowbreak{}py N\_\allowbreak{}WORDS\_\allowbreak{}PER\_\allowbreak{}SET} \textbf{\tagnew{}} & probes at the word positions, per layer and per hop bin (\S\,\ref{sec:3.9}; I used the default 700 per set, 2,100 words; about 1 minute); output \code{input\_\allowbreak{}probe\_\allowbreak{}results.\allowbreak{}json}, \code{input\_\allowbreak{}probe\_\allowbreak{}log.\allowbreak{}txt} \\
-\code{run\_\allowbreak{}patching.\allowbreak{}py N\_\allowbreak{}WORDS} \textbf{\tagnew{}} & activation patching at the word positions (\S\,\ref{sec:3.10}; I used the default 200 words per $L$; about 14 minutes); output \code{patching\_\allowbreak{}results.\allowbreak{}json}, \code{patching\_\allowbreak{}log.\allowbreak{}txt} \\
-\code{make\_\allowbreak{}input\_\allowbreak{}figure.\allowbreak{}py} \textbf{\tagnew{}} & draws \code{fig\_\allowbreak{}input\_\allowbreak{}positions.\allowbreak{}png} from the two result files \\
+\code{run\_\allowbreak{}input\_\allowbreak{}probes.\allowbreak{}py N\_\allowbreak{}WORDS\_\allowbreak{}PER\_\allowbreak{}SET} & probes at the word positions, per layer and per hop bin (\S\,\ref{sec:3.9}; I used the default 700 per set, 2,100 words; about 1 minute); output \code{input\_\allowbreak{}probe\_\allowbreak{}results.\allowbreak{}json}, \code{input\_\allowbreak{}probe\_\allowbreak{}log.\allowbreak{}txt} \\
+\code{run\_\allowbreak{}patching.\allowbreak{}py N\_\allowbreak{}WORDS} & activation patching at the word positions (\S\,\ref{sec:3.10}; I used the default 200 words per $L$; about 14 minutes); output \code{patching\_\allowbreak{}results.\allowbreak{}json}, \code{patching\_\allowbreak{}log.\allowbreak{}txt} \\
+\code{make\_\allowbreak{}input\_\allowbreak{}figure.\allowbreak{}py} & draws \code{fig\_\allowbreak{}input\_\allowbreak{}positions.\allowbreak{}png} from the two result files \\
+\code{run\_\allowbreak{}input\_\allowbreak{}probes\_\allowbreak{}elem.\allowbreak{}py N\_\allowbreak{}WORDS\_\allowbreak{}PER\_\allowbreak{}SET} \textbf{\tagnew{}} & probes at the word positions of the elementary model (\S\,\ref{sec:3.11}; I used the default 450 per set, 1,350 words; about 1.5 minutes on one core); output \code{input\_\allowbreak{}probe\_\allowbreak{}elem\_\allowbreak{}results.\allowbreak{}json}, \code{input\_\allowbreak{}probe\_\allowbreak{}elem\_\allowbreak{}log.\allowbreak{}txt} \\
+\code{run\_\allowbreak{}patching\_\allowbreak{}elem.\allowbreak{}py N\_\allowbreak{}WORDS} \textbf{\tagnew{}} & activation patching of the elementary model (\S\,\ref{sec:3.11}; I used 200 words per $L$ for $L=12$, 24, 40 and 80; about 33 minutes on one core); output \code{patching\_\allowbreak{}elem\_\allowbreak{}results.\allowbreak{}json}, \code{patching\_\allowbreak{}elem\_\allowbreak{}log.\allowbreak{}txt} \\
+\code{make\_\allowbreak{}input\_\allowbreak{}figure\_\allowbreak{}elem.\allowbreak{}py} \textbf{\tagnew{}} & draws \code{fig\_\allowbreak{}input\_\allowbreak{}positions\_\allowbreak{}elem.\allowbreak{}png} from the two result files \\
 \code{run\_\allowbreak{}pos\_\allowbreak{}ablation.\allowbreak{}py DATA\_\allowbreak{}DIR N\_\allowbreak{}SEG N\_\allowbreak{}PAIR} & position-embedding ablation, Test 6b (\S\,\ref{sec:3.8}; I used \code{150 150}; about 10 minutes); output \code{pos\_\allowbreak{}ablation\_\allowbreak{}results.\allowbreak{}json}, \code{pos\_\allowbreak{}ablation\_\allowbreak{}log.\allowbreak{}txt} \\
 \end{longtable}}
 
@@ -1397,21 +1669,28 @@ in the same \code{trained-\allowbreak{}models} folder as the general one.\par}
 \code{elem\_\allowbreak{}data\_\allowbreak{}stats.\allowbreak{}txt},
 \code{fig5b\_\allowbreak{}provenance.\allowbreak{}txt},
 \code{pos\_\allowbreak{}ablation\_\allowbreak{}results.\allowbreak{}json},
-\code{pos\_\allowbreak{}ablation\_\allowbreak{}log.\allowbreak{}txt}, \textbf{\tagnew{}}
+\code{pos\_\allowbreak{}ablation\_\allowbreak{}log.\allowbreak{}txt},
 \code{input\_\allowbreak{}probe\_\allowbreak{}results.\allowbreak{}json},
 \code{input\_\allowbreak{}probe\_\allowbreak{}log.\allowbreak{}txt},
 \code{patching\_\allowbreak{}results.\allowbreak{}json}, \code{patching\_\allowbreak{}log.\allowbreak{}txt},
 \code{elem\_\allowbreak{}pos\_\allowbreak{}gram.\allowbreak{}png},
 \code{fig\_\allowbreak{}probe\_\allowbreak{}layers.\allowbreak{}png},
 \code{fig\_\allowbreak{}influence\_\allowbreak{}map.\allowbreak{}png},
-\code{fig\_\allowbreak{}elem\_\allowbreak{}cells.\allowbreak{}png}, \textbf{\tagnew{}}
-\code{fig\_\allowbreak{}input\_\allowbreak{}positions.\allowbreak{}png}, and the arrays
+\code{fig\_\allowbreak{}elem\_\allowbreak{}cells.\allowbreak{}png},
+\code{fig\_\allowbreak{}input\_\allowbreak{}positions.\allowbreak{}png},
+\code{fig\_\allowbreak{}patching\_\allowbreak{}setup.\allowbreak{}png} (drawn by
+\code{make\_\allowbreak{}patching\_\allowbreak{}schematic.\allowbreak{}py}), \textbf{\tagnew{}}
+\code{input\_\allowbreak{}probe\_\allowbreak{}elem\_\allowbreak{}results.\allowbreak{}json},
+\code{input\_\allowbreak{}probe\_\allowbreak{}elem\_\allowbreak{}log.\allowbreak{}txt},
+\code{patching\_\allowbreak{}elem\_\allowbreak{}results.\allowbreak{}json},
+\code{patching\_\allowbreak{}elem\_\allowbreak{}log.\allowbreak{}txt},
+\code{fig\_\allowbreak{}input\_\allowbreak{}positions\_\allowbreak{}elem.\allowbreak{}png}, and the arrays
 \code{elem\_\allowbreak{}train\_\allowbreak{}chase\_\allowbreak{}hist.\allowbreak{}npz} and
 \code{elem\_\allowbreak{}natural.\allowbreak{}npz}. The raw per-slot arrays from the stratified run
 (\code{strat\_\allowbreak{}results.\allowbreak{}npz}, 2.3 MB) are not included;
 \code{run\_\allowbreak{}stratified.\allowbreak{}py} regenerates them with the same seed.\par}
 
-\lead{\tagnew{} The training experiment} is in \code{../\allowbreak{}hpc-\allowbreak{}experiment/} (design in
+\lead{The training experiment} is in \code{../\allowbreak{}hpc-\allowbreak{}experiment/} (design in
 \S\,\ref{sec:6.1}; how to run it, what it measures and its limits are in its \code{README.\allowbreak{}md}).
 From that folder, \code{sbatch run.\allowbreak{}slurm} runs everything and writes one zip;
 \code{tests/\allowbreak{}run\_\allowbreak{}tests.\allowbreak{}sh} runs the CPU tests (about 6 minutes).

@@ -20,8 +20,8 @@ DST = sys.argv[2] if len(sys.argv) > 2 else "report.tex"
 
 # ----------------------------------------------------------------------------------------------------------
 # Edit these when a new version of the report is made.
-VERSION = "Version 5"
-SUBTITLE = "Word-position probes and patching; the training experiment"
+VERSION = "Version 6"
+SUBTITLE = "Probes and patching on the elementary model"
 DATE = "26 November 2026"
 EXPECTED_TITLE = "Inference-only tests on `torn-bigger-13` (general transpositions, $S_{25}$)"
 FIGURE_CAPTION_FOR_FILE_LINE = {
@@ -31,7 +31,7 @@ FIGURE_CAPTION_FOR_FILE_LINE = {
                                  "400 words per point, 95\\% Wilson intervals."),
 }
 FIGURE_WIDTH = {"fig_accuracy_vs_hops.png": 0.88, "fig_probe_layers.png": 1.0, "fig_influence_map.png": 1.0,
-                "fig_elem_cells.png": 1.0, "fig_input_positions.png": 1.0, "fig_patching_setup.png": 1.0}
+                "fig_elem_cells.png": 1.0, "fig_input_positions.png": 1.0, "fig_patching_setup.png": 1.0, "fig_input_positions_elem.png": 1.0}
 
 ARR = r">{\raggedright\arraybackslash}"
 TABLE_SPECS = {
@@ -52,8 +52,13 @@ TABLE_SPECS = {
     13: dict(cols="l *{8}{r}"),
     14: dict(cols="r l r r *{5}{r}", special="patch_all"),
     15: dict(cols="l " + ARR + "p{5.4cm} *{5}{r}", special="patch_subsets", long=True),
-    16: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
-    17: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
+    # section 3.11 (elementary model): probes on natural words, planted long ranges, patching all positions, patching subsets
+    16: dict(cols="l *{9}{r}"),
+    17: dict(cols="l l *{6}{r}"),
+    18: dict(cols="r l r r *{5}{r}", special="patch_all"),
+    19: dict(cols="l " + ARR + "p{5.4cm} *{5}{r}", special="patch_subsets", long=True),
+    20: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
+    21: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
 }
 
 CALLOUTS = {"What it shows": "find", "What this does and does not say": "find",
@@ -311,10 +316,12 @@ def render_table(idx, rows):
                 " & ".join(hdr(c) for c in rows[0]) + r" \\", r"\midrule"]
         # the five layer columns are labelled 0..4 in the Markdown header
         trs, prev_L = [], None
-        for r in body:
+        for ri, r in enumerate(body):
             if prev_L is not None and r[0] != prev_L:
                 trs.append(r"\addlinespace[4pt]")
-            trs.append(" & ".join(inl(c, lead_ok=False) for c in r) + r" \\")
+            # \\* forbids a page break inside a group of rows with the same L
+            end = r"\\*" if (ri + 1 < len(body) and body[ri + 1][0] == r[0]) else r"\\"
+            trs.append(" & ".join(inl(c, lead_ok=False) for c in r) + " " + end)
             prev_L = r[0]
         content = head + trs
     elif special == "patch_subsets":
@@ -343,7 +350,7 @@ def render_table(idx, rows):
         content = head + trs
     if spec.get("long") or len(rows) >= 7:
         first = [r"\toprule"] + content[:len(head)] if special is None else [r"\toprule"] + content[:len(head)]
-        out.append(r"{\%s" % size)
+        out.append(r"{\%s\nopagebreak[4]" % size)       # keep the lead-in line with the start of the table
         out.append(r"\begin{longtable}{@{}%s@{}}" % spec["cols"])
         out += first
         out.append(r"\endfirsthead")
@@ -470,8 +477,14 @@ def wrap_tex(txt, width=112):
 # join blocks: no blank line around display maths so the sentence continues after it
 out_body = []
 for n, (kind, tex) in enumerate(body_parts):
-    out_body.append(tex)
     nxt = body_parts[n + 1][0] if n + 1 < len(body_parts) else None
+    if kind == "para" and nxt == "table" and "restored when patching at layer" in body_parts[n + 1][1]:
+        # keep a lead-in line with the start of its table: reserve room for the line, the header and the first rows
+        ttex = body_parts[n + 1][1]
+        nrows = ttex.count("\\\\")
+        need = (min(nrows, 8) + 5) if "longtable" in ttex else (nrows + 4)
+        tex = r"\Needspace*{%d\baselineskip}" % (need + 3) + tex
+    out_body.append(tex)
     if kind == "math" or nxt == "math":
         out_body.append("\n")
     elif kind in ("h2", "h3"):

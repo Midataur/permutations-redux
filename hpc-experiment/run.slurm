@@ -59,8 +59,11 @@ export WALL_HOURS=${WALL_HOURS:-10}
 # export ARMS="g_m10 g_plant10 g_plant10_b8 e_base g_plant10_b3 g_plant5"
 # ------------------------------------------------------------------
 
-# The modules to load:
+# The modules to load.  The Python modules are the ones from your newer scripts (Python/3.14.2); a venv made with a module
+# Python needs that module loaded when it runs.  Set PY_MODULES="" if your venv does not need them, or to other modules.
+PY_MODULES=${PY_MODULES-"GCCcore/13.3.0 XZ/5.4.5 Python/3.14.2"}
 module load CUDA/12.4.1
+for m in $PY_MODULES; do module load "$m" || echo "WARNING: could not load module $m"; done
 
 # Run the job from the directory where it was launched (default): this folder, hpc-experiment/
 cd "$SLURM_SUBMIT_DIR" || exit 1

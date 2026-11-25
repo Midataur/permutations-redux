@@ -37,7 +37,7 @@ def main():
     ap.add_argument("--tiny", action="store_true", help="smoke-test sizes (CPU friendly)")
     ap.add_argument("--calib-seconds", type=float, default=60.0)
     ap.add_argument("--seed", type=int, default=int(env_float("SEED", 0)))
-    ap.add_argument("--batch", type=int, default=1024)
+    ap.add_argument("--batch", type=int, default=int(env_float("BATCH", 1024)), help="words per step per arm (your original runs: 1024 per GPU on 4 GPUs = 4096 per step)")
     ap.add_argument("--resume-dir", default=os.environ.get("RESUME_DIR", ""), help="continue a previous run directory")
     ap.add_argument("--no-figs", action="store_true")
     a = ap.parse_args()
@@ -132,6 +132,14 @@ def main():
     say("plan: " + json.dumps({k: v for k, v in plan.items() if k != "calibration"}))
     for x, c in plan.get("calibration", {}).items():
         say(f"  {x}: {c['steps_per_sec']:.2f} steps/s, evaluation {c['eval_seconds']:.1f}s, {c['params']/1e6:.1f}M params")
+    # Reference from the two original training logs (torn-bigger-13 and elem-partitioned-long-boosted-1): both reached
+    # 99.9% training accuracy after about 160M training words (10 to 20 epochs of 8M or 16M words).
+    REF_WORDS = 160e6
+    for x in plan.get("calibration", {}):
+        st = plan["steps_general"] if ARMS[x]["kind"] == "general" else plan["steps_elementary"]
+        words = st * a.batch
+        warn = "" if words >= 1.5 * REF_WORDS else "   <-- under 1.5x what the original runs needed; see 'How many steps' in the README"
+        say(f"  {x}: {st} steps x {a.batch} words = {words/1e6:.0f}M words (original runs: about 160M to reach 99.9% train accuracy){warn}")
 
     # ---------------------------------------------------------------- 3. train every arm
     deadline = T_START + a.wall_hours * 3600 - 20 * 60

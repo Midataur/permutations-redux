@@ -9,8 +9,24 @@ cd hpc-experiment        # after a git pull
 sbatch run.slurm
 ```
 
-The job needs a Python environment with `torch`, `numpy` and `safetensors` (your `scaling-generator/venv` is found
-automatically; or set `VENV=/path/to/venv`). `matplotlib` is optional (pictures). No wandb, no accelerate, no data files.
+### Setting up the Python environment (once)
+
+The job needs `torch`, `numpy` and `safetensors`; `matplotlib` is optional (pictures). No wandb, no accelerate, no data
+files. With the modules from your newer Slurm script (Python 3.14.2), on a login node:
+
+```
+module load CUDA/12.4.1 GCCcore/13.3.0 XZ/5.4.5 Python/3.14.2
+cd hpc-experiment
+python -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install torch numpy safetensors matplotlib
+```
+
+`run.slurm` loads the same modules (`PY_MODULES`, empty to skip), then uses `./venv` (or `$VENV`, or `../scaling-generator/venv`),
+checks that torch sees a GPU, and stops with a clear message if not. I tested on Python 3.13 with torch 2.15, numpy 2.5 and
+safetensors 0.8 (CPU only). Those packages all have wheels for Python 3.14, but I have not run on 3.14 or on a GPU myself. The code
+uses only features that exist in torch 2.1 as well, in case you reuse an older environment.
 
 ## Why these arms
 
@@ -71,6 +87,22 @@ at once, so contention is included), then sets the number of steps so that train
 general arms get the same number of steps. Total run time is about `TRAIN_HOURS` + 30 minutes. `#SBATCH --time=0-10:00:00` and
 `WALL_HOURS=10` go together: if you change one, change the other. For a first look, `TRAIN_HOURS=3 sbatch run.slurm`.
 Batch size 1024 words per step, learning rate 3e-4, AdamW (weight decay 0.05).
+
+### How many steps? (from your two training logs)
+
+Your logs of the original runs (`torn-bigger-13`, `elem-partitioned-long-boosted-1`) give a reference for how much training is enough:
+
+| | `torn-bigger-13` | `elem-partitioned-long-boosted-1` |
+|---|---|---|
+| words per epoch (steps per epoch) | 8M (1,954 steps of 4,096 words: 1,024 per GPU on 4 GPUs) | 16M (3,907 steps) |
+| time per epoch, speed | 165 s, about 12k words/s per GPU | 1,010 s, about 4k words/s per GPU |
+| plateau before learning | accuracy 72-73% for epochs 1-9 (about 18k steps, 72M words) | accuracy 63-68% for epochs 2-4 (epoch 1 is not in the log) |
+| 90% train accuracy | epoch 11 | epoch 6 |
+| 99.9% train accuracy | epoch 20 (about 39k steps, **160M words**) | epoch 10 (about 39k steps, **160M words**) |
+| 99.99% train accuracy | epoch 44 | epoch 21 |
+| whole run | 161 epochs, about 7.4 hours | 96 epochs, about 27 hours |
+
+So an arm needs roughly 160M words to be converged, and the plateau lasts 70M words or fewer. After calibration the job prints, for every arm, steps x batch = words and warns if that is below 1.5 times 160M. If your GPUs run as fast as in your logs, 8 hours gives about 345M words to a general arm (less for the 8-block arm) but only about 115M to the elementary arm, which is a little short of converged; it will still show the early phase of the position-embedding pictures. To give every arm more: `TRAIN_HOURS=14 WALL_HOURS=16 sbatch --time=0-16:00:00 run.slurm`. The batch is 1,024 words per step (your runs: 4,096); `BATCH=2048 sbatch run.slurm` changes it, if the memory of the elementary arm allows.
 
 **Safety.**
 * A failing arm fails in the calibration minute, before any real training, and the zip then contains the logs.

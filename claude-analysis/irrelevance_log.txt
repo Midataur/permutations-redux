@@ -1,0 +1,28 @@
+[  14s] planted L=8: baseline accuracy 1.000; mean hops 8.0, mean irrelevant letters 17.0
+   full    : prediction unchanged in 100.0%  accuracy 100.0% -> 100.0%  median margin 21.0 -> 20.9
+   half    : prediction unchanged in 100.0%  accuracy 100.0% -> 100.0%  median margin 21.0 -> 21.0
+   identity: prediction unchanged in  99.6%  accuracy 100.0% -> 99.6%  median margin 21.0 -> 17.4
+   delete1 : prediction unchanged in   3.6%  accuracy 100.0% -> 3.6%  median margin 21.0 -> -22.2
+[  83s] planted L=12: baseline accuracy 1.000; mean hops 12.0, mean irrelevant letters 13.0
+   full    : prediction unchanged in 100.0%  accuracy 100.0% -> 100.0%  median margin 18.4 -> 18.4
+   half    : prediction unchanged in  99.8%  accuracy 100.0% -> 99.8%  median margin 18.4 -> 18.3
+   identity: prediction unchanged in 100.0%  accuracy 100.0% -> 100.0%  median margin 18.4 -> 18.1
+   delete1 : prediction unchanged in   4.2%  accuracy 100.0% -> 4.2%  median margin 18.4 -> -21.4
+[ 152s] planted L=16: baseline accuracy 0.871; mean hops 16.0, mean irrelevant letters 9.0
+   full    : prediction unchanged in  84.2%  accuracy 87.1% -> 88.0%  median margin 6.9 -> 6.7
+   half    : prediction unchanged in  86.5%  accuracy 87.1% -> 86.9%  median margin 6.9 -> 6.5
+   identity: prediction unchanged in  85.5%  accuracy 87.1% -> 93.0%  median margin 6.9 -> 8.1
+   delete1 : prediction unchanged in   4.9%  accuracy 87.1% -> 3.4%  median margin 6.9 -> -20.1
+[ 220s] planted L=20: baseline accuracy 0.485; mean hops 20.0, mean irrelevant letters 5.0
+   full    : prediction unchanged in  54.5%  accuracy 48.5% -> 50.4%  median margin -0.3 -> 0.0
+   half    : prediction unchanged in  67.4%  accuracy 48.5% -> 49.6%  median margin -0.3 -> -0.0
+   identity: prediction unchanged in  60.4%  accuracy 48.5% -> 53.9%  median margin -0.3 -> 0.4
+   delete1 : prediction unchanged in  14.5%  accuracy 48.5% -> 5.6%  median margin -0.3 -> -15.8
+[ 289s] natural: baseline accuracy 1.000; mean hops 1.9, mean irrelevant letters 23.1
+   full    : prediction unchanged in 100.0%  accuracy 100.0% -> 100.0%  median margin 20.7 -> 20.7
+   half    : prediction unchanged in 100.0%  accuracy 100.0% -> 100.0%  median margin 20.7 -> 20.7
+   identity: prediction unchanged in  98.1%  accuracy 100.0% -> 98.1%  median margin 20.7 -> 12.9
+   delete1 : prediction unchanged in  14.6%  accuracy 100.0% -> 14.6%  median margin 20.7 -> -21.8
+[ 480s] influence map L=12: replacing a HOP letter changes the prediction in 94.6% of cases; replacing an IRRELEVANT letter in 0.2%
+[ 613s] influence map L=20: replacing a HOP letter changes the prediction in 86.2% of cases; replacing an IRRELEVANT letter in 20.5%
+DONE

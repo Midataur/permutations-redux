@@ -1,0 +1,12 @@
+stored permutations reproduced by my convention: OK
+
+real TRAINING data (100000 words, 1600000 slots): per-slot hops and width
+  hops: mean 14.7; quantiles 5/50/95/99/99.9%: [0, 16, 38, 47, 56]
+  P(slot has >= L hops): {10: 0.5912, 20: 0.4144, 30: 0.1444, 40: 0.03945, 50: 0.005137, 60: 0.0002513, 80: 0.0, 100: 0.0}
+  width (distinct positions visited) distribution: {1: 624102, 2: 8595, 3: 60293, 4: 197693, 5: 228931, 6: 212536, 7: 139759, 8: 75100, 9: 31949, 10: 14340, 11: 6702}
+  P(width >= 12): 0.0    (training windows give widths <= 11 in a single window)
+
+real TEST file (2000 words): hops mean 14.1, max 29; width mean 5.60, max 15; P(width>=12) = 0.0053
+  teacher-forced: slot accuracy 0.99987, word accuracy 0.9980  [91s]
+  free-running exact match on the first 500 test words: 1.0000 (500/500)  [124s]
+  teacher-forced errors (word, slot, hops, width): [(943, 15, 19, 14), (1425, 3, 5, 4), (1727, 0, 12, 13), (1830, 3, 17, 13)]

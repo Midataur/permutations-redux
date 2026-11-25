@@ -1,0 +1,47 @@
+[  22s] A fixed w=8   L=12 w= 8: TF 500/500 (100.0%)  margin med 22.9
+[  44s] A fixed w=8   L=24 w= 8: TF 500/500 (100.0%)  margin med 22.8
+[  65s] A fixed w=8   L=40 w= 8: TF 500/500 (100.0%)  margin med 21.9
+[  86s] A fixed w=8   L=56 w= 8: TF 500/500 (100.0%)  margin med 20.6
+[ 108s] A fixed w=8   L=80 w= 8: TF 499/500 (99.8%)  margin med 16.7
+[ 130s] B fixed L=24  L=24 w= 4: TF 500/500 (100.0%)  margin med 23.1
+[ 151s] B fixed L=24  L=24 w= 8: TF 500/500 (100.0%)  margin med 23.1
+[ 173s] B fixed L=24  L=24 w=11: TF 500/500 (100.0%)  margin med 22.5
+[ 194s] B fixed L=24  L=24 w=12: TF 500/500 (100.0%)  margin med 21.8
+[ 216s] B fixed L=24  L=24 w=14: TF 496/500 (99.2%)  margin med 18.2
+[ 238s] B fixed L=24  L=24 w=16: TF 478/500 (95.6%)  margin med 12.1
+[ 260s] C fixed L=40  L=40 w= 8: TF 500/500 (100.0%)  margin med 21.4
+[ 281s] C fixed L=40  L=40 w=11: TF 500/500 (100.0%)  margin med 20.0
+[ 303s] C fixed L=40  L=40 w=12: TF 499/500 (99.8%)  margin med 18.9
+[ 325s] C fixed L=40  L=40 w=16: TF 450/500 (90.0%)  margin med 10.4
+
+[ 459s] natural words: 3000 words, 48000 slots; slot acc 0.99983, word acc 0.9973
+accuracy by width (slots, errors):
+   w= 1:        1 slots,     0 errors  (100.000% correct)
+   w= 2:      678 slots,     0 errors  (100.000% correct)
+   w= 3:     4075 slots,     0 errors  (100.000% correct)
+   w= 4:     9596 slots,     0 errors  (100.000% correct)
+   w= 5:    11502 slots,     0 errors  (100.000% correct)
+   w= 6:     9336 slots,     0 errors  (100.000% correct)
+   w= 7:     6043 slots,     0 errors  (100.000% correct)
+   w= 8:     3454 slots,     1 errors  (99.971% correct)
+   w= 9:     1846 slots,     0 errors  (100.000% correct)
+   w=10:      879 slots,     0 errors  (100.000% correct)
+   w=11:      375 slots,     4 errors  (98.933% correct)
+   w=12:      138 slots,     0 errors  (100.000% correct)
+   w=13:       52 slots,     2 errors  (96.154% correct)
+   w=14:       21 slots,     1 errors  (95.238% correct)
+   w=15:        3 slots,     0 errors  (100.000% correct)
+   w=16:        1 slots,     0 errors  (100.000% correct)
+accuracy by hop bin (slots, errors):
+   hops   0-  4:      228 slots,     0 errors  (100.000% correct)
+   hops   5-  9:     5126 slots,     0 errors  (100.000% correct)
+   hops  10- 14:    21300 slots,     3 errors  (99.986% correct)
+   hops  15- 19:    17537 slots,     3 errors  (99.983% correct)
+   hops  20- 24:     3596 slots,     2 errors  (99.944% correct)
+   hops  25- 29:      207 slots,     0 errors  (100.000% correct)
+   hops  30- 39:        6 slots,     0 errors  (100.000% correct)
+accuracy for wide pointers (w >= 12) by hop bin:
+   w>=12, hops   0- 14:     16 slots,    1 errors (93.75% correct)
+   w>=12, hops  15- 24:    190 slots,    2 errors (98.95% correct)
+   w>=12, hops  25-120:      9 slots,    0 errors (100.00% correct)
+DONE

@@ -28,12 +28,13 @@ def softmax(x):
 
 
 class NPTransformer:
-    def __init__(self, path, max_group=25, input_len=25, n_head=6, n_blocks=5):
+    def __init__(self, path, max_group=25, input_len=25, n_head=6, n_blocks=5, num_trans=None):
         W, _ = load_safetensors(path)
         self.W = W
         self.n_head, self.n_blocks = n_head, n_blocks
         self.max_group, self.input_len = max_group, input_len
-        self.num_trans = max_group ** 2          # general transpositions: n^2 tokens
+        # general transpositions: n^2 tokens; elementary: pass num_trans=max_group (e.g. NPTransformer(path, 16, 120, num_trans=16))
+        self.num_trans = max_group ** 2 if num_trans is None else num_trans
         self.num_normal = self.num_trans + max_group
         self.START = self.num_normal + 1
         self.E = W["token_embedding_table.weight"]

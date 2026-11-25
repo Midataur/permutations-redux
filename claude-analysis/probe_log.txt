@@ -1,0 +1,11 @@
+[  71s] L=8 s=9: model correct at planted slot 1.000
+[  72s]   probes done
+[ 142s] L=12 s=13: model correct at planted slot 0.999
+[ 144s]   probes done
+[ 214s] L=16 s=17: model correct at planted slot 0.855
+[ 216s]   probes done
+[ 285s] L=20 s=21: model correct at planted slot 0.486
+[ 288s]   probes done
+[ 357s] L=20 s=6: model correct at planted slot 0.554
+[ 359s]   probes done
+DONE

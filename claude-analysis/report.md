@@ -8,13 +8,17 @@ Code, raw results and the figures are in this folder; commands to reproduce are 
 1. Version 1: baseline, stratified accuracy, planted-chase tests and Gram spectrum (§2, §3.1–3.5).
 2. Version 2: layer-wise probes, irrelevance interventions and the elementary-transposition model (§3.6–3.8).
 3. Version 3: which model produced Figure 5b, and where its blocks are (§3.8).
-4. Version 4 (this one): the position-embedding ablation, Test 6b (§3.8).
+4. Version 4: the position-embedding ablation, Test 6b (§3.8).
+5. Version 5 (this one): probes and activation patching at the word positions (§3.9, §3.10), and the design of the training experiment for the Spartan cluster (§6.1; code and README in `../hpc-experiment/`, not yet run).
 
-**What is new in this version (version 4).** The markers **[NEW]** and **[UPDATED]** show only what changed since version 3. Text without a marker is unchanged from version 3. Each new version clears the previous version's markers.
+**What is new in this version (version 5).** The markers **[NEW]** and **[UPDATED]** show only what changed since version 4. Text without a marker is unchanged from version 4. Each new version clears the previous version's markers.
 
-- **§3.8 [UPDATED]:** new paragraph with the result of Test 6b, which replaces the paragraph saying it could now be run.
-- **§1 [UPDATED]:** new item 14.
-- **§6 and §7 [UPDATED]:** Test 6b removed from the list of tests not yet run; the new script `run_pos_ablation.py` and its result files.
+- **§3.9 [NEW]:** probes at the 25 word positions. **§3.10 [NEW]:** activation patching at the word positions.
+- **§1 [UPDATED]:** items 6, 9 and 12 revised; new items 15, 16 and 17.
+- **§4 [UPDATED]:** two bullets revised (the second now has a fourth point): I no longer lean towards "coverage" over "depth".
+- **§5 [UPDATED]:** new item 8 (that change of lean).
+- **§6 [UPDATED], with new §6.1 [NEW]:** the two tests are no longer pending; the training experiment is designed, with predictions written down.
+- **§7 [UPDATED]:** new scripts, results files and figure; the experiment package.
 
 ## 1. Summary
 
@@ -26,16 +30,20 @@ Code, raw results and the figures are in this folder; commands to reproduce are 
    - At fixed $s=12$: 100% ($L=11$), 98.8% ($L=14$), 78.5% ($L=17$), 54.2% ($L=20$).
    - At $L=20$ the model is at about 50–56% whether the chase visits 4 points or 21 (1,000 words per cell in the fixed-hop sweep).
 5. **So the hypothesis I proposed earlier, that accuracy collapses once a chase visits more distinct points than the training support ($s\ge11$), is not supported.** Chases with 11–14 distinct points (10–13 hops) were 99.8–100% correct. In the fixed-hop sweep (§3.3), crossing from $s\le10$ to $s\ge11$ costs a small, measurable amount, about 2 points at $L=16$ and 4 points at $L=20$ (standard errors about 1), compared with 30–35 points for going from $L=16$ to $L=20$.
-6. **Unresolved: why hop count matters.** Either the 5-layer network cannot follow longer chains, or long chains are too rare in training, or both. The data is consistent with both (§3.3). Tests 1, 2 and 6a (§3.6–3.8) narrow this but do not settle it; see item 12.
+6. **[UPDATED] Unresolved: why hop count matters.** Either the 5-layer network cannot follow longer chains, or long chains are too rare in training, or both. The data is consistent with both (§3.3). Tests 1, 2 and 6a (§3.6–3.8) narrow this but do not settle it, and the tests at the word positions (§3.9–3.10, items 15 and 16) make a depth limit a serious candidate; see items 12, 15 and 16.
 7. **Token embeddings are close to $S_{25}$-invariant** (§3.5), but one of my earlier predictions about their spectrum failed.
 8. **The training support is $m=10$**, measured from the real training data (§2.3). The checkpoint config's `ACTUAL_GROUP_SIZE = 16` does not describe that data. In an earlier version of this report I wrongly took 16 from the config.
-9. **Layer-wise probes (§3.6).** At the position that predicts $p_k$, the pointer's location after $r$ hops is linearly decodable for the first few hops only. For $r=1$ a probe reaches 97–99% at layer 3, for $r=4$ about 60% at layers 4–5, and for $8\le r\le L-2$ it is at most 13% (chance 4%) in every layer. That holds even for $L=8$ and $L=12$, where the model is 100% correct. The answer itself appears only after the last block. So the model does not keep a step-by-step record of the chain at the query position, and there is no staircase of one hop per layer. This does not exclude composition at the input positions, which I did not probe.
+9. **Layer-wise probes (§3.6).** At the position that predicts $p_k$, the pointer's location after $r$ hops is linearly decodable for the first few hops only. For $r=1$ a probe reaches 97–99% at layer 3, for $r=4$ about 60% at layers 4–5, and for $8\le r\le L-2$ it is at most 13% (chance 4%) in every layer. That holds even for $L=8$ and $L=12$, where the model is 100% correct. The answer itself appears only after the last block. So the model does not keep a step-by-step record of the chain at the query position, and there is no staircase of one hop per layer. **[UPDATED]** Composition at the input positions is probed in §3.9 (item 15).
 10. **Irrelevance interventions (§3.7).** For $L\le 12$ and for natural words the prediction depends on the hop letters and on nothing else. Replacing every letter that cannot touch the pointer leaves the prediction unchanged in 98.1–100% of 800 words per set, and replacing one hop letter changes it in about 96% (planted chases). At $L=16$ and $L=20$ the same replacements change 16% and 45% of predictions, almost all of them near-ties, and accuracy does not fall (87.1% to 88.0%, and 48.5% to 50.4%). At $L=20$, replacing a hop letter that is read last, i.e. one of the chain's final hops, changes the prediction only about 60% of the time, against 95–98% for hop letters read first.
 11. **Elementary-transposition model (§3.8).** My NumPy port reproduces the model: 31,996 of 32,000 slots correct on the real test file (99.9875%, teacher-forced) and 500/500 words free-running. At fixed width 8 (the pointer stays inside 8 adjacent positions) accuracy is 99.8–100% from 12 up to 80 hops. There is no hop-count cliff, and its training data contains chases of up to 78 hops (about 0.1% of slots have 56 or more). Accuracy falls only when the chase spans more positions than any training chase did (width at least 12): 95.6% at width 16 with 24 hops, 90.0% at width 16 with 40 hops. On 3,000 fresh words, 7 of the 8 errors are at width 11 or more, which holds 590 of the 48,000 slots.
-12. **What this does to item 6.** The elementary model has the same architecture family (5 blocks, 6 heads; my NumPy code loads both) and follows chases of 40–80 hops when its training data contains chases that long. The general-transposition model's cliff at 15–20 hops sits where its own training data ends (§3.3). That favours "rare in training" over "five layers cannot do it", but it is not a proof: the two tasks differ (§3.8), and I have not trained the general model on longer chains.
+12. **What this does to item 6.** The elementary model has the same architecture family (5 blocks, 6 heads; my NumPy code loads both) and follows chases of 40–80 hops when its training data contains chases that long. The general-transposition model's cliff at 15–20 hops sits where its own training data ends (§3.3). That favoured "rare in training" over "five layers cannot do it", but it was never a proof: the two tasks differ (§3.8), and I have not trained the general model on longer chains. **[UPDATED]** The word-position results (items 15 and 16) weaken that lean: chain continuations are built layer by layer, which is how a depth limit would look, so I now treat the two readings as open (§5 item 8).
 13. **Figure 5b (§3.8).** The saved picture in the original repo's `embedding_pictures/` matches the `elem-partitioned-long-boosted-1` checkpoint in this repo (correlation 0.9999), and you confirmed it is Figure 5b. Its word positions split into two blocks at position 72, and the 16 output positions form a third block at 120, so the block sides are about 72 and 48, not 45. The training data shows nothing special at 45 or at 72.
 
-14. **[NEW] Position-embedding ablation, Test 6b (§3.8).** Swapping entries of the position-embedding table of the elementary model makes its answers follow the rearranged word: in 92.6–93.6% of the slots where the two answers differ (about 1,700–2,000 slots per segment swap), and 1% or fewer follow neither. Swaps that cross the block boundary at 72 behave the same as swaps inside a block (92.6–92.9% against 92.9–93.6%), so I find no sign that the boundary does anything the model relies on. The model reads the order of the letters from these vectors.
+14. **Position-embedding ablation, Test 6b (§3.8).** Swapping entries of the position-embedding table of the elementary model makes its answers follow the rearranged word: in 92.6–93.6% of the slots where the two answers differ (about 1,700–2,000 slots per segment swap), and 1% or fewer follow neither. Swaps that cross the block boundary at 72 behave the same as swaps inside a block (92.6–92.9% against 92.9–93.6%), so I find no sign that the boundary does anything the model relies on. The model reads the order of the letters from these vectors.
+
+15. **[NEW] At the word positions, the continuation of a chain becomes readable one layer at a time (§3.9).** For a letter $(a,b)$ at word position $t$, the "continuation" of endpoint $a$ is where a pointer that leaves the letter at $a$ ends up after the remaining letters to the left. A linear probe trained on letters whose chain has $h$ hops still to go decodes it with the following accuracy (chance 4%): at $h=1$, 27% at layer 1, 56% at layer 2 and 72–77% at layers 3–5; at $h=2$ to 4, 4–9% up to layer 2, 33–47% at layer 3, 60–66% at layer 4; at $h=5$ to 8, 4–6% up to layer 2, 7–11% at layer 3, 40–47% at layer 4, 56–57% at layer 5; at $h=9$ to 12, 3–5% through layer 3, 10% at layer 4, 64% at layer 5; at $h=13$ to 24, 4–5% through layer 4 and 74% at layer 5. The reach grows with depth, roughly 1, 1, 4, 8 and 13 or more hops at layers 1 to 5. That is the pattern a log-depth ("pointer-jumping") composition would give, and it would cap five blocks near 16 hops. A probe does not show the algorithm, and the high-$h$ bins come from my planted words only (§3.9).
+16. **[NEW] Activation patching agrees (§3.10).** Corrupt one hop letter of a planted chain ($L=8$, 12 or 16, model right on the clean word) and patch clean activations into the corrupted run. For a middle or last hop, restoring the clean activations at *all word positions* after block 4 brings back the clean answer in every word (1.00 to two decimals in all six conditions), although the query position's own state was computed from the corrupted word: the late part of the chain reaches the answer through the word positions, read in the last block. For the first hop, restoration falls to 33–51% when the patch is made after block 2 and to 8–10% after block 3: the query position has taken in the first hops by then (consistent with §3.6). Patching only the letters to the *right* of the corrupted one (read earlier in the chase) restores the answer for a middle hop from layer 3 on (30–38% after block 3, 72–93% after block 4) and for the last hop from layer 2 on (43–77% after block 2, 97–100% after block 3); patching only the letters to its *left* (read later) restores nothing in any condition. So the corrupted letter's influence travels towards the letters read before it, the direction in which continuations are built.
+17. **[NEW] The training experiment is designed, with predictions written down, and not yet run (§6.1).** One Slurm job trains four models in parallel: the control, the same model with planted long chains (word support kept at 10 points), an 8-block model on the same data, and the elementary model with embedding snapshots during training. It writes one zip. The model matches `transformer.py` to 1e-6 and the data generators match your real training statistics, both tested on CPU only.
 
 ## 2. Setup and provenance
 
@@ -250,7 +258,7 @@ The `delete1` figure for natural words, 14.6%, is the share of slots with no hop
 
 **Caveats.** Planted words at $L=16$ and $20$ are unlike training words anyway (§3.3). Replacing irrelevant letters with identity tokens makes natural words almost all identity, which is also unusual. Because the output prefix is the *original* one, other slots' prefix tokens may disagree with the changed input. The model's output at slot $k$ ignored this at $L\le12$, which, if anything, strengthens the locality result.
 
-### 3.8 Elementary-transposition model (Tests 6a and 6b, and where Figure 5b comes from) [UPDATED]
+### 3.8 Elementary-transposition model (Tests 6a and 6b, and where Figure 5b comes from)
 
 **The model.** `elem-partitioned-long-boosted-1` (checkpoint in this repo; training and test data in `Midataur/permutations` at commit `fdefb8c`). A word has 120 letters, each one of 16 tokens. Token $t\ge1$ swaps positions $t-1$ and $t$ and token 0 is the identity, so the group is $S_{16}$ and the model emits 16 output slots. The vocabulary has 34 tokens (16 letter tokens, 16 output tokens, NULL, START) and the context is 136. The pointer chase is the same, but every hop moves the pointer by $\pm1$. Instead of the number of distinct points I use the **width** $w$ of a chase: the number of adjacent positions it spans (largest minus smallest position visited, plus 1).
 
@@ -313,7 +321,7 @@ By hop count the 8 errors are spread across the bins with 10–24 hops (3, 3 and
 
 **Position 45 in the training data** (`elem_data_stats.py`, `elem_data_stats.txt`, 400,000 training rows and the test file). I found no structure at 45 or at 72. The training rows are position-stationary: for every position the token histogram is consistent with the pooled one (chi-square $z$ scores between $-1.9$ and $+1.6$ over 120 positions, none beyond 3; $z$ at positions 40–50 between $-0.9$ and $+1.5$), and the mean Coxeter length of the product of the first $i$ letters is smooth through $i=45$ (second differences below 0.01). Training outputs move at most 13 points and have Coxeter length at most 42, while the test file reaches 16 points and length 48 (0.35% of test outputs have length 45 or more, against none in training). The test file's token histogram is flat (0.062 each) while training's is bell-shaped (0.02 at the ends, 0.085 in the middle). I did not check position 72 specifically beyond the same stationarity test, which covers all 120 positions.
 
-**[NEW] Test 6b: position-embedding ablation** (`run_pos_ablation.py`, results in `pos_ablation_results.json`). I edited the position-embedding table of the elementary model in memory, so that the letter at word position $i$ is given the vector of position $\sigma(i)$, and ran the real test words. If the model reads the order of the letters from the embeddings, its answers should follow the *rearranged* word $w'$, where $w'[\sigma(i)]=w[i]$. For each slot where the true answer for $w$ and for $w'$ differ, I record whether the prediction equals the answer for $w$ (original), for $w'$ (rearranged) or neither. The unedited model is 100% correct on these words (150 words). Teacher forcing with the original word's true outputs as the prefix.
+**Test 6b: position-embedding ablation** (`run_pos_ablation.py`, results in `pos_ablation_results.json`). I edited the position-embedding table of the elementary model in memory, so that the letter at word position $i$ is given the vector of position $\sigma(i)$, and ran the real test words. If the model reads the order of the letters from the embeddings, its answers should follow the *rearranged* word $w'$, where $w'[\sigma(i)]=w[i]$. For each slot where the true answer for $w$ and for $w'$ differ, I record whether the prediction equals the answer for $w$ (original), for $w'$ (rearranged) or neither. The unedited model is 100% correct on these words (150 words). Teacher forcing with the original word's true outputs as the prefix.
 
 Segment swaps (two segments of 24 positions exchanged; 150 words):
 
@@ -333,15 +341,80 @@ Single swaps of two neighbouring positions $(i,i+1)$ for every $i$ from 0 to 118
 - **Not explained:** the 6–7% of differing slots that keep the original answer. I have not looked into which slots they are.
 - **Limits.** This shows whether the model uses the structure, not why training produced the blocks. Only swaps were tried: I did not remove the block structure itself (for example by projecting out the directions that separate the blocks), I did not test the 16 output positions, and the single-swap counts are small (40–60 slots per pair). Teacher forcing may help the model.
 
-## 4. What this means for the density idea
+### 3.9 Probes at the word positions (Test 7) [NEW]
+
+![Left: accuracy (%) of a linear probe for the continuation of a chain, at the 25 word positions, by layer and by the number of hops $h$ still to go; chance is 4%. Middle and right: activation patching (§3.10) for planted chains of $L=12$ hops; "restored" is the share of words whose answer returns to the clean one.](fig_input_positions.png)
+
+**Setup** (`run_input_probes.py`, results in `input_probe_results.json`, log in `input_probe_log.txt`). Read a word right to left. A pointer that leaves letter $t$ at endpoint $x$ continues through letters $t-1,\dots,0$ and ends at $\pi_{t-1}(x)$ after $h$ more hops. If the model composed chains by pointer jumping, the state of letter $t$ after layer $\ell$ would carry $\pi_{t-1}(a_t)$ and $\pi_{t-1}(b_t)$ for chains of up to about $2^\ell$ remaining hops. So for every layer $\ell$ (0 = embeddings, $\ell$ = after block $\ell$) I fit ridge probes from the residual stream at word position $t$ to $\pi_{t-1}(a_t)$ and to $\pi_{t-1}(b_t)$ (25 classes each), **separately for each range of $h$**, using only letters whose endpoint has that many hops to go. The rows are (word, position) pairs from 3,600 words: 1,200 planted words with $L=12$ and $s=9$, 1,200 planted with $L=20$ and $s=10$, and 1,200 natural words over 25 points. Words are split 60/20/20 into train, validation (ridge strength) and test, so no word appears in two parts. Input positions never see the outputs, so no teacher forcing is involved. A first version trained one probe on all rows pooled; it was dominated by the many rows where the answer is the letter's own endpoint ($h=0$) and showed nothing, so I report only the per-range probes.
+
+Accuracy (%) on test rows, chance 4%:
+
+| layer | $h=1$ | 2 | 3 | 4 | 5–6 | 7–8 | 9–12 | 13–24 |
+|---|---|---|---|---|---|---|---|---|
+| 0 (embeddings) | 4 | 5 | 4 | 5 | 4 | 4 | 4 | 4 |
+| 1 | 27 | 5 | 5 | 5 | 5 | 4 | 3 | 5 |
+| 2 | 56 | 9 | 5 | 5 | 6 | 4 | 5 | 4 |
+| 3 | 72 | 47 | 33 | 37 | 11 | 7 | 4 | 5 |
+| 4 | 77 | 66 | 61 | 60 | 47 | 40 | 10 | 5 |
+| 5 | 75 | 64 | 61 | 64 | 56 | 57 | 64 | 74 |
+| test rows | 8,650 | 4,569 | 2,199 | 1,076 | 1,234 | 986 | 1,661 | 1,589 |
+
+Label-shuffle controls (training labels permuted across rows) give 3.3–5.2% at layers 0, 4 and 5 for $h=1$, 5–6 and 13–24.
+
+**What it shows.**
+- **The reach of what is readable grows with depth.** At layers 1–2 only $h=1$ is readable. Readability extends to $h\le4$ at layer 3, to about $h\le8$ at layer 4, and to every $h$ I could test (up to 24) at layer 5. Counting the hops covered, that is about 1, 1, 4, 8 and 13 or more at layers 1 to 5, which is a doubling pattern with some lag.
+- **That is the pattern of log-depth composition, and it is a reason to take a depth limit seriously.** With about $2^\ell$ hops at layer $\ell$, five blocks would reach roughly 16 hops, close to where accuracy falls (§3.3). This is a reading of the pattern; the probe does not show the algorithm.
+- This is also where §3.6 left a gap: the query position holds the first few pointer states only, and the rest of the chain is held here, at the word positions.
+
+**Limits.**
+- Natural words have at most about 9 remaining hops, so the bins with $h\ge9$ come only from my planted words. In those, the continuation at every hop letter of the long chain is the same point, the end of the chain, so these rows are less independent than their number suggests, and "decodable at layer 5" is weaker evidence for composition there than at small $h$.
+- A linear probe can fail to find information that is present in another form. The values of 3–5% at the early layers mean that there is no linear code for this quantity there, not that there is no information.
+- Words are my own planted and natural words; I did not vary the distribution.
+- This is observational. §3.10 is the causal check.
+
+### 3.10 Activation patching at the word positions (Test 8) [NEW]
+
+**Setup** (`run_patching.py`, results in `patching_results.json`, log in `patching_log.txt`). I take a planted word where the pointer of slot $k$ makes $L$ hops ($s=\min(L+1,10)$ distinct points) and the model is right, and corrupt one hop letter: the $j$-th hop letter $(x_{j-1},x_j)$ becomes $(x_{j-1},z)$ with $z$ a fresh point, so the pointer leaves the chain there. The true answer then changes, and the unpatched model follows the corrupted word in 84–98% of words (the "follows corrupted" column below). Teacher forcing uses the clean word's outputs in every run, so only the word differs. I then run the corrupted word but overwrite the residual stream at a set of word positions, at layer $\ell$ (0 = embeddings, $\ell$ = after block $\ell$), with the values from the clean run, and report the share of words whose prediction at slot $k$ returns to the clean answer ("restored"). Patching at layer 5 changes nothing, because no later block reads the word positions; it is the unpatched baseline (2–8%). I used the first, middle and last hop of chains with $L=8$, 12 and 16 (143–160 words each).
+
+Patching **all 25 word positions** at layer $\ell$ (columns 0–4), by corrupted hop:
+
+| $L$ | corrupted hop | words | follows corrupted | 0 | 1 | 2 | 3 | 4 |
+|---|---|---|---|---|---|---|---|---|
+| 8 | first | 160 | 0.96 | 1.00 | 1.00 | 0.51 | 0.10 | 0.05 |
+| 8 | middle | 160 | 0.95 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| 8 | last | 160 | 0.95 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| 12 | first | 160 | 0.97 | 1.00 | 1.00 | 0.43 | 0.10 | 0.04 |
+| 12 | middle | 160 | 0.96 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| 12 | last | 160 | 0.95 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| 16 | first | 143 | 0.98 | 1.00 | 1.00 | 0.33 | 0.08 | 0.03 |
+| 16 | middle | 143 | 0.93 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| 16 | last | 143 | 0.84 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+
+Patching **subsets** of positions, $L=12$, restored at layer 0 / 1 / 2 / 3 / 4:
+
+| corrupted hop | chain letters | letters to the right (read earlier) | letters to the left (read later) | the corrupted letter | non-chain letters |
+|---|---|---|---|---|---|
+| middle | 1.00 / 1.00 / 1.00 / 1.00 / 1.00 | .04 / .04 / .04 / .38 / .92 | .04 for all | 1.00 / .99 / .81 / .15 / .06 | .04 for all |
+| last | 1.00 / 1.00 / 1.00 / 1.00 / 1.00 | .04 / .04 / .77 / 1.00 / 1.00 | .04 for all | 1.00 / 1.00 / .35 / .04 / .04 | .04 for all |
+| first | 1.00 / 1.00 / .40 / .07 / .04 | .03 for all | .03 for all | 1.00 / .98 / .23 / .06 / .04 | .03 for all |
+
+**What it shows.**
+- **Late hops are read from the word positions in the last block.** For a middle or last hop, patching all word positions even at layer 4, which leaves block 5 as the only reader, brings back the clean answer in every word, although the query position's own residual stream after block 4 was computed from the corrupted word. Whatever the query took in during blocks 1–4 about these hops does not decide the answer.
+- **The first hops are different.** Corrupting the first hop is not repaired by clean word positions from layer 2 or 3 on (33–51% after block 2, 8–10% after block 3), because the query position has already read it: that is the part of the chain the query holds itself (§3.6).
+- **The corrupted letter's effect travels to the letters read before it.** Clean activations at the letters to its right (read earlier in the chase) restore the answer, from layer 2 for the last hop and from layer 3 for a middle hop, while clean activations at the letters to its left (read later) restore nothing at any layer. This is the direction in which the continuation probes of §3.9 would be built: each letter learns where the chain beyond it leads.
+- The corrupted letter's own state carries it only through about layer 2, after which the information has moved to other positions. Non-chain letters never matter (control).
+
+**Limits.** 143–160 words per cell, chains of at most 16 hops (at $L=20$ the model is right only about half the time, so there is no clean baseline to restore), one corruption type, and positions are patched all at once rather than one head or one layer component at a time. "Restored" is the share of words whose prediction equals the clean answer; the unpatched baseline is 2–8%.
+
+## 4. What this means for the density idea [UPDATED]
 
 - The algebraic reason the target is local (Moore's presentation: every relation involves at most 4 points, and the pointer chase needs one point at a time) stands. The experiments above don't test it directly.
 - What the data does say is that the model's generalization beyond the training support is real at the level of whole words (all 2,000 real test words touch 17 or more points, against at most 10 in training), while each output slot only needs a short chase (at most 9 distinct points in the real test file). The ability to follow a chain falls off at $L\approx15$ to 20, which is where the training data runs out of long chains. Crossing the support boundary ($s=10\to11$) costs only 2 to 4 points. An accurate statement of what training "covers" is therefore about **chain length (hop count)** much more than about how many distinct points a word or a trajectory touches.
 - In the spirit of the $\mathbb{Q}\subset\mathbb{R}$ analogy: the objects that need to be dense are trajectories (chases), not words. The training distribution is dense in short chains, wherever they sit among 25 points, and sparse in long ones. A density argument would need a metric in which "long chain" is far from "short chain".
-- I can't say from this evidence whether the limit is architectural (depth) or statistical (rarity in training). Separating them needs experiments with new training runs (§6).
-- Three results from §3.6–3.8 bear on this. (i) The elementary model, trained on far longer chases than the general model, shows no hop-count cliff up to 80 hops and loses accuracy only beyond the widths it was trained on. That supports reading the general model's cliff as a coverage effect in hop count, though the two tasks differ. (ii) The interventions say the general model is local in the sense the algebra suggests: for $L\le12$ the output depends on the chase letters and nothing else. (iii) The probes say it does not hold the chain's later states at the query position, so how chains of 8–12 hops are composed within five blocks is still open, and a density argument built on chains would need to account for it.
+- I can't say from this evidence whether the limit is architectural (depth) or statistical (rarity in training). Separating them needs experiments with new training runs (§6.1). **[UPDATED]** §3.9–3.10 make the depth reading more plausible than I judged in version 4.
+- **[UPDATED]** Four results from §3.6–3.10 bear on this. (i) The elementary model, trained on far longer chases than the general model, shows no hop-count cliff up to 80 hops and loses accuracy only beyond the widths it was trained on. That supports reading the general model's cliff as a coverage effect in hop count, though the two tasks differ, and the elementary model's hops are $\pm1$ steps inside a window of at most 11 positions, which may be composed differently. (ii) The interventions say the general model is local in the sense the algebra suggests: for $L\le12$ the output depends on the chase letters and nothing else. (iii) The probes at the query position say it does not hold the chain's later states (§3.6); the probes and patching at the word positions say they are built there, layer by layer, with a reach of roughly 1, 1, 4, 8 and 13 or more hops at layers 1 to 5, and read in the last block (§3.9–3.10). (iv) If that is how five blocks compose chains, the hop limit may be set by depth, and more long chains in the data would not move it, while a deeper model would. A density argument built on chains would then need a second ingredient: the chain length the architecture can compose. The training experiment in §6.1 is designed to tell these apart.
 
-## 5. Corrections to my earlier messages
+## 5. Corrections to my earlier messages [UPDATED]
 1. **Ladder hypothesis.** I framed the ladder test around a boundary at 11 distinct points, the first beyond the $m=10$ support. That boundary is correct (§2.3). There is no collapse at it (summary item 5).
 2. **Word length.** My earlier closed-form tail estimates assumed 24 letters. The config uses 25 (`MAX_TRANS_NUMBER = 25`). Recomputed, the per-trajectory probability of at least 11 distinct points is $1.1\times10^{-6}$ (was $7.0\times10^{-7}$), and per word at most $2.7\times10^{-5}$ (was $1.7\times10^{-5}$). The simulation I ran earlier used 24 letters; the stratified run here uses 25 and saw none in 20,000 words, consistent with this.
 3. **Training support.** I assumed $m=10$, then switched to $m=16$ on the config's say-so, and finally measured the real data: $m=10$ (§2.3). The config's `ACTUAL_GROUP_SIZE` does not describe the data.
@@ -349,21 +422,39 @@ Single swaps of two neighbouring positions $(i,i+1)$ for every $i$ from 0 to 118
 5. **Untested:** my earlier suggestion that $m=4$ or $5$ might already suffice has not been tested (it needs retraining).
 6. **Leftover in §7.** Version 1 of this report described the fixed-hop sweep as crossing an $s=16/17$ boundary in the file table in §7. That was left over from the wrong $m=16$; the sweep crosses $s=10/11$, as §3.3 says. Fixed in version 2.
 7. **The block in Figure 5b.** In version 2 of §3.8 I said this checkpoint was not a clear example of the position-embedding block and that I had no seed that shows it. After finding that the saved picture in the original repo matches this checkpoint exactly, and you confirming it is Figure 5b, that was wrong. The blocks are at 72 and 120, not 45 (§3.8).
+8. **[NEW] Coverage versus depth.** In version 4 (§1 item 12, §4, §6 item 1) I said that the elementary model's results favoured "rare in training" over "five layers cannot do it", and called training on long-chain-enriched data "now more motivated". The probes and patching at the word positions (§3.9–3.10) show a depth-like staircase, so I no longer lean either way: it is open, and §6.1 is designed to settle it.
 
-## 6. Not done, and suggested next steps
+## 6. Not done, and suggested next steps [UPDATED]
 
-**Inference-only tests run in this version:** layer-wise probes (§3.6), irrelevance interventions (§3.7), and the elementary-transposition port with baseline, width and hop-count tests (§3.8, Test 6a).
+**Inference-only tests run in this version:** layer-wise probes (§3.6), irrelevance interventions (§3.7), the elementary-transposition port with baseline, width and hop-count tests (§3.8, Tests 6a and 6b), and **[NEW]** probes and activation patching at the word positions (§3.9, §3.10).
 
-**Inference-only tests not yet run:** probes (and activation patching) at the input-word positions, which follow from §3.6 and are the way to find where long chains are composed; gap/alignment variations beyond spread versus contiguous; attention patterns; weight-level equivariance; removing the block structure itself from the elementary model's position embeddings (for example by projecting out the directions that separate the blocks), and swaps involving the 16 output positions (§3.8). **[UPDATED]** Test 6b (swaps) is now done.
+**Inference-only tests not yet run:** gap/alignment variations beyond spread versus contiguous; attention patterns (of the general model at the word positions, and of the elementary model at long $L$); weight-level equivariance; removing the block structure itself from the elementary model's position embeddings (for example by projecting out the directions that separate the blocks), and swaps involving the 16 output positions (§3.8). **[NEW]** Patching for $L=20$ and above, and patching one head or one component at a time, which would say which heads move the continuations.
 
-**Needs training (not possible in my environment):** the support-size sweep; models of different depth; training with long-chain-enriched data.
+**Needs training (not possible in my environment):** the support-size sweep; models of different depth; training with long-chain-enriched data. **[UPDATED]** The experiment that does the first three is written and tested on CPU, and is waiting to be run on Spartan (§6.1).
 
-Given §3.6–3.8, I would prioritise:
-1. **Training the general model with long-chain-enriched data** (or a deeper model). This is now more motivated: the elementary model suggests long chains are learnable when present. If the general model's cliff moves with the data, it was coverage.
-2. **Probes and activation patching at the input positions** of the general model, to find where chains of 8–12 hops are composed, since the query position does not hold them (§3.6).
-3. **Attention patterns of the elementary model at long $L$** (40–80 hops, width 8), to see how a five-block model gets there.
+Given §3.6–3.10, I would prioritise:
+1. **Run the Spartan job (§6.1).** It is the only way to tell coverage from depth.
+2. **Then repeat §3.9–3.10 on the new checkpoints.** The 8-block model should show continuations readable at larger $h$ and an earlier layer, if depth is the limit.
+3. **Attention patterns at the word positions** of `torn-bigger-13`, to see which heads build the continuations.
 
-## 7. Reproducing
+### 6.1 The training experiment (`../hpc-experiment/`, not yet run) [NEW]
+
+One `sbatch` trains four models in parallel (one per GPU) and writes one zip with everything needed. Details, assumptions and how to shorten or resume it are in `hpc-experiment/README.md`.
+
+| arm | data | question |
+|---|---|---|
+| `g_m10` | natural words over 10 points (the paper's data) | control: does it reproduce the cliff at 15–20 hops? |
+| `g_plant10` | half natural, half words with one planted chain of 3–25 hops through 2–10 points, whole word on 10 points | **coverage**: does the cliff move? |
+| `g_plant10_b8` | the same, 8 blocks instead of 5 | **depth**: does the cliff go away? |
+| `e_base` | elementary model, as for Figure 5b | position-embedding pictures during training: when do the blocks form? |
+
+At about 60 snapshots per arm it records accuracy on fixed test sets split by hops and by distinct points, the position embeddings, and (less often) the token embeddings. Optional arms: 3 blocks, planted chains on 5 points, natural words on 5 points.
+
+**Predictions, written before the run.** If the cliff is coverage: `g_plant10` is at 90% or more at 20–24 hops at every $s$, including $s=14$ and 20, which are outside the 10-point support. If it is depth: `g_plant10` still falls off between about 16 and 24 hops and `g_plant10_b8` does not. Mixed outcomes are plausible. For `e_base` I have no prediction.
+
+**What has been checked, and what not.** Checked on CPU: the model computes the same function as `transformer.py` (logits agree to $10^{-6}$ for both configs; same checkpoint layout, readable by `np_transformer.py`); the data generators reproduce the real data (hop histogram of the natural general words to three decimals; for the elementary data token frequencies, window spans and the hops-by-width histogram, total variation distance 0.010); planted chains have exactly the requested $L$ and $s$ for 3,000 of 3,000 words at each support; a tiny version of the whole pipeline runs end to end and writes the zip, and early stop and resume work. Not checked: anything on a GPU, the speed, and whether the chosen number of steps is enough to converge. It differs from your training code in four ways (fresh data every step, a fixed learning-rate schedule, fused attention and bfloat16 autocast, one seed), listed in the README.
+
+## 7. Reproducing [UPDATED]
 
 Run from this folder (`claude-analysis/`). Scripts find the checkpoint at `../scaling-generator/trained-models/torn-bigger-13/model.safetensors`; set `TORN_MODEL` to override. Needs only `numpy` (plus `matplotlib` for figures); no PyTorch. To get the real data for `data_stats.py`, run `git cat-file blob 5863de5:scaling-generator/data/torn_bigger/<file>` in a clone of `Midataur/permutations` for `train_data1.csv`, `train_data1_perms.csv`, `test_data.csv` and `test_data_perms.csv`.
 
@@ -388,8 +479,13 @@ Run from this folder (`claude-analysis/`). Scripts find the checkpoint at `../sc
 | `make_elem_figure.py` | draws `fig_elem_cells.png` |
 | `elem_data_stats.py DATA_DIR`, `elem_pos_gram.py` | position-45 checks on the elementary data (§3.8); the picture from `elem_pos_gram.py` uses a colour scale that hides the blocks, use `fig5b_provenance.py` instead |
 | `fig5b_provenance.py CLONE_DIR` | searches the notebook history of `Midataur/permutations`, decodes the saved pictures, compares them with the checkpoints and locates the blocks (§3.8); output `fig5b_provenance.txt` |
-| **[NEW]** `run_pos_ablation.py DATA_DIR N_SEG N_PAIR` | position-embedding ablation, Test 6b (§3.8; I used `150 150`; about 10 minutes); output `pos_ablation_results.json`, `pos_ablation_log.txt` |
+| `run_input_probes.py N_WORDS_PER_SET` **[NEW]** | probes at the word positions, per layer and per hop bin (§3.9; I used the default 700 per set, 2,100 words; about 1 minute); output `input_probe_results.json`, `input_probe_log.txt` |
+| `run_patching.py N_WORDS` **[NEW]** | activation patching at the word positions (§3.10; I used the default 200 words per $L$; about 14 minutes); output `patching_results.json`, `patching_log.txt` |
+| `make_input_figure.py` **[NEW]** | draws `fig_input_positions.png` from the two result files |
+| `run_pos_ablation.py DATA_DIR N_SEG N_PAIR` | position-embedding ablation, Test 6b (§3.8; I used `150 150`; about 10 minutes); output `pos_ablation_results.json`, `pos_ablation_log.txt` |
 
 The elementary data is in `Midataur/permutations` at commit `fdefb8c`, folder `scaling-generator/data/elem_partitioned_long_boosted/`; fetch `train_data1.csv`, `train_data1_perms.csv`, `test_data.csv` and `test_data_perms.csv` with `git cat-file blob` as above. The elementary checkpoint is `elem-partitioned-long-boosted-1/model.safetensors` in the same `trained-models` folder as the general one.
 
-Results included: `ladder_results.csv`, `beyond_support_results.csv`, `support_stats.txt`, `data_stats.txt`, `strat_summary.txt`, `gram_results.json`, `gram_spectrum.png`, `fig_accuracy_vs_hops.png`, `probe_results.csv`, `probe_controls.json`, `probe_log.txt`, `irrelevance_results.json`, `influence_map.json`, `irrelevance_log.txt`, `elem_stats.txt`, `elem_cells_results.csv`, `elem_cells_log.txt`, `elem_data_stats.txt`, `fig5b_provenance.txt`, **[NEW]** `pos_ablation_results.json`, `pos_ablation_log.txt`, `elem_pos_gram.png`, `fig_probe_layers.png`, `fig_influence_map.png`, `fig_elem_cells.png`, and the arrays `elem_train_chase_hist.npz` and `elem_natural.npz`. The raw per-slot arrays from the stratified run (`strat_results.npz`, 2.3 MB) are not included; `run_stratified.py` regenerates them with the same seed.
+Results included: `ladder_results.csv`, `beyond_support_results.csv`, `support_stats.txt`, `data_stats.txt`, `strat_summary.txt`, `gram_results.json`, `gram_spectrum.png`, `fig_accuracy_vs_hops.png`, `probe_results.csv`, `probe_controls.json`, `probe_log.txt`, `irrelevance_results.json`, `influence_map.json`, `irrelevance_log.txt`, `elem_stats.txt`, `elem_cells_results.csv`, `elem_cells_log.txt`, `elem_data_stats.txt`, `fig5b_provenance.txt`, `pos_ablation_results.json`, `pos_ablation_log.txt`, **[NEW]** `input_probe_results.json`, `input_probe_log.txt`, `patching_results.json`, `patching_log.txt`, `elem_pos_gram.png`, `fig_probe_layers.png`, `fig_influence_map.png`, `fig_elem_cells.png`, **[NEW]** `fig_input_positions.png`, and the arrays `elem_train_chase_hist.npz` and `elem_natural.npz`. The raw per-slot arrays from the stratified run (`strat_results.npz`, 2.3 MB) are not included; `run_stratified.py` regenerates them with the same seed.
+
+**[NEW] The training experiment** is in `../hpc-experiment/` (design in §6.1; how to run it, what it measures and its limits are in its `README.md`). From that folder, `sbatch run.slurm` runs everything and writes one zip; `tests/run_tests.sh` runs the CPU tests (about 6 minutes).

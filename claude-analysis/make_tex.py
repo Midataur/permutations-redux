@@ -31,7 +31,7 @@ FIGURE_CAPTION_FOR_FILE_LINE = {
                                  "400 words per point, 95\\% Wilson intervals."),
 }
 FIGURE_WIDTH = {"fig_accuracy_vs_hops.png": 0.88, "fig_probe_layers.png": 1.0, "fig_influence_map.png": 1.0,
-                "fig_elem_cells.png": 1.0, "fig_input_positions.png": 1.0}
+                "fig_elem_cells.png": 1.0, "fig_input_positions.png": 1.0, "fig_patching_setup.png": 1.0}
 
 ARR = r">{\raggedright\arraybackslash}"
 TABLE_SPECS = {
@@ -51,7 +51,7 @@ TABLE_SPECS = {
     12: dict(cols=ARR + "p{6.0cm} r r r r"),
     13: dict(cols="l *{8}{r}"),
     14: dict(cols="r l r r *{5}{r}", special="patch_all"),
-    15: dict(cols="l " + ARR + "p{5.4cm} *{5}{r}", special="patch_subsets"),
+    15: dict(cols="l " + ARR + "p{5.4cm} *{5}{r}", special="patch_subsets", long=True),
     16: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
     17: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
 }
@@ -333,7 +333,9 @@ def render_table(idx, rows):
                     assert len(vals) == 5, c
                     cells = " & ".join(vals)
                 label = r"\textbf{%s}" % inl(r[0], lead_ok=False) if k == 0 else ""
-                trs.append("%s & %s & %s \\\\" % (label, inl(names[k], lead_ok=False), cells))
+                # \\* forbids a page break inside one corrupted-hop group (the table is a longtable and may break between groups)
+                end = r"\\" if k == len(r) - 2 else r"\\*"
+                trs.append("%s & %s & %s %s" % (label, inl(names[k], lead_ok=False), cells, end))
         content = head + trs
     else:
         head = [" & ".join(hdr(c) for c in rows[0]) + r" \\", r"\midrule"]

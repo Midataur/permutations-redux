@@ -374,7 +374,31 @@ Label-shuffle controls (training labels permuted across rows) give 3.3–5.2% at
 
 ### 3.10 Activation patching at the word positions (Test 8) [NEW]
 
-**Setup** (`run_patching.py`, results in `patching_results.json`, log in `patching_log.txt`). I take a planted word where the pointer of slot $k$ makes $L$ hops ($s=\min(L+1,10)$ distinct points) and the model is right, and corrupt one hop letter: the $j$-th hop letter $(x_{j-1},x_j)$ becomes $(x_{j-1},z)$ with $z$ a fresh point, so the pointer leaves the chain there. The true answer then changes, and the unpatched model follows the corrupted word in 84–98% of words (the "follows corrupted" column below). Teacher forcing uses the clean word's outputs in every run, so only the word differs. I then run the corrupted word but overwrite the residual stream at a set of word positions, at layer $\ell$ (0 = embeddings, $\ell$ = after block $\ell$), with the values from the clean run, and report the share of words whose prediction at slot $k$ returns to the clean answer ("restored"). Patching at layer 5 changes nothing, because no later block reads the word positions; it is the unpatched baseline (2–8%). I used the first, middle and last hop of chains with $L=8$, 12 and 16 (143–160 words each).
+**Setup** (`run_patching.py`, results in `patching_results.json`, log in `patching_log.txt`).
+
+*The idea.* Damage the input in one place, then repair the model's internal state in chosen places. If putting the clean values back at some word positions, right after some block, undoes the damage, then the information that decides the answer passes through those positions at that depth.
+
+![What the patching experiment does, for a word with $L=4$ hops (the real words have 25 letters and $L=8$, 12 or 16 hops). Top: the word, with the corrupted hop letter in red; "right" and "left" refer to that letter. Bottom: the three runs. The patched run is the corrupted run with clean values put back at chosen word positions after block $\ell$ ($\ell=3$ here).](fig_patching_setup.png)
+
+*The four steps, for one output slot $k$ of one word.*
+
+1. **Clean word.** Take a planted word (§3.3) in which the pointer of slot $k$ makes $L$ hops through $s=\min(L+1,10)$ distinct points, and keep it only if the model answers slot $k$ correctly. Call that answer $p_k$. The letters where the pointer moves are the *hop letters* (the chain letters); all other letters are *non-chain* letters. Number the hop letters $1,\dots,L$ in reading order, so hop 1 is the one nearest the right end, which the pointer meets first.
+2. **Corrupted word.** Pick one hop $j$. Its letter moves the pointer from $x_{j-1}$ to $x_j$. Replace it by a letter that moves the pointer from $x_{j-1}$ to $z$, where $z$ is a point not on the chain. The pointer now leaves the chain at hop $j$, and the true answer for slot $k$ becomes a different point $p^*_k$ (words where it does not change are dropped). In the figure ($L=4$, $k=3$) the hop letters $\{3,7\},\{7,1\},\{1,9\},\{9,12\}$ give $3\to7\to1\to9\to12$, so $p_k=12$. Replacing hop 2, $\{7,1\}$, by $\{7,20\}$ gives $3\to7\to20$, so $p^*_k=20$ (if a letter read later also contained 20, the pointer would carry on from there; the true answer is always recomputed from the corrupted word).
+3. **Two ordinary runs.** Run the model on the clean word and on the corrupted word. In both, the outputs fed back before slot $k$ are those of the clean word (teacher forcing), so the only difference between the runs is the word. Unpatched, the model follows the corrupted word, answering $p^*_k$, in 84–98% of words (the "follows corrupted" column below), and answers $p_k$ in only 2–8%.
+4. **Patched run.** Run the corrupted word again, but right after block $\ell$ overwrite the residual stream at a chosen set of word positions with the values from the clean run. The later blocks then compute on this mixture. The query and output positions are never overwritten. A word counts as **restored** if the prediction at slot $k$ is $p_k$ again. Here $\ell=0$ means the embeddings (before block 1) and $\ell$ means after block $\ell$.
+
+*Which positions are overwritten.* Within the word every position can attend to every other one, so the corruption can reach any of them. I try six sets:
+
+- all 25 word positions;
+- the chain letters (all hop letters);
+- the letters to the right of the corrupted one (read earlier in the chase);
+- the letters to the left of it (read later);
+- the corrupted letter alone;
+- the non-chain letters (a control).
+
+*Reference points.* Patching all word positions at layer 0 gives back the clean word exactly, so it must restore every word (the column headed 0 below). Patching at layer 5 changes nothing, because no later block reads the word positions; it is the unpatched run, restored in 2–8% of words.
+
+*What was run.* The corrupted hop was the first (hop 1), the middle (hop $L/2+1$) or the last (hop $L$), for chains with $L=8$, 12 and 16, with 143–160 words each. Every table cell below is the share of those words that are restored; the columns are the layer $\ell$ at which the patch is made (0–4).
 
 Patching **all 25 word positions** at layer $\ell$ (columns 0–4), by corrupted hop:
 

@@ -53,25 +53,24 @@ draw(ctrl, ORANGE, "^", True, "Control: L = 20 hops, s = 4…10 distinct points"
 
 ax.set_ylim(35, 102); ax.set_ylabel("Accuracy at planted slot (%)", color=INK2, fontsize=10)
 ax.set_title("Accuracy falls mainly with chain length (hops), only weakly with distinct points", loc="left", color=INK, fontsize=12, pad=10)
-ax.annotate("L = 20 for all four orange points\n(s = 4, 6, 8, 10) and the s = 12 square:\nsimilar accuracy, very different support", xy=(20, 54), xytext=(20.8, 82), fontsize=8.5, color=INK2,
+ax.annotate("L = 20 for all four orange points\n(s = 4, 6, 8, 10) and the s = 12 square:\nsimilar accuracy; training support is s ≤ 10", xy=(20, 54), xytext=(20.8, 82), fontsize=8.5, color=INK2,
             arrowprops=dict(arrowstyle="-", color=INK2, lw=0.8))
 ax.legend(loc="lower left", frameon=False, fontsize=8.5, labelcolor=INK2)
 
 Ls = np.arange(2, 25)
-def tail(m, L, N=25):
-    q = 2*(m-1)/m**2
-    return sum(comb(N, j) * q**j * (1-q)**(N-j) for j in range(L, N+1))
-WORDS = 8_000_000
-for m, ls, lab in [(10, "--", "m = 10 (paper; sensitivity only)"), (16, "-", "m = 16 (checkpoint config; used)")]:
-    cnt = np.array([WORDS * m * tail(m, L) for L in Ls])
-    bx.semilogy(Ls, np.maximum(cnt, 1e-6), ls, color=INK2, lw=1.4, label=lab)
-bx.axhline(1, color=INK2, lw=0.8, ls=":")
-bx.text(24.4, 1.4, "1 example", ha="right", fontsize=8, color=INK2)
-bx.set_ylim(1e-4, 3e7); bx.set_xlim(2, 24.6); bx.set_xticks(range(2, 25, 2))
-bx.set_ylabel("Expected training\ntrajectories with ≥ L hops", color=INK2, fontsize=9)
+H = np.load("train_chase_hist.npz")          # from data_stats.py: real training file 1 of 20
+hist_L, scale = H["hist_L"], float(H["scale"])
+cnt = np.array([hist_L[L:].sum() * scale for L in Ls])
+pos = cnt > 0
+bx.semilogy(Ls[pos], cnt[pos], "-o", color=INK2, lw=1.4, ms=4, label="training slots with ≥ L hops (file 1 of 20, ×20)")
+bx.semilogy(Ls[~pos], np.full((~pos).sum(), 6.0), "x", color=INK2, ms=6, label="none observed in file 1")
+bx.axhline(scale, color=INK2, lw=0.8, ls=":")
+bx.text(24.4, scale * 1.5, "1 slot in file 1", ha="right", fontsize=8, color=INK2)
+bx.set_ylim(2, 2e8); bx.set_xlim(2, 24.6); bx.set_xticks(range(2, 25, 2))
+bx.set_ylabel("Training slots\nwith ≥ L hops (8M words)", color=INK2, fontsize=9)
 bx.set_xlabel("Hops L made by the pointer for the planted output slot", color=INK2, fontsize=10)
 bx.legend(loc="upper right", frameon=False, fontsize=8.5, labelcolor=INK2)
-fig.text(0.01, 0.005, "Teacher-forced; 400 words per point; bars are 95% Wilson intervals. Bottom panel assumes 8M training words of 25 uniform letters on m points (assumption, not verified).",
+fig.text(0.01, 0.005, "Teacher-forced; 400 words per point; bars are 95% Wilson intervals. Bottom panel: counts from one of the 20 real training files (400k words), scaled to 8M.",
          fontsize=7.5, color=INK2)
 fig.savefig("fig_accuracy_vs_hops.png", dpi=150, bbox_inches="tight", facecolor=SURF)
 print("saved")

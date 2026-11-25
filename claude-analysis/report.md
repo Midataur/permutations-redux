@@ -1,21 +1,21 @@
 # Inference-only tests on `torn-bigger-13` (general transpositions, $S_{25}$)
 
-Run on 2026-11-25. Everything here uses the trained checkpoint as-is, with no retraining.
+Run on 2026-11-25. Everything here uses the trained checkpoint as-is, with no retraining. Section 2.3 also uses one real training file and the real test file.
 Code, raw results and the figure are in this folder; commands to reproduce are in §7.
 
 ## 1. Summary
 
-1. **Baseline reproduced on freshly generated words.** Free-running accuracy was 3,000/3,000. Teacher-forced word accuracy was 19,999/20,000, with 499,999/500,000 positions correct.
-2. **Almost every test word is outside the training support.** I take the training support to be $m=16$ points, as in the checkpoint's config (§2.3). Fresh test words touch 15–25 distinct points (mean 21.6), and 99.95% touch more than 16 (`support_stats.py`, 200,000 words). Their permutations move 12–25 points (mean 21.0).
-3. **But each individual chase in a natural test word is short.** Per output slot, the pointer chase (§3.1) visited at most 10 distinct points, and only 7 of 500,000 slots reached 10. So a test word is globally outside the support while every one of its output slots is locally well inside it. The paper-style accuracy therefore says nothing about slots with long chases.
-4. **Planted-chase ("ladder") tests: accuracy is governed mainly by the number of hops $L$. The number of distinct points $s$ has a much smaller, gradual effect.**
+1. **Baseline reproduced.** On the paper's real test file the model gets 2,000/2,000 words right, free-running. On freshly generated words free-running accuracy was 3,000/3,000. Teacher-forced word accuracy was 19,999/20,000, with 499,999/500,000 positions correct.
+2. **Every test word is outside the training support.** The real training data touches at most 10 points (§2.3). All 2,000 words of the real test file touch 17 to 25 points (mean 21.6), and my fresh words behave the same way.
+3. **But each individual chase in a natural test word is short.** In the real test file the longest chase made 9 hops and visited 9 distinct points. In my 20,000 fresh words, a chase visited at most 10 distinct points, and only 7 of 500,000 slots reached 10. So a test word is globally outside the support while each of its output slots is locally inside it. The paper-style accuracy therefore says nothing about slots with long chases.
+4. **Planted-chase ("ladder") tests: accuracy is governed mainly by the number of hops $L$. The number of distinct points $s$ has a much smaller effect.**
    - Accuracy is essentially perfect up to $L\approx 12$ and falls steeply after $L\approx 15$.
    - At fixed $s=12$: 100% ($L=11$), 98.8% ($L=14$), 78.5% ($L=17$), 54.2% ($L=20$).
-   - At $L=20$ the model is at about 50–60% whether the chase visits 4 points or 21: 59.5% ($s=6$), 54.4% ($s=12$), 53.4% ($s=16$), 50.8% ($s=17$), 50.3% ($s=21$) with 1,000 words per cell.
-5. **So the hypothesis I proposed earlier, that accuracy collapses once a chase visits more distinct points than the training support, is not supported.** With $m=16$ my first ladder cells (11–14 distinct points, about 100% correct) were inside the support and did not test it. The fixed-hop sweep (§3.3) does: at $L=16$ and $L=20$ there is no step between $s=16$ and $s=17$ (changes of $+1.6$ and $-2.6$ points, each about one standard error). Accuracy declines only gently with $s$, by about 9 points from $s=6$ to $s=21$ at $L=20$.
+   - At $L=20$ the model is at about 50–56% whether the chase visits 4 points or 21 (1,000 words per cell in the fixed-hop sweep).
+5. **So the hypothesis I proposed earlier, that accuracy collapses once a chase visits more distinct points than the training support ($s\ge11$), is not supported.** Chases with 11–14 distinct points (10–13 hops) were 99.8–100% correct. In the fixed-hop sweep (§3.3), crossing from $s\le10$ to $s\ge11$ costs a small, measurable amount, about 2 points at $L=16$ and 4 points at $L=20$ (standard errors about 1), compared with 30–35 points for going from $L=16$ to $L=20$.
 6. **Unresolved: why hop count matters.** Either the 5-layer network cannot follow longer chains, or long chains are too rare in training, or both. The data is consistent with both (§3.3).
 7. **Token embeddings are close to $S_{25}$-invariant** (§3.5), but one of my earlier predictions about their spectrum failed.
-8. **Training support is taken as $m=16$** from the config, per your note that this checkpoint may not be the paper's model (§2.3). I have not verified it against the training data.
+8. **The training support is $m=10$**, measured from the real training data (§2.3). The checkpoint config's `ACTUAL_GROUP_SIZE = 16` does not describe that data. In an earlier version of this report I wrongly took 16 from the config.
 
 ## 2. Setup and provenance
 
@@ -27,12 +27,17 @@ Code, raw results and the figure are in this folder; commands to reproduce are i
 ### 2.2 Why I trust the reimplementation, and what is not checked
 - The mask I build equals the mask buffer stored in the checkpoint.
 - The cached incremental decoder agrees with a full forward pass to $1.7\times10^{-5}$ in the logits.
-- It scores 100% on fresh words. A faulty reimplementation would not.
+- It scores 100% on fresh words and 2,000/2,000 on the real test file. A faulty reimplementation would not.
 - **Not done:** a direct comparison against the repo's PyTorch code. PyTorch could not be installed in my sandbox (the package host was blocked).
 
-### 2.3 Test words, and a discrepancy about the training support
-- The paper's test set is not in the repo. I generated words to match `fast-data-gen/src/main.rs` for the general type: 25 letters, each an independent uniform draw from the $25^2=625$ tokens (token $=25a+b$), with the permutation computed by swapping positions as in `get_permutation`.
-- **Training support.** `trained-models/torn-bigger-13-config.py` sets `MAX_GROUP_SIZE = 25` and `ACTUAL_GROUP_SIZE = 16`, with `RELABEL = True`. The paper says $S_{10}$. You told me this checkpoint is probably not the one reported in the paper, merely one that did well, and that the config should be trusted over the paper. **So the working assumption throughout is $m=16$.** The training data is not in the repo, so I have not verified this independently. The $m=10$ row of the table in §3.3 and the dashed curve in the figure are kept only as a sensitivity check.
+### 2.3 Test words and the training support
+- The test set is not in this repo (the real one is in `Midataur/permutations`, see below). For most tests I generated words to match `fast-data-gen/src/main.rs` for the general type: 25 letters, each an independent uniform draw from the $25^2=625$ tokens (token $=25a+b$), with the permutation computed by swapping positions as in `get_permutation`.
+- **Training support (measured).** The data is not in the latest commit of this repo. It is in `scaling-generator/data/torn_bigger/` at commit `5863de5` ("torn-bigger-13") of `Midataur/permutations`: 20 training files of 400,000 words each (8M words) plus a 2,000-word test file. I read one training file and the test file (`data_stats.py`, output in `data_stats.txt`).
+  - Training words touch 7 to 10 distinct points (mean 9.93; 93% touch exactly 10) and never more than 10. Their permutations move at most 10 points. So $m=10$, as in the paper.
+  - 10.0% of training letters are identity tokens, against 4.1% in the test file.
+  - Test words touch 17 to 25 points (mean 21.6).
+  - The stored permutations equal the ones I recompute from the words, in both files, so my reading of the token convention is right.
+  - `trained-models/torn-bigger-13-config.py` sets `ACTUAL_GROUP_SIZE = 16`, which does not match this data. Earlier I switched to $m=16$ because you suggested trusting the config over the paper. That was wrong: the config value does not describe the data. I have not checked the other 19 training files, and I cannot prove the checkpoint was trained on exactly these files, but it scores 2,000/2,000 on this test file.
 
 ## 3. Results
 
@@ -92,39 +97,45 @@ Source: `strat_summary.txt` (20,000 words, 500,000 slots, teacher-forced).
 The full table (24 cells, including the remaining contig cells) is in `ladder_results.csv`.
 
 **What it shows.**
-- At $L=20$ the accuracy is the same, within noise, for $s=4$ up to $s=12$ (400 words per cell). At $s=12$ it varies from 100% to 54% as $L$ goes from 11 to 20. So $L$ is the dominant variable. The larger fixed-hop sweep below finds a small additional dependence on $s$.
+- At $L=20$ the accuracy is the same, within noise, for $s=4$ up to $s=12$ (400 words per cell). At $s=12$ it varies from 100% to 54% as $L$ goes from 11 to 20. So $L$ is the dominant variable. The larger fixed-hop sweep below finds a small additional dependence on $s$ across the support boundary.
 - Where it fails, it fails softly: the median margin between the true logit and the best competitor goes from about 20 (easy) to about 0.6 at $L=20$. The model is close to indifferent rather than confidently wrong.
 - At $L\ge19$ accuracy is around 50%, not near chance ($1/25$).
 - Hop letters packed at the end of the word give about the same accuracy as spread-out ones (e.g. both 93.8% at $L=15$).
 - Other output slots in the planted words stay at least 99% correct in every cell.
 
-**Fixed-hop sweep across the support boundary.** The ladder cells confound $s$ and $L$, because a chase with $s$ distinct points needs at least $s-1$ hops. To test the boundary $m=16$ directly I fixed $L$ and varied $s$ from inside the support ($s\le16$) to outside it ($s\ge17$). Script `run_beyond_support.py`, teacher-forced, 1,000 words per cell, seed 2027, result in `beyond_support_results.csv`.
+**Fixed-hop sweep across the support boundary.** The ladder cells confound $s$ and $L$, because a chase with $s$ distinct points needs at least $s-1$ hops. To test the boundary directly I fixed $L$ and varied $s$ from inside the training support ($s\le10$) to outside it ($s\ge11$). Script `run_beyond_support.py`, teacher-forced, 1,000 words per cell, seed 2027, result in `beyond_support_results.csv`.
 
 | $L$ | $s$ | teacher-forced slot [95% CI] | median logit margin |
 |---|---|---|---|
 | 16 | 6 | 910/1000 (91.0%) [89.1, 92.6] | 11.6 |
-| 16 | 12 | 890/1000 (89.0%) [86.9, 90.8] | 8.5 |
-| 16 | 16 | 855/1000 (85.5%) [83.2, 87.5] | 6.7 |
-| 16 | 17 | 871/1000 (87.1%) [84.9, 89.0] | 6.3 |
-| 20 | 6 | 595/1000 (59.5%) [56.4, 62.5] | 1.6 |
-| 20 | 12 | 544/1000 (54.4%) [51.3, 57.5] | 0.8 |
-| 20 | 16 | 534/1000 (53.4%) [50.3, 56.5] | 0.5 |
-| 20 | 17 | 508/1000 (50.8%) [47.7, 53.9] | 0.1 |
-| 20 | 21 | 503/1000 (50.3%) [47.2, 53.4] | 0.0 |
+| 16 | 9 | 895/1000 (89.5%) [87.4, 91.3] | 9.9 |
+| 16 | 10 | 907/1000 (90.7%) [88.7, 92.3] | 9.7 |
+| 16 | 11 | 896/1000 (89.6%) [87.6, 91.3] | 9.3 |
+| 16 | 12 | 884/1000 (88.4%) [86.3, 90.2] | 8.9 |
+| 16 | 17 | 876/1000 (87.6%) [85.4, 89.5] | 6.2 |
+| 20 | 6 | 558/1000 (55.8%) [52.7, 58.9] | 1.2 |
+| 20 | 9 | 529/1000 (52.9%) [49.8, 56.0] | 0.5 |
+| 20 | 10 | 550/1000 (55.0%) [51.9, 58.1] | 0.7 |
+| 20 | 11 | 508/1000 (50.8%) [47.7, 53.9] | 0.2 |
+| 20 | 12 | 513/1000 (51.3%) [48.2, 54.4] | 0.2 |
+| 20 | 17 | 499/1000 (49.9%) [46.8, 53.0] | 0.0 |
+| 20 | 21 | 506/1000 (50.6%) [47.5, 53.7] | 0.0 |
 
-- Hop count dominates. Going from $L=16$ to $L=20$ costs about 30–35 points at every $s$ (for example 89.0% to 54.4% at $s=12$).
-- $s$ has a small but real effect. At $L=20$, accuracy falls from 59.5% ($s=6$) to 50.3% ($s=21$), a 9-point drop with a standard error of about 2. At $L=16$ the drop from $s=6$ to $s=17$ is 3.9 points (standard error 1.4).
-- There is no step at the support boundary. Going from $s=16$ to $s=17$ changes accuracy by $+1.6$ points at $L=16$ and $-2.6$ at $L=20$, each about one standard error.
+- Hop count dominates. Going from $L=16$ to $L=20$ costs about 30–35 points at every $s$ (for example 88.4% to 51.3% at $s=12$).
+- Pooling the cells inside the support ($s\le10$) and beyond it ($s\ge11$): at $L=16$ the accuracy is 90.4% inside and 88.5% beyond, a drop of 1.9 points (standard error 0.8). At $L=20$ it is 54.6% and 50.6%, a drop of 3.9 points (standard error 1.2).
+- So there is a small but detectable cost to leaving the support, about 2 to 4 points. It looks more like a small step at $s=10\to11$ than a smooth slope: the cells inside the support are flat (52.9–55.8% at $L=20$) and so are those beyond it (49.9–51.3%). With 1,000 words per cell I can't rule out a gentle slope.
+- The cost of leaving the support is about a tenth of the cost of adding hops.
 - Caveat: at fixed $L$, larger $s$ also means a different word structure (fewer revisits of the same point), so this is not a pure change in support size.
 
-**Relation to training frequency (suggestive only).** Assuming 8M training words of 25 uniform letters on $m$ points (the dataset size is from the paper's hyperparameter table; the rest is an assumption), the expected number of training trajectories with at least $L$ hops is:
+**Relation to training frequency (from the real training data).** I counted, in one of the 20 real training files (400,000 words, §2.3), the output slots whose pointer chase makes at least $L$ hops, and scaled by 20 to the full 8M words. The tail is noisy because it rests on few observations.
 
 | $L \ge$ | 12 | 13 | 15 | 17 | 19 |
 |---|---|---|---|---|---|
-| $m=16$ (working assumption) | 1,020 | 132 | 1.4 | 0.008 | $2\times10^{-5}$ |
-| $m=10$ (sensitivity only) | 46,300 | 9,790 | 280 | 4.3 | 0.03 |
+| observed in file 1 | 2,310 | 483 | 18 | 1 | 0 |
+| scaled to 8M words | 46,200 | 9,660 | 360 | 20 | 0 (upper 95% bound about 60) |
+| model accuracy at this $L$ | 100% | 99.8% | 93.8% | 78.5% | 56.2% |
 
-Under $m=16$ the model still gets 94% right at $L=15$ and 78% at $L=17$, where the training set would be expected to contain about one such chase or none at all. So it extrapolates past the chain lengths it was trained on, and degrades gradually rather than failing at the edge of its training data. A sharp "long chains are rare, so unlearned" explanation does not fit that well. A softer version does: the model composes the short chains it has seen and becomes less reliable as the chain grows beyond them. A depth limit ("five layers can only follow so many hops") predicts a similar gradual decline, and this experiment cannot separate the two. The expected counts also rest on unverified assumptions about the training data.
+The accuracy cliff sits where the training data runs out of long chains: tens of thousands of slots with 12 or more hops, a few hundred at 15, about 20 at 17, and none seen at 19 or more. At $L=17$ there are only about 20 examples in the whole training set and the model still gets 78.5%. At $L=19$ to 20, where there are essentially none, it still gets about 55%. So it extrapolates partly beyond the chain lengths it saw, and degrades gradually instead of failing at the edge of its training data. That fits "long chains are rare in training". It equally fits "five layers can only follow so many hops", and this experiment cannot separate them. The numbers come from one file of 20.
 
 **Limitations of the design.** At $L=20$, 80% of the word's letters belong to one chain, so planted words differ from training words in other ways too (§4). The cells use 200 free-running and 400 teacher-forced words, so intervals are about ±5 percentage points. Teacher forcing lets the model see correct earlier outputs, which may help it.
 
@@ -155,14 +166,14 @@ An $S_{25}$-invariant Gram matrix would be a combination of the three isotypic p
 ## 4. What this means for the density idea
 
 - The algebraic reason the target is local (Moore's presentation: every relation involves at most 4 points, and the pointer chase needs one point at a time) stands. The experiments above don't test it directly.
-- What the data does say is that the model's generalization beyond the training support is real at the level of whole words (99.95% of test words touch more than 16 points), while each output slot only needs a short chase (at most 10 distinct points in 500,000 natural slots). The ability to follow a chain falls off at $L\approx15$ to 20, far below the 25 letters available, and the fall is gradual, with no step at the support boundary. An accurate statement of what training "covers" is therefore about **chain length (hop count)**, not about how many distinct points a word or a trajectory touches.
+- What the data does say is that the model's generalization beyond the training support is real at the level of whole words (all 2,000 real test words touch 17 or more points, against at most 10 in training), while each output slot only needs a short chase (at most 9 distinct points in the real test file). The ability to follow a chain falls off at $L\approx15$ to 20, which is where the training data runs out of long chains. Crossing the support boundary ($s=10\to11$) costs only 2 to 4 points. An accurate statement of what training "covers" is therefore about **chain length (hop count)** much more than about how many distinct points a word or a trajectory touches.
 - In the spirit of the $\mathbb{Q}\subset\mathbb{R}$ analogy: the objects that need to be dense are trajectories (chases), not words. The training distribution is dense in short chains, wherever they sit among 25 points, and sparse in long ones. A density argument would need a metric in which "long chain" is far from "short chain".
 - I can't say from this evidence whether the limit is architectural (depth) or statistical (rarity in training). Separating them needs experiments with new training runs (§6).
 
 ## 5. Corrections to my earlier messages
-1. **Ladder hypothesis.** I framed the ladder test around a boundary at 11 distinct points (the paper's $m=10$). With $m=16$ the relevant boundary is 17. Neither shows a collapse (summary item 5).
+1. **Ladder hypothesis.** I framed the ladder test around a boundary at 11 distinct points, the first beyond the $m=10$ support. That boundary is correct (§2.3). There is no collapse at it (summary item 5).
 2. **Word length.** My earlier closed-form tail estimates assumed 24 letters. The config uses 25 (`MAX_TRANS_NUMBER = 25`). Recomputed, the per-trajectory probability of at least 11 distinct points is $1.1\times10^{-6}$ (was $7.0\times10^{-7}$), and per word at most $2.7\times10^{-5}$ (was $1.7\times10^{-5}$). The simulation I ran earlier used 24 letters; the stratified run here uses 25 and saw none in 20,000 words, consistent with this.
-3. **Training support.** I assumed $m=10$ in earlier messages. The config says 16, and you said to trust the config (§2.3). This changes which of my earlier statements about "beyond the support" are actually tested: see item 5 of the summary and §3.3.
+3. **Training support.** I assumed $m=10$, then switched to $m=16$ on the config's say-so, and finally measured the real data: $m=10$ (§2.3). The config's `ACTUAL_GROUP_SIZE` does not describe the data.
 4. **Gram spectrum.** See §3.5.
 5. **Untested:** my earlier suggestion that $m=4$ or $5$ might already suffice has not been tested (it needs retraining).
 
@@ -179,7 +190,7 @@ Given §3.3, I would prioritise:
 
 ## 7. Reproducing
 
-Run from this folder (`claude-analysis/`). Scripts find the checkpoint at `../scaling-generator/trained-models/torn-bigger-13/model.safetensors`; set `TORN_MODEL` to override. Needs only `numpy` (plus `matplotlib` for figures); no PyTorch.
+Run from this folder (`claude-analysis/`). Scripts find the checkpoint at `../scaling-generator/trained-models/torn-bigger-13/model.safetensors`; set `TORN_MODEL` to override. Needs only `numpy` (plus `matplotlib` for figures); no PyTorch. To get the real data for `data_stats.py`, run `git cat-file blob 5863de5:scaling-generator/data/torn_bigger/<file>` in a clone of `Midataur/permutations` for `train_data1.csv`, `train_data1_perms.csv`, `test_data.csv` and `test_data_perms.csv`.
 
 | file | purpose |
 |---|---|
@@ -190,8 +201,9 @@ Run from this folder (`claude-analysis/`). Scripts find the checkpoint at `../sc
 | `run_ladder.py N_FREE N_TF` | ladder tests (I used `200 400`; about 5 minutes) |
 | `run_beyond_support.py N_TF` | fixed-hop sweep across the $s=16$/$17$ boundary (I used `1000`; about 3 minutes) |
 | `support_stats.py` | how many points fresh test words touch and move (seconds) |
+| `data_stats.py DATA_DIR` | statistics of the real training file and test file, and the model on the real test file (§2.3; needs the data, see below) |
 | `run_error_anatomy.py` | failure anatomy (§3.4) |
 | `run_gram.py` | Gram spectrum (§3.5) |
 | `make_figure.py` | draws `fig_accuracy_vs_hops.png` from `ladder_results.csv` |
 
-Results included: `ladder_results.csv`, `beyond_support_results.csv`, `support_stats.txt`, `strat_summary.txt`, `gram_results.json`, `gram_spectrum.png`, `fig_accuracy_vs_hops.png`. The raw per-slot arrays from the stratified run (`strat_results.npz`, 2.3 MB) are not included; `run_stratified.py` regenerates them with the same seed.
+Results included: `ladder_results.csv`, `beyond_support_results.csv`, `support_stats.txt`, `data_stats.txt`, `strat_summary.txt`, `gram_results.json`, `gram_spectrum.png`, `fig_accuracy_vs_hops.png`. The raw per-slot arrays from the stratified run (`strat_results.npz`, 2.3 MB) are not included; `run_stratified.py` regenerates them with the same seed.

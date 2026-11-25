@@ -1,0 +1,26 @@
+[train] 400000 words: identity-token share 0.0999
+   touched points: min 7 mean 9.93 max 10   P(>10)=0.00000  P(>16)=0.00000
+   histogram of touched points: {np.int64(7): np.int64(2), np.int64(8): np.int64(520), np.int64(9): np.int64(26697), np.int64(10): np.int64(372781)}
+   stored perms == recomputed perms on first 20000 rows: True
+   moved points: min 0 mean 8.97 max 10   P(>16)=0.00000
+
+per-slot chase statistics, scaled to the full 8M-word training set (x20):
+   P(slot has >= L hops) -> expected count in 8M words
+   L>= 8: observed in file    263948   -> ~   5278960.0 in 8M words
+   L>=10: observed in file     33635   -> ~    672700.0 in 8M words
+   L>=12: observed in file      2310   -> ~     46200.0 in 8M words
+   L>=13: observed in file       483   -> ~      9660.0 in 8M words
+   L>=14: observed in file        88   -> ~      1760.0 in 8M words
+   L>=15: observed in file        18   -> ~       360.0 in 8M words
+   L>=16: observed in file         4   -> ~        80.0 in 8M words
+   L>=17: observed in file         1   -> ~        20.0 in 8M words
+   L>=18: observed in file         1   -> ~        20.0 in 8M words
+   L>=19: observed in file         0   -> ~         0.0 in 8M words
+   L>=20: observed in file         0   -> ~         0.0 in 8M words
+   distinct points visited by a slot's chase (observed in file): {1: 6027743, 2: 208452, 3: 640759, 4: 1073928, 5: 1070692, 6: 660876, 7: 252989, 8: 57116, 9: 7083, 10: 362}
+[test] 2000 words: identity-token share 0.0411
+   touched points: min 17 mean 21.56 max 25   P(>10)=1.00000  P(>16)=1.00000
+   stored perms == recomputed perms (test): True
+   test: max hops per slot 9  max distinct 9
+
+model on the real test file (2000 words): free-running exact match 1.0000 (2000/2000); teacher-forced word acc 1.0000; slot acc 1.00000

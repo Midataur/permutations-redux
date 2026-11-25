@@ -52,8 +52,8 @@ draw(s12, AQUA, "s", True, "Fixed s = 12 distinct points, more hops", 0.0)
 draw(ctrl, ORANGE, "^", True, "Control: L = 20 hops, s = 4…10 distinct points", 0.0)
 
 ax.set_ylim(35, 102); ax.set_ylabel("Accuracy at planted slot (%)", color=INK2, fontsize=10)
-ax.set_title("Accuracy falls with chain length (hops), not with the number of distinct points", loc="left", color=INK, fontsize=12, pad=10)
-ax.annotate("L = 20 for all four orange points\n(s = 4, 6, 8, 10) and the s = 12 square:\nsame accuracy, very different support", xy=(20, 54), xytext=(20.8, 82), fontsize=8.5, color=INK2,
+ax.set_title("Accuracy falls mainly with chain length (hops), only weakly with distinct points", loc="left", color=INK, fontsize=12, pad=10)
+ax.annotate("L = 20 for all four orange points\n(s = 4, 6, 8, 10) and the s = 12 square:\nsimilar accuracy, very different support", xy=(20, 54), xytext=(20.8, 82), fontsize=8.5, color=INK2,
             arrowprops=dict(arrowstyle="-", color=INK2, lw=0.8))
 ax.legend(loc="lower left", frameon=False, fontsize=8.5, labelcolor=INK2)
 
@@ -62,7 +62,7 @@ def tail(m, L, N=25):
     q = 2*(m-1)/m**2
     return sum(comb(N, j) * q**j * (1-q)**(N-j) for j in range(L, N+1))
 WORDS = 8_000_000
-for m, ls, lab in [(10, "--", "m = 10 (paper text)"), (16, "-", "m = 16 (checkpoint config)")]:
+for m, ls, lab in [(10, "--", "m = 10 (paper; sensitivity only)"), (16, "-", "m = 16 (checkpoint config; used)")]:
     cnt = np.array([WORDS * m * tail(m, L) for L in Ls])
     bx.semilogy(Ls, np.maximum(cnt, 1e-6), ls, color=INK2, lw=1.4, label=lab)
 bx.axhline(1, color=INK2, lw=0.8, ls=":")

@@ -1,0 +1,2 @@
+touched points  min 15  mean 21.61  max 25   P(>16) = 0.999535   P(>10) = 1.000000
+moved points    min 12  mean 21.01  max 25   P(>16) = 0.992480   P(>10) = 1.000000

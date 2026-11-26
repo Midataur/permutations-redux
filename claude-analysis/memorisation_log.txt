@@ -1,0 +1,48 @@
+training words 8,000,000, validation words 100,000
+points touched (first 20k words): train max 10  val max 10
+distinct training words 8,000,000 of 8,000,000; validation words also in training: 0
+training slots by hops >= h: {10: 664450, 11: 188922, 12: 46287, 13: 9927, 14: 1776, 15: 308, 16: 38, 17: 4, 18: 2, 19: 0}
+validation slots by hops >= h: {10: 8180, 11: 2334, 12: 574, 13: 113, 14: 22, 15: 1, 16: 0, 17: 0, 18: 0, 19: 0}
+fresh words 10,000,000: slots kept by h {12: 1500, 13: 1500, 14: 1500, 15: 316, 16: 25, 17: 5, 18: 3}
+fresh words 20,000,000: slots kept by h {12: 1500, 13: 1500, 14: 1500, 15: 666, 16: 62, 17: 11, 18: 3, 19: 1}
+fresh words 30,000,000: slots kept by h {12: 1500, 13: 1500, 14: 1500, 15: 962, 16: 103, 17: 15, 18: 4, 19: 1}
+fresh words 40,000,000: slots kept by h {12: 1500, 13: 1500, 14: 1500, 15: 1287, 16: 142, 17: 20, 18: 4, 19: 2}
+fresh words 50,000,000: slots kept by h {12: 1500, 13: 1500, 14: 1500, 15: 1500, 16: 191, 17: 25, 18: 6, 19: 2}
+fresh words 60,000,000: slots kept by h {12: 1500, 13: 1500, 14: 1500, 15: 1500, 16: 228, 17: 32, 18: 6, 19: 2}
+fresh words generated 60,000,000; kept {12: 1500, 13: 1500, 14: 1500, 15: 1500, 16: 228, 17: 32, 18: 6, 19: 2}
+P(h >= 8) per slot: training 2.642e-02  fresh 2.644e-02  Binomial(25,0.18) exact see report
+P(h >= 10) per slot: training 3.322e-03  fresh 3.321e-03  Binomial(25,0.18) exact see report
+P(h >= 12) per slot: training 2.314e-04  fresh 2.299e-04  Binomial(25,0.18) exact see report
+P(h >= 14) per slot: training 8.880e-06  fresh 9.040e-06  Binomial(25,0.18) exact see report
+training   h=12  n= 1500  accuracy 1.000  median margin  18.78  10th pct  14.22
+training   h=13  n= 1500  accuracy 1.000  median margin  17.74  10th pct  12.83
+training   h=14  n= 1468  accuracy 1.000  median margin  16.70  10th pct  11.92
+training   h=15  n=  270  accuracy 1.000  median margin  15.54  10th pct  11.35
+training   h=16  n=   34  accuracy 1.000  median margin  13.79  10th pct  11.05
+training   h=17  n=    2  accuracy 1.000  median margin  12.39  10th pct  11.58
+training   h=18  n=    2  accuracy 1.000  median margin  11.16  10th pct  10.70
+validation h=12  n=  461  accuracy 0.996  median margin  18.87  10th pct  13.42
+validation h=13  n=   91  accuracy 0.989  median margin  17.86  10th pct   7.86
+validation h=14  n=   21  accuracy 1.000  median margin  15.84  10th pct   6.18
+validation h=15  n=    1  accuracy 0.000  median margin  -6.51  10th pct  -6.51
+fresh      h=12  n= 1500  accuracy 0.999  median margin  18.85  10th pct  13.35
+fresh      h=13  n= 1500  accuracy 0.989  median margin  17.40  10th pct  10.58
+fresh      h=14  n= 1500  accuracy 0.976  median margin  15.47  10th pct   7.01
+fresh      h=15  n= 1500  accuracy 0.943  median margin  13.04  10th pct   2.68
+fresh      h=16  n=  228  accuracy 0.868  median margin   9.45  10th pct  -1.21
+fresh      h=17  n=   32  accuracy 0.719  median margin   7.58  10th pct  -3.57
+fresh      h=18  n=    6  accuracy 0.833  median margin   3.64  10th pct  -1.08
+fresh      h=19  n=    2  accuracy 1.000  median margin   0.84  10th pct   0.64
+baseline train  h=0-1: n= 61811 acc 1.00000 median margin  21.84
+baseline train  h=2-3: n= 11010 acc 1.00000 median margin  21.21
+baseline train  h=4-5: n= 15665 acc 1.00000 median margin  21.31
+baseline train  h=6-7: n=  8941 acc 1.00000 median margin  21.30
+baseline train  h=8-9: n=  2225 acc 1.00000 median margin  20.97
+baseline train  h=10-11: n=   327 acc 1.00000 median margin  20.26
+baseline fresh  h=0-1: n= 61769 acc 1.00000 median margin  21.84
+baseline fresh  h=2-3: n= 10899 acc 1.00000 median margin  21.19
+baseline fresh  h=4-5: n= 15829 acc 1.00000 median margin  21.30
+baseline fresh  h=6-7: n=  8787 acc 1.00000 median margin  21.26
+baseline fresh  h=8-9: n=  2381 acc 1.00000 median margin  20.99
+baseline fresh  h=10-11: n=   305 acc 1.00000 median margin  19.94
+DONE

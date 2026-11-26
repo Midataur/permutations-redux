@@ -1,0 +1,16 @@
+[  37s] general L=8 layer 1: word-position ablation 1.00 0.99 1.00 1.00 1.00 1.00   output-side ablation 1.00 1.00 1.00 1.00 1.00 1.00
+[  70s] general L=8 layer 2: word-position ablation 1.00 0.48 1.00 0.68 0.83 0.92   output-side ablation 1.00 1.00 1.00 0.94 1.00 1.00
+[ 103s] general L=8 layer 3: word-position ablation 1.00 0.99 0.93 1.00 1.00 0.93   output-side ablation 1.00 1.00 0.94 1.00 1.00 1.00
+[ 136s] general L=8 layer 4: word-position ablation 0.81 1.00 0.97 0.88 1.00 1.00   output-side ablation 1.00 0.98 1.00 1.00 1.00 1.00
+[ 168s] general L=8 layer 5: word-position ablation 1.00 1.00 1.00 1.00 1.00 1.00   output-side ablation 1.00 0.99 1.00 1.00 0.99 1.00
+[ 204s] general L=16 layer 1: word-position ablation 1.00 0.99 1.00 1.00 1.00 1.00   output-side ablation 1.00 1.00 1.00 1.00 1.00 1.00
+[ 238s] general L=16 layer 2: word-position ablation 1.00 0.49 1.00 0.68 0.60 0.81   output-side ablation 1.00 1.00 1.00 0.85 1.00 1.00
+[ 271s] general L=16 layer 3: word-position ablation 1.00 1.00 0.95 1.00 1.00 0.88   output-side ablation 1.00 1.00 0.90 1.00 1.00 0.99
+[ 303s] general L=16 layer 4: word-position ablation 0.87 1.00 0.99 0.82 1.00 1.00   output-side ablation 1.00 0.99 1.00 1.00 1.00 1.00
+[ 336s] general L=16 layer 5: word-position ablation 1.00 1.00 1.00 1.00 1.00 1.00   output-side ablation 1.00 0.98 0.99 0.99 1.00 1.00
+[ 371s] general L=24 layer 1: word-position ablation 1.00 0.95 1.00 1.00 1.00 1.00   output-side ablation 1.00 1.00 1.00 1.00 1.00 1.00
+[ 404s] general L=24 layer 2: word-position ablation 1.00 0.46 1.00 0.61 0.64 0.85   output-side ablation 1.00 1.00 1.00 0.91 1.00 1.00
+[ 436s] general L=24 layer 3: word-position ablation 1.00 1.00 0.98 1.00 1.00 0.92   output-side ablation 1.00 1.00 0.87 1.00 1.00 0.99
+[ 468s] general L=24 layer 4: word-position ablation 0.94 1.00 0.99 0.95 1.00 1.00   output-side ablation 1.00 1.00 1.00 1.00 1.00 1.00
+[ 501s] general L=24 layer 5: word-position ablation 1.00 1.00 1.00 1.00 1.00 1.00   output-side ablation 1.00 1.00 1.00 1.00 1.00 1.00
+DONE

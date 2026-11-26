@@ -1,0 +1,7 @@
+[  15s] general L=8 word: b2h1: mean 0.93 (zero 0.90)  b2h3: mean 0.97 (zero 0.84)  b3h5: mean 0.64 (zero 0.45)
+[  21s] general L=8 output: b2h3: mean 0.56 (zero 0.51)  b3h5: mean 0.67 (zero 0.64)
+[  41s] general L=12 word: b1h1: mean 0.84 (zero 0.80)  b1h2: mean 0.63 (zero 0.52)  b2h1: mean 0.88 (zero 0.60)  b2h3: mean 0.87 (zero 0.51)  b3h5: mean 0.57 (zero 0.38)
+[  49s] general L=12 output: b2h3: mean 0.60 (zero 0.52)  b3h5: mean 0.60 (zero 0.57)  b5h4: mean 0.65 (zero 0.62)
+[  75s] general L=16 word: b1h1: mean 0.46 (zero 0.51)  b1h2: mean 0.37 (zero 0.37)  b2h1: mean 0.86 (zero 0.53)  b2h3: mean 0.82 (zero 0.48)  b3h1: mean 0.88 (zero 0.88)  b3h5: mean 0.58 (zero 0.46)  b4h1: mean 0.93 (zero 0.91)
+[  86s] general L=16 output: b2h1: mean 0.95 (zero 0.91)  b2h3: mean 0.69 (zero 0.69)  b3h5: mean 0.56 (zero 0.61)  b5h4: mean 0.25 (zero 0.23)
+DONE

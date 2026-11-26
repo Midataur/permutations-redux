@@ -1,0 +1,16 @@
+[  35s] general L=8 layer 1: word-position ablation 1.00 0.99 0.98 1.00 1.00 1.00   output-side ablation 0.99 1.00 0.99 0.99 1.00 1.00
+[  68s] general L=8 layer 2: word-position ablation 1.00 0.90 1.00 0.84 0.97 1.00   output-side ablation 1.00 0.94 1.00 0.51 1.00 0.99
+[ 100s] general L=8 layer 3: word-position ablation 1.00 1.00 0.98 0.99 1.00 0.45   output-side ablation 0.99 1.00 1.00 0.97 1.00 0.64
+[ 133s] general L=8 layer 4: word-position ablation 1.00 1.00 1.00 1.00 1.00 0.99   output-side ablation 0.98 1.00 1.00 1.00 1.00 0.98
+[ 166s] general L=8 layer 5: word-position ablation 1.00 1.00 1.00 1.00 1.00 1.00   output-side ablation 0.98 0.99 1.00 1.00 0.99 0.98
+[ 201s] general L=12 layer 1: word-position ablation 1.00 0.80 0.52 1.00 1.00 1.00   output-side ablation 1.00 1.00 1.00 0.98 1.00 1.00
+[ 234s] general L=12 layer 2: word-position ablation 1.00 0.60 0.99 0.51 0.94 1.00   output-side ablation 1.00 0.94 1.00 0.52 1.00 0.99
+[ 269s] general L=12 layer 3: word-position ablation 1.00 0.94 0.95 0.94 0.99 0.38   output-side ablation 0.99 1.00 1.00 0.97 1.00 0.57
+[ 305s] general L=12 layer 4: word-position ablation 0.99 0.98 0.99 0.99 0.99 0.99   output-side ablation 0.98 0.97 0.99 1.00 1.00 0.94
+[ 339s] general L=12 layer 5: word-position ablation 1.00 1.00 1.00 1.00 1.00 1.00   output-side ablation 0.94 0.99 0.97 1.00 0.62 0.99
+[ 375s] general L=16 layer 1: word-position ablation 1.00 0.51 0.37 1.00 0.99 1.00   output-side ablation 1.00 1.00 0.99 0.97 1.00 1.00
+[ 407s] general L=16 layer 2: word-position ablation 0.99 0.53 0.99 0.48 0.96 1.00   output-side ablation 1.00 0.91 1.00 0.69 1.00 0.98
+[ 439s] general L=16 layer 3: word-position ablation 0.99 0.88 0.95 0.94 0.99 0.46   output-side ablation 0.99 1.00 0.99 0.98 1.00 0.61
+[ 472s] general L=16 layer 4: word-position ablation 1.00 0.91 0.98 0.99 0.99 0.96   output-side ablation 0.98 0.95 0.99 1.00 0.99 0.96
+[ 505s] general L=16 layer 5: word-position ablation 1.00 1.00 1.00 1.00 1.00 1.00   output-side ablation 0.94 0.98 0.92 0.98 0.23 0.97
+DONE

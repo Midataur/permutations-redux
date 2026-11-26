@@ -1,0 +1,16 @@
+[  42s] elem L=12 layer 1: word-position ablation 1.00 0.91 0.99 1.00 0.45 0.63   output-side ablation 1.00 1.00 1.00 0.95 1.00 1.00
+[  81s] elem L=12 layer 2: word-position ablation 1.00 0.57 1.00 0.75 0.92 0.98   output-side ablation 0.99 0.97 1.00 1.00 1.00 0.99
+[ 121s] elem L=12 layer 3: word-position ablation 1.00 1.00 0.56 0.66 0.97 1.00   output-side ablation 0.98 0.96 1.00 0.99 1.00 0.99
+[ 160s] elem L=12 layer 4: word-position ablation 1.00 1.00 1.00 0.90 0.48 1.00   output-side ablation 1.00 0.83 1.00 1.00 1.00 0.95
+[ 199s] elem L=12 layer 5: word-position ablation 1.00 1.00 1.00 1.00 1.00 1.00   output-side ablation 1.00 0.39 1.00 1.00 1.00 0.97
+[ 241s] elem L=40 layer 1: word-position ablation 1.00 0.60 1.00 0.98 0.46 0.41   output-side ablation 1.00 1.00 1.00 0.92 1.00 1.00
+[ 280s] elem L=40 layer 2: word-position ablation 0.95 0.40 0.97 0.46 0.72 0.90   output-side ablation 0.99 0.95 1.00 0.98 1.00 0.95
+[ 318s] elem L=40 layer 3: word-position ablation 1.00 1.00 0.72 0.74 0.94 0.99   output-side ablation 0.90 1.00 1.00 0.94 0.97 0.96
+[ 355s] elem L=40 layer 4: word-position ablation 0.99 1.00 1.00 0.88 0.58 0.99   output-side ablation 1.00 0.89 0.95 1.00 0.95 0.96
+[ 394s] elem L=40 layer 5: word-position ablation 1.00 1.00 1.00 1.00 1.00 1.00   output-side ablation 0.96 0.51 0.95 0.92 0.94 0.91
+[ 435s] elem L=80 layer 1: word-position ablation 0.96 0.50 0.79 0.73 0.45 0.39   output-side ablation 1.00 1.00 1.00 0.95 0.99 1.00
+[ 475s] elem L=80 layer 2: word-position ablation 0.69 0.46 0.81 0.43 0.60 0.81   output-side ablation 1.00 0.83 0.98 0.98 0.99 0.89
+[ 514s] elem L=80 layer 3: word-position ablation 0.95 0.95 0.72 0.64 0.79 0.86   output-side ablation 0.92 0.98 0.98 0.92 0.97 0.93
+[ 552s] elem L=80 layer 4: word-position ablation 0.97 0.97 0.97 0.76 0.61 0.99   output-side ablation 0.97 0.83 0.99 0.99 0.95 0.99
+[ 591s] elem L=80 layer 5: word-position ablation 1.00 1.00 1.00 1.00 1.00 1.00   output-side ablation 0.94 0.50 0.88 0.88 0.92 0.91
+DONE

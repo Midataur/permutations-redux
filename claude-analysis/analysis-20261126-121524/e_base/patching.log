@@ -1,0 +1,26 @@
+[    7s] L=12 w=8: model right on 1.000 of the planted words; using 200
+[  157s] L=12 corrupt hop #1 (first), n=181 (skipped 19): unpatched restored/follows-corrupt = 0.02/0.75
+     patch all       restored by layer: 1.00 0.97 0.72 0.37 0.07 0.02
+     patch chain     restored by layer: 1.00 0.97 0.65 0.25 0.07 0.02
+     patch corrchain restored by layer: 1.00 0.89 0.62 0.30 0.04 0.02
+     patch left      restored by layer: 0.02 0.04 0.10 0.17 0.07 0.02
+     patch right     restored by layer: 0.02 0.02 0.03 0.02 0.02 0.02
+     patch self      restored by layer: 1.00 0.90 0.55 0.12 0.02 0.02
+     patch nonchain  restored by layer: 0.02 0.02 0.03 0.02 0.03 0.02
+[  311s] L=12 corrupt hop #7 (middle), n=200 (skipped 0): unpatched restored/follows-corrupt = 0.21/0.72
+     patch all       restored by layer: 1.00 1.00 1.00 1.00 1.00 0.21
+     patch chain     restored by layer: 1.00 1.00 0.99 0.97 0.95 0.21
+     patch corrchain restored by layer: 1.00 0.94 0.86 0.86 0.97 0.21
+     patch left      restored by layer: 0.21 0.21 0.28 0.47 0.53 0.21
+     patch right     restored by layer: 0.21 0.23 0.33 0.51 0.65 0.21
+     patch self      restored by layer: 1.00 0.83 0.56 0.35 0.32 0.21
+     patch nonchain  restored by layer: 0.21 0.21 0.22 0.24 0.27 0.21
+[  458s] L=12 corrupt hop #12 (last), n=196 (skipped 4): unpatched restored/follows-corrupt = 0.20/0.71
+     patch all       restored by layer: 1.00 1.00 1.00 1.00 1.00 0.20
+     patch chain     restored by layer: 1.00 1.00 1.00 0.98 0.99 0.20
+     patch corrchain restored by layer: 1.00 1.00 1.00 0.99 0.99 0.20
+     patch left      restored by layer: 0.20 0.21 0.21 0.21 0.20 0.20
+     patch right     restored by layer: 0.20 0.29 0.60 0.94 1.00 0.20
+     patch self      restored by layer: 1.00 0.91 0.65 0.33 0.23 0.20
+     patch nonchain  restored by layer: 0.20 0.20 0.21 0.27 0.25 0.20
+[  465s] L=24 w=8: model right on 1.000 of the planted words; using 200

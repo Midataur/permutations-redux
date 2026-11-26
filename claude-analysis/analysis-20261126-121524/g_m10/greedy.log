@@ -1,0 +1,3 @@
+general_g_m10: L=16, 149 words kept (99% of planted right), 24 candidate heads
+[  50s] remove 1: + b3h5  ->  accuracy 0.43
+[  99s] remove 2: + b1h2  ->  accuracy 0.30

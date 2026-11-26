@@ -1,0 +1,13 @@
+[  13s] w=8 L= 56: 300/300 (100.0%)  margin med 20.2   (training slots with >= 56 hops: 1642 of 1600000)
+[  25s] w=8 L= 70: 300/300 (100.0%)  margin med 19.1   (training slots with >= 70 hops: 8 of 1600000)
+[  39s] w=8 L= 78: 300/300 (100.0%)  margin med 17.3   (training slots with >= 78 hops: 1 of 1600000)
+[  52s] w=8 L= 80: 299/300 (99.7%)  margin med 16.8   (training slots with >= 80 hops: 0 of 1600000)
+[  64s] w=8 L= 84: 299/300 (99.7%)  margin med 14.8   (training slots with >= 84 hops: 0 of 1600000)
+[  77s] w=8 L= 90: 300/300 (100.0%)  margin med 12.8   (training slots with >= 90 hops: 0 of 1600000)
+[  90s] w=8 L=100: 296/300 (98.7%)  margin med 9.7   (training slots with >= 100 hops: 0 of 1600000)
+[ 103s] w=8 L=110: 277/300 (92.3%)  margin med 6.3   (training slots with >= 110 hops: 0 of 1600000)
+[ 116s] w=8 L=118: 284/300 (94.7%)  margin med 6.0   (training slots with >= 118 hops: 0 of 1600000)
+[ 129s] w=4 L= 80: 300/300 (100.0%)  margin med 19.3   (training slots with >= 80 hops: 0 of 1600000)
+[ 142s] w=4 L=100: 296/300 (98.7%)  margin med 10.8   (training slots with >= 100 hops: 0 of 1600000)
+[ 155s] w=4 L=118: 284/300 (94.7%)  margin med 7.2   (training slots with >= 118 hops: 0 of 1600000)
+DONE

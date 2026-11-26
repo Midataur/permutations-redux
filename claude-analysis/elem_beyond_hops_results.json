@@ -1,0 +1,110 @@
+[
+ {
+  "w": 8,
+  "L": 56,
+  "n": 300,
+  "ok": 300,
+  "train_slots_with_this_many_hops": 476,
+  "train_slots_with_at_least": 1642,
+  "margin_median": 20.16165542602539
+ },
+ {
+  "w": 8,
+  "L": 70,
+  "n": 300,
+  "ok": 300,
+  "train_slots_with_this_many_hops": 2,
+  "train_slots_with_at_least": 8,
+  "margin_median": 19.0714111328125
+ },
+ {
+  "w": 8,
+  "L": 78,
+  "n": 300,
+  "ok": 300,
+  "train_slots_with_this_many_hops": 1,
+  "train_slots_with_at_least": 1,
+  "margin_median": 17.30892562866211
+ },
+ {
+  "w": 8,
+  "L": 80,
+  "n": 300,
+  "ok": 299,
+  "train_slots_with_this_many_hops": 0,
+  "train_slots_with_at_least": 0,
+  "margin_median": 16.81302833557129
+ },
+ {
+  "w": 8,
+  "L": 84,
+  "n": 300,
+  "ok": 299,
+  "train_slots_with_this_many_hops": 0,
+  "train_slots_with_at_least": 0,
+  "margin_median": 14.840752601623535
+ },
+ {
+  "w": 8,
+  "L": 90,
+  "n": 300,
+  "ok": 300,
+  "train_slots_with_this_many_hops": 0,
+  "train_slots_with_at_least": 0,
+  "margin_median": 12.797565460205078
+ },
+ {
+  "w": 8,
+  "L": 100,
+  "n": 300,
+  "ok": 296,
+  "train_slots_with_this_many_hops": 0,
+  "train_slots_with_at_least": 0,
+  "margin_median": 9.669805526733398
+ },
+ {
+  "w": 8,
+  "L": 110,
+  "n": 300,
+  "ok": 277,
+  "train_slots_with_this_many_hops": 0,
+  "train_slots_with_at_least": 0,
+  "margin_median": 6.302689552307129
+ },
+ {
+  "w": 8,
+  "L": 118,
+  "n": 300,
+  "ok": 284,
+  "train_slots_with_this_many_hops": 0,
+  "train_slots_with_at_least": 0,
+  "margin_median": 5.992942810058594
+ },
+ {
+  "w": 4,
+  "L": 80,
+  "n": 300,
+  "ok": 300,
+  "train_slots_with_this_many_hops": 0,
+  "train_slots_with_at_least": 0,
+  "margin_median": 19.298927307128906
+ },
+ {
+  "w": 4,
+  "L": 100,
+  "n": 300,
+  "ok": 296,
+  "train_slots_with_this_many_hops": 0,
+  "train_slots_with_at_least": 0,
+  "margin_median": 10.835289001464844
+ },
+ {
+  "w": 4,
+  "L": 118,
+  "n": 300,
+  "ok": 284,
+  "train_slots_with_this_many_hops": 0,
+  "train_slots_with_at_least": 0,
+  "margin_median": 7.176202297210693
+ }
+]

@@ -1,4 +1,4 @@
-# Inference-only tests on `torn-bigger-13` (general transpositions, $S_{25}$)
+# Inference-only tests on two trained models: `torn-bigger-13` (general transpositions, $S_{25}$) and `elem-partitioned-long-boosted-1` (elementary transpositions)
 
 Run on 2026-11-25 and 2026-11-26 (§3.11, §3.12). Everything here uses the trained checkpoints as-is, with no retraining. Section 2.3 also uses one real training file and the real test file.
 Code, raw results and the figures are in this folder; commands to reproduce are in §7.

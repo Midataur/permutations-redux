@@ -23,7 +23,7 @@ DST = sys.argv[2] if len(sys.argv) > 2 else "report.tex"
 VERSION = "Version 7"
 SUBTITLE = "Attention patterns and head ablation"
 DATE = "26 November 2026"
-EXPECTED_TITLE = "Inference-only tests on `torn-bigger-13` (general transpositions, $S_{25}$)"
+EXPECTED_TITLE = "Inference-only tests on two trained models: `torn-bigger-13` (general transpositions, $S_{25}$) and `elem-partitioned-long-boosted-1` (elementary transpositions)"
 FIGURE_CAPTION_FOR_FILE_LINE = {
     # the line "**Figure:** `fig_accuracy_vs_hops.png` (...)" in section 3.3 stands for the picture itself
     "fig_accuracy_vs_hops.png": ("Planted-chase accuracy against hop count $L$ (top), and the number of training slots with at "
@@ -539,7 +539,7 @@ PREAMBLE = r"""% !TEX program = xelatex
 
 \usepackage[headsepline,footsepline=false,plainheadsepline=false]{scrlayer-scrpage}
 \clearpairofpagestyles
-\ihead{\sffamily\small Inference-only tests on \texttt{torn-bigger-13}}
+\ihead{\sffamily\small Inference-only tests on two trained models}
 \ohead{\sffamily\small @@VERSION@@ \textperiodcentered{} @@DATE@@}
 \cfoot*{\sffamily\small\pagemark}
 
@@ -590,7 +590,7 @@ PREAMBLE = r"""% !TEX program = xelatex
   left=10pt,right=10pt,top=6pt,bottom=6pt,before skip=10pt,after skip=10pt}
 
 \usepackage[colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent,bookmarksnumbered=true,
-  pdftitle={Inference-only tests on torn-bigger-13 (general transpositions, S25)},pdfsubject={@@VERSION@@}]{hyperref}
+  pdftitle={Inference-only tests on two trained models: torn-bigger-13 and elem-partitioned-long-boosted-1},pdfsubject={@@VERSION@@}]{hyperref}
 
 \begin{document}
 
@@ -598,10 +598,12 @@ PREAMBLE = r"""% !TEX program = xelatex
 {\sffamily\bfseries\color{accent}\small\MakeUppercase{@@VERSION@@}\hspace{0.7em}\textcolor{rulegray}{\textperiodcentered}\hspace{0.7em}\textcolor{rulegray}{@@DATE@@}\par}
 \vspace{8pt}
 {\sffamily\bfseries\fontsize{24}{28}\selectfont Inference-only tests on\par}
-\vspace{2pt}
-{\ttfamily\fontsize{22}{26}\selectfont torn-bigger-13\par}
-\vspace{6pt}
-{\sffamily\large (general transpositions, $S_{25}$)\par}
+\vspace{0pt}
+{\sffamily\bfseries\fontsize{24}{28}\selectfont two trained models\par}
+\vspace{8pt}
+{\ttfamily\fontsize{15}{19}\selectfont torn-bigger-13}\hspace{0.5em}{\sffamily\large (general transpositions, $S_{25}$)\par}
+\vspace{3pt}
+{\ttfamily\fontsize{15}{19}\selectfont elem-partitioned-long-boosted-1}\hspace{0.5em}{\sffamily\large (elementary transpositions)\par}
 \vspace{6pt}
 {\sffamily\color{rulegray}@@SUBTITLE@@\par}
 \vspace{6pt}

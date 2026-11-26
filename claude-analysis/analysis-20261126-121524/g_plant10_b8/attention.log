@@ -1,0 +1,21 @@
+[  14s] general L=8: 300 words (model right on 1.000)
+      top next-hop shares (expected 0.040): L6H3=0.44  L6H2=0.38  L5H4=0.24  L5H0=0.24  L5H3=0.24
+      top prev-hop shares (expected 0.040): L5H5=0.35  L4H1=0.34  L6H5=0.31  L7H5=0.30  L2H5=0.21
+      query heads with most attention on hop letters (uniform 0.32): L8H3=0.84  L6H2=0.62  L8H1=0.61  L7H0=0.60  L7H2=0.52
+[  28s] general L=16: 300 words (model right on 1.000)
+      top next-hop shares (expected 0.040): L6H3=0.45  L6H2=0.39  L2H3=0.31  L3H1=0.30  L5H4=0.29
+      top prev-hop shares (expected 0.040): L5H5=0.40  L4H1=0.39  L6H5=0.34  L2H5=0.33  L7H5=0.31
+      query heads with most attention on hop letters (uniform 0.64): L8H3=0.90  L8H0=0.89  L6H2=0.81  L8H1=0.80  L4H1=0.79
+/home/claude/permutations-redux/claude-analysis/run_attention.py:59: RuntimeWarning: Mean of empty slice
+  word_exp += np.array([onehot[c].sum(-1)[onehot[c].any(-1)].mean() for c in range(len(CATS))]) / N / B
+/usr/local/lib/python3.13/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+/home/claude/permutations-redux/claude-analysis/run_attention.py:78: RuntimeWarning: Mean of empty slice
+  word_mass[l, :, c] += per_row[:, has].mean(-1) / B
+/usr/local/lib/python3.13/site-packages/numpy/_core/_methods.py:134: RuntimeWarning: invalid value encountered in divide
+  ret = um.true_divide(
+[  41s] general L=24: 300 words (model right on 1.000)
+      top next-hop shares (expected 0.040): L6H3=0.41  L3H1=0.39  L2H3=0.39  L6H2=0.36  L4H3=0.32
+      top prev-hop shares (expected 0.040): L4H1=0.41  L2H5=0.40  L5H5=0.39  L6H5=0.32  L7H5=0.28
+      query heads with most attention on hop letters (uniform 0.96): L4H0=0.95  L8H3=0.94  L6H2=0.93  L8H0=0.93  L4H1=0.90
+DONE

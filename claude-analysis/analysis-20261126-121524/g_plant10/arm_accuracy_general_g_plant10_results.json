@@ -1,0 +1,158 @@
+{
+ "model": "torn-bigger-13",
+ "blocks": 5,
+ "cells": [
+  {
+   "series": "in support",
+   "L": 4,
+   "s": 5,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 16.038677215576172
+  },
+  {
+   "series": "in support",
+   "L": 8,
+   "s": 9,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 15.398286819458008
+  },
+  {
+   "series": "in support",
+   "L": 12,
+   "s": 10,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 13.897441864013672
+  },
+  {
+   "series": "in support",
+   "L": 14,
+   "s": 10,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 13.830265045166016
+  },
+  {
+   "series": "in support",
+   "L": 16,
+   "s": 10,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 13.730175971984863
+  },
+  {
+   "series": "in support",
+   "L": 18,
+   "s": 10,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 14.189148902893066
+  },
+  {
+   "series": "in support",
+   "L": 20,
+   "s": 10,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 14.849809646606445
+  },
+  {
+   "series": "in support",
+   "L": 22,
+   "s": 10,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 14.908344268798828
+  },
+  {
+   "series": "in support",
+   "L": 24,
+   "s": 10,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 15.127582550048828
+  },
+  {
+   "series": "beyond support",
+   "L": 16,
+   "s": 11,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 13.899515151977539
+  },
+  {
+   "series": "beyond support",
+   "L": 16,
+   "s": 12,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 13.682403564453125
+  },
+  {
+   "series": "beyond support",
+   "L": 16,
+   "s": 17,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 12.688323974609375
+  },
+  {
+   "series": "beyond support",
+   "L": 20,
+   "s": 11,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 14.491857528686523
+  },
+  {
+   "series": "beyond support",
+   "L": 20,
+   "s": 12,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 14.283590316772461
+  },
+  {
+   "series": "beyond support",
+   "L": 20,
+   "s": 17,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 13.174209594726562
+  },
+  {
+   "series": "beyond support",
+   "L": 20,
+   "s": 21,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 12.194343566894531
+  },
+  {
+   "series": "beyond support",
+   "L": 24,
+   "s": 12,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 14.866565704345703
+  },
+  {
+   "series": "beyond support",
+   "L": 24,
+   "s": 17,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 13.565919876098633
+  },
+  {
+   "series": "beyond support",
+   "L": 24,
+   "s": 25,
+   "n": 300,
+   "ok": 300,
+   "margin_median": 11.234441757202148
+  }
+ ]
+}

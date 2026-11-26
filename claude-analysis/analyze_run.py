@@ -1,14 +1,15 @@
 """
 Run the mechanism tests (sections 3.9 and 3.12 and the planted-chain accuracy sweep) on the checkpoints of a finished hpc-experiment run.
 
-    python analyze_run.py hpc-run-<id>.zip hpc-run-<id>-extras.zip  [--out analysis-<id>] [--arms g_m10,e_base] [--patching] [--jobs 2]
+    python analyze_run.py hpc-run-<id>.zip hpc-run-<id>-extras.zip  [--out analysis-<id>] [--arms g_m10,e_base] [--patching] [--greedy] [--jobs 2]
     python analyze_run.py DIR_WITH_UNZIPPED_FILES ...
 
 It takes the LAST checkpoint of each arm (highest step; for an arm stopped at the deadline that is the step where it stopped) from
 <root>-extras/<arm>/ckpt/step_*.safetensors, runs each test with the checkpoint, the block count and an output tag set through
 ckpt_env.py, and writes one folder per arm plus summary.md (compare_arms.py).  Finished jobs are skipped, so it can be re-run.
 Stages (cheap first, so partial results arrive early):  1 accuracy, attention, natural-word control, probes   2 head ablation
-(zeroing)   3 head ablation (mean replacement, needs stage 2)   4 activation patching (only with --patching; about 15 minutes per arm).
+(zeroing)   3 head ablation (mean replacement, needs stage 2)   4 activation patching (only with --patching; about 15 minutes per arm)
+5 greedy head ablation (only with --greedy; 5 to 30 minutes per arm).
 """
 import argparse, glob, json, os, re, subprocess, sys, zipfile
 from concurrent.futures import ThreadPoolExecutor
@@ -28,6 +29,7 @@ ap.add_argument("paths", nargs="+")
 ap.add_argument("--out", default="analysis-run")
 ap.add_argument("--arms", default="")
 ap.add_argument("--patching", action="store_true")
+ap.add_argument("--greedy", action="store_true", help="also run the greedy head ablation (Test 15)")
 ap.add_argument("--jobs", type=int, default=2)
 ap.add_argument("--quick", action="store_true", help="a quarter of the words everywhere (about 20 minutes in total)")
 a = ap.parse_args()
@@ -60,7 +62,7 @@ q = 4 if a.quick else 1
 def jobs_for(arm):
     kind = "general" if ARMS[arm]["kind"] == "general" else "elem"
     n = lambda x: str(max(10, x // q))
-    J = {1: [], 2: [], 3: [], 4: []}
+    J = {1: [], 2: [], 3: [], 4: [], 5: []}
     J[1] += [("arm_accuracy.py", ["run_arm_accuracy.py", kind, n(300)], f"arm_accuracy_{kind}_{arm}_results.json")]
     J[1] += [("attention", ["run_attention.py", kind, n(300 if kind == "general" else 200)], f"attention_{kind}_{arm}_results.json")]
     J[1] += [("content", ["run_attention_content.py", kind, n(200 if kind == "general" else 150)], f"attention_content_{kind}_{arm}_results.json")]
@@ -71,6 +73,8 @@ def jobs_for(arm):
     if a.patching:
         J[4] += [("patching", ["run_patching.py" if kind == "general" else "run_patching_elem.py", n(200)],
                   f"patching_results_{arm}.json" if kind == "general" else f"patching_elem_results_{arm}.json")]
+    if a.greedy:
+        J[5] += [("greedy", ["run_greedy_ablation.py", kind, n(150), "8"], f"greedy_ablation_{kind}_{arm}_results.json")]
     return J
 
 def run(arm, name, argv, result):
@@ -91,7 +95,7 @@ for arm in arms:
     json.dump(dict(arm=arm, kind="general" if ARMS[arm]["kind"] == "general" else "elementary", blocks=ARMS[arm]["n_blocks"],
                    step=ck[arm][0], checkpoint=os.path.basename(ck[arm][1])), open(os.path.join(out, arm, "run_info.json"), "w"))
 allj = {arm: jobs_for(arm) for arm in arms}
-for stage in (1, 2, 3, 4):
+for stage in (1, 2, 3, 4, 5):
     todo = [(arm, *j) for arm in arms for j in allj[arm][stage]]
     if not todo:
         continue

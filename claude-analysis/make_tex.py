@@ -20,10 +20,10 @@ DST = sys.argv[2] if len(sys.argv) > 2 else "report.tex"
 
 # ----------------------------------------------------------------------------------------------------------
 # Edit these when a new version of the report is made.
-VERSION = "Version 7"
-SUBTITLE = "Attention patterns and head ablation"
-DATE = "26 November 2026"
-EXPECTED_TITLE = "Inference-only tests on two trained models: `torn-bigger-13` (general transpositions, $S_{25}$) and `elem-partitioned-long-boosted-1` (elementary transpositions)"
+VERSION = "Version 8"
+SUBTITLE = "Results of the Spartan training run"
+DATE = "27 November 2026"
+EXPECTED_TITLE = "Tests on two trained models, and a training experiment on four more: `torn-bigger-13` (general transpositions, $S_{25}$) and `elem-partitioned-long-boosted-1` (elementary transpositions)"
 FIGURE_CAPTION_FOR_FILE_LINE = {
     # the line "**Figure:** `fig_accuracy_vs_hops.png` (...)" in section 3.3 stands for the picture itself
     "fig_accuracy_vs_hops.png": ("Planted-chase accuracy against hop count $L$ (top), and the number of training slots with at "
@@ -32,9 +32,11 @@ FIGURE_CAPTION_FOR_FILE_LINE = {
 }
 FIGURE_WIDTH = {"fig_accuracy_vs_hops.png": 0.88, "fig_probe_layers.png": 1.0, "fig_influence_map.png": 1.0,
                 "fig_elem_cells.png": 1.0, "fig_input_positions.png": 1.0, "fig_patching_setup.png": 1.0, "fig_input_positions_elem.png": 1.0,
-                "fig_attention_heads.png": 1.0, "fig_attention_profiles.png": 1.0}
+                "fig_attention_heads.png": 1.0, "fig_attention_profiles.png": 1.0,
+                "fig_train_learning_curves.png": 1.0, "fig_train_hop_cliff.png": 1.0, "fig_ebase_blocks.png": 1.0}
 
 ARR = r">{\raggedright\arraybackslash}"
+RARR = r">{\raggedleft\arraybackslash}"
 TABLE_SPECS = {
     # index in the order of appearance: column spec, optional long=True (longtable), optional size, optional special
     0: dict(cols="l r r"),
@@ -62,8 +64,22 @@ TABLE_SPECS = {
     20: dict(cols="r r " + ARR + "p{4.6cm} l"),
     21: dict(cols="r r l " + ARR + "p{4.0cm} l r", long=True, size="footnotesize"),
     22: dict(cols="r r l " + ARR + "p{3.8cm} l r", long=True, size="footnotesize"),
-    23: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
-    24: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
+    # sections 3.13-3.16 (version 8)
+    23: dict(cols="r " + RARR + "p{6.4cm} r r"),                                     # Test 13: hops, training slots, accuracy at widths 8 and 4
+    24: dict(cols="l r r r"),                                     # Test 14: heads zeroed together
+    25: dict(cols="l r " + ARR + "p{1.9cm} r " + ARR + "p{2.2cm} " + ARR + "p{2.1cm} " + ARR + "p{2.1cm}", size="small"),   # learning milestones
+    26: dict(cols="l " + ARR + "p{2.6cm} " + ARR + "p{2.8cm} " + ARR + "p{4.2cm}", size="small"),                          # final accuracy on natural words
+    27: dict(cols="r r r r r"),                                   # planted-chain accuracy of the three general arms
+    28: dict(cols="r " + ARR + "p{3.3cm} " + ARR + "p{4.2cm} " + ARR + "p{4.2cm}", size="small"),                       # tail of the hop-count distribution
+    29: dict(cols=ARR + "p{6.0cm} " + ARR + "p{8.6cm}", size="small"),                                                    # predictions against outcomes
+    30: dict(cols=ARR + "p{5.0cm} " + ARR + "p{4.0cm} " + ARR + "p{4.6cm}", size="small"),             # e_base against the original: neighbour cosine
+    31: dict(cols="l *{8}{r}", size="small"),                     # probes of the retrained models
+    32: dict(cols=ARR + "p{2.9cm} " + ARR + "p{3.2cm} " + ARR + "p{8.0cm}", size="small"),                                # single-head ablation, four arms
+    33: dict(cols=ARR + "p{2.6cm} r r " + ARR + "p{9.0cm}", size="small"),                                                # greedy ablation
+    34: dict(cols="r r r r r"),                                   # patching, first hop corrupted, four models
+    # section 6.1 and section 7
+    35: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
+    36: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
 }
 
 CALLOUTS = {"What it shows": "find", "What this does and does not say": "find",
@@ -539,7 +555,7 @@ PREAMBLE = r"""% !TEX program = xelatex
 
 \usepackage[headsepline,footsepline=false,plainheadsepline=false]{scrlayer-scrpage}
 \clearpairofpagestyles
-\ihead{\sffamily\small Inference-only tests on two trained models}
+\ihead{\sffamily\small Two trained models and a training experiment}
 \ohead{\sffamily\small @@VERSION@@ \textperiodcentered{} @@DATE@@}
 \cfoot*{\sffamily\small\pagemark}
 
@@ -590,16 +606,16 @@ PREAMBLE = r"""% !TEX program = xelatex
   left=10pt,right=10pt,top=6pt,bottom=6pt,before skip=10pt,after skip=10pt}
 
 \usepackage[colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent,bookmarksnumbered=true,
-  pdftitle={Inference-only tests on two trained models: torn-bigger-13 and elem-partitioned-long-boosted-1},pdfsubject={@@VERSION@@}]{hyperref}
+  pdftitle={Tests on two trained models, and a training experiment on four more: torn-bigger-13 and elem-partitioned-long-boosted-1},pdfsubject={@@VERSION@@}]{hyperref}
 
 \begin{document}
 
 \begin{flushleft}
 {\sffamily\bfseries\color{accent}\small\MakeUppercase{@@VERSION@@}\hspace{0.7em}\textcolor{rulegray}{\textperiodcentered}\hspace{0.7em}\textcolor{rulegray}{@@DATE@@}\par}
 \vspace{8pt}
-{\sffamily\bfseries\fontsize{24}{28}\selectfont Inference-only tests on\par}
+{\sffamily\bfseries\fontsize{24}{28}\selectfont Tests on two trained models,\par}
 \vspace{0pt}
-{\sffamily\bfseries\fontsize{24}{28}\selectfont two trained models\par}
+{\sffamily\bfseries\fontsize{24}{28}\selectfont and a training experiment on four more\par}
 \vspace{8pt}
 {\ttfamily\fontsize{15}{19}\selectfont torn-bigger-13}\hspace{0.5em}{\sffamily\large (general transpositions, $S_{25}$)\par}
 \vspace{3pt}

@@ -1,0 +1,10 @@
+general_g_plant10: L=24, 150 words kept (100% of planted right), 24 candidate heads
+[  50s] remove 1: + b2h1  ->  accuracy 0.51
+[  97s] remove 2: + b2h5  ->  accuracy 0.39
+[ 142s] remove 3: + b2h3  ->  accuracy 0.31
+[ 187s] remove 4: + b2h2  ->  accuracy 0.25
+[ 228s] remove 5: + b3h3  ->  accuracy 0.20
+[ 266s] remove 6: + b1h0  ->  accuracy 0.19
+[ 303s] remove 7: + b1h4  ->  accuracy 0.20
+[ 339s] remove 8: + b1h5  ->  accuracy 0.21
+DONE

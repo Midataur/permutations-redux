@@ -1,0 +1,10 @@
+elem_e_base: L=80, 146 words kept (97% of planted right), 24 candidate heads
+[ 119s] remove 1: + b1h5  ->  accuracy 0.33
+[ 232s] remove 2: + b3h1  ->  accuracy 0.32
+[ 337s] remove 3: + b2h3  ->  accuracy 0.31
+[ 438s] remove 4: + b2h1  ->  accuracy 0.28
+[ 534s] remove 5: + b4h0  ->  accuracy 0.27
+[ 624s] remove 6: + b1h3  ->  accuracy 0.25
+[ 709s] remove 7: + b2h2  ->  accuracy 0.24
+[ 791s] remove 8: + b3h2  ->  accuracy 0.25
+DONE

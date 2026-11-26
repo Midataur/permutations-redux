@@ -53,6 +53,10 @@ Strongest hop offsets per head at L=16 (head, offset d: times uniform attention;
 - block 4: none
 - block 5: none
 
+Greedy head ablation (zero, at each step, the one further word-position head that hurts most; L=16, 149 words that the intact model gets right):
+
++b3h5 -> 0.43, +b1h2 -> 0.30, +b2h3 -> 0.18, +b1h4 -> 0.17, +b3h4 -> 0.15, +b2h2 -> 0.15
+
 ## g_plant10  (general, 5 blocks, checkpoint step 200000)
 
 Planted-chain accuracy (teacher-forced, at the planted slot):
@@ -107,6 +111,10 @@ Strongest hop offsets per head at L=24 (head, offset d: times uniform attention;
 - block 3: h1: +1 (12x); h2: +1 (10x); h4: +2 (9x); h5: -1 (10x)
 - block 4: none
 - block 5: none
+
+Greedy head ablation (zero, at each step, the one further word-position head that hurts most; L=24, 150 words that the intact model gets right):
+
++b2h1 -> 0.51, +b2h5 -> 0.39, +b2h3 -> 0.31, +b2h2 -> 0.25, +b3h3 -> 0.20, +b1h0 -> 0.19, +b1h4 -> 0.20, +b1h5 -> 0.21
 
 ## g_plant10_b8  (general, 8 blocks, checkpoint step 200000)
 
@@ -169,6 +177,10 @@ Strongest hop offsets per head at L=24 (head, offset d: times uniform attention;
 - block 7: none
 - block 8: none
 
+Greedy head ablation (zero, at each step, the one further word-position head that hurts most; L=24, 150 words that the intact model gets right):
+
++b2h5 -> 0.75, +b2h3 -> 0.38, +b1h3 -> 0.29, +b5h3 -> 0.24, +b2h1 -> 0.23, +b1h0 -> 0.23, +b1h1 -> 0.23, +b1h2 -> 0.23
+
 ## e_base  (elementary, 5 blocks, checkpoint step 106250)
 
 Planted-chain accuracy (teacher-forced, at the planted slot):
@@ -225,3 +237,7 @@ Strongest hop offsets per head at L=80 (head, offset d: times uniform attention;
 - block 3: h2: -1 (42x), -3 (12x); h3: +1 (40x), +3 (12x); h4: -2 (18x), -4 (14x); h5: +2 (16x), +4 (13x)
 - block 4: h3: +6 (10x), +4 (9x); h4: -8 (9x), -6 (8x)
 - block 5: none
+
+Greedy head ablation (zero, at each step, the one further word-position head that hurts most; L=80, 146 words that the intact model gets right):
+
++b1h5 -> 0.33, +b3h1 -> 0.32, +b2h3 -> 0.31, +b2h1 -> 0.28, +b4h0 -> 0.27, +b1h3 -> 0.25, +b2h2 -> 0.24, +b3h2 -> 0.25

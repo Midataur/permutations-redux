@@ -73,5 +73,10 @@ for arm in arms:
                     items.append(f"h{h}: {offs[j[0]]:+d} ({O[l, h, j[0]]:.0f}x)" + (f", {offs[j[1]]:+d} ({O[l, h, j[1]]:.0f}x)" if O[l, h, j[1]] > 8 else ""))
             P(f"- block {l + 1}: " + ("; ".join(items) if items else "none"))
         P()
+    gr = first("greedy_ablation_*results.json", d)
+    if gr:
+        P(f"Greedy head ablation (zero, at each step, the one further word-position head that hurts most; L={gr['L']}, {gr['n_words']} words that the intact model gets right):\n")
+        P(", ".join(f"+{x['added']} -> {x['acc']:.2f}" for x in gr["steps"]))
+        P()
 open(os.path.join(out, "summary.md"), "w").write("\n".join(lines))
 print("\n".join(lines))

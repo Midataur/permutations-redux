@@ -20,8 +20,8 @@ DST = sys.argv[2] if len(sys.argv) > 2 else "report.tex"
 
 # ----------------------------------------------------------------------------------------------------------
 # Edit these when a new version of the report is made.
-VERSION = "Version 6"
-SUBTITLE = "Probes and patching on the elementary model"
+VERSION = "Version 7"
+SUBTITLE = "Attention patterns and head ablation"
 DATE = "26 November 2026"
 EXPECTED_TITLE = "Inference-only tests on `torn-bigger-13` (general transpositions, $S_{25}$)"
 FIGURE_CAPTION_FOR_FILE_LINE = {
@@ -31,7 +31,8 @@ FIGURE_CAPTION_FOR_FILE_LINE = {
                                  "400 words per point, 95\\% Wilson intervals."),
 }
 FIGURE_WIDTH = {"fig_accuracy_vs_hops.png": 0.88, "fig_probe_layers.png": 1.0, "fig_influence_map.png": 1.0,
-                "fig_elem_cells.png": 1.0, "fig_input_positions.png": 1.0, "fig_patching_setup.png": 1.0, "fig_input_positions_elem.png": 1.0}
+                "fig_elem_cells.png": 1.0, "fig_input_positions.png": 1.0, "fig_patching_setup.png": 1.0, "fig_input_positions_elem.png": 1.0,
+                "fig_attention_heads.png": 1.0, "fig_attention_profiles.png": 1.0}
 
 ARR = r">{\raggedright\arraybackslash}"
 TABLE_SPECS = {
@@ -57,8 +58,12 @@ TABLE_SPECS = {
     17: dict(cols="l l *{6}{r}"),
     18: dict(cols="r l r r *{5}{r}", special="patch_all"),
     19: dict(cols="l " + ARR + "p{5.4cm} *{5}{r}", special="patch_subsets", long=True),
-    20: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
-    21: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
+    # section 3.12 (attention and head ablation): hop offsets of the elementary model; ablation tables for the general and the elementary model
+    20: dict(cols="r r " + ARR + "p{4.6cm} l"),
+    21: dict(cols="r r l " + ARR + "p{4.0cm} l r", long=True, size="footnotesize"),
+    22: dict(cols="r r l " + ARR + "p{3.8cm} l r", long=True, size="footnotesize"),
+    23: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
+    24: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
 }
 
 CALLOUTS = {"What it shows": "find", "What this does and does not say": "find",

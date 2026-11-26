@@ -1,0 +1,13 @@
+[  15s] elem L=12: 200 words (model right on 1.000)
+      top next-hop shares (expected 0.008): L2H2=0.26  L1H0=0.19  L3H4=0.19  L1H3=0.16  L2H3=0.15
+      top prev-hop shares (expected 0.008): L2H5=0.27  L3H3=0.25  L1H5=0.17  L2H0=0.16  L2H2=0.14
+      query heads with most attention on hop letters (uniform 0.10): L4H0=0.82  L5H1=0.77  L4H1=0.39  L3H4=0.18  L5H4=0.17
+[  31s] elem L=40: 200 words (model right on 1.000)
+      top next-hop shares (expected 0.008): L2H2=0.33  L1H0=0.31  L1H3=0.25  L2H3=0.21  L1H5=0.21
+      top prev-hop shares (expected 0.008): L2H5=0.34  L1H5=0.31  L1H0=0.23  L2H2=0.21  L1H3=0.13
+      query heads with most attention on hop letters (uniform 0.33): L4H0=0.87  L5H1=0.81  L4H1=0.64  L5H4=0.38  L5H3=0.36
+[  47s] elem L=80: 199 words (model right on 0.995)
+      top next-hop shares (expected 0.008): L1H0=0.35  L2H2=0.32  L1H5=0.25  L1H3=0.25  L2H3=0.23
+      top prev-hop shares (expected 0.008): L1H5=0.35  L2H5=0.33  L1H0=0.26  L2H2=0.22  L1H3=0.16
+      query heads with most attention on hop letters (uniform 0.67): L4H0=0.89  L5H1=0.82  L4H1=0.82  L1H1=0.61  L1H5=0.61
+DONE

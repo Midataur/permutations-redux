@@ -13,6 +13,7 @@ teacher forcing is involved.)  Data: planted words with L=12 and L=20 hops, and 
 Usage: python run_input_probes.py N_WORDS_PER_SET   (default 700 per set -> 2100 words, ~45k training rows)
 """
 from paths import MODEL_TORN
+import ckpt_env
 import json, sys, time
 import numpy as np
 from np_transformer import NPTransformer
@@ -20,7 +21,7 @@ from permdata import plant_batch, apply_words, random_words
 
 NW = int(sys.argv[1]) if len(sys.argv) > 1 else 700
 n, N = 25, 25
-m = NPTransformer(MODEL_TORN)
+m = NPTransformer(ckpt_env.CKPT or MODEL_TORN, n_blocks=ckpt_env.BLOCKS)
 rng = np.random.default_rng(777)
 LAMS = [10.0, 100.0, 1000.0, 10000.0]
 
@@ -112,12 +113,12 @@ for l in range(m.n_blocks + 1):
         hA, nA = probe_bin(l, FA, HA, lo, hi); hB, nB = probe_bin(l, FB, HB, lo, hi)
         res[l][f"{lo}-{hi}"] = [(hA + hB) / max(nA + nB, 1), nA + nB]
     print(f"[{time.time()-t0:3.0f}s] layer {l}: " + "  ".join(f"h{k}:{v[0]:.2f}" for k, v in res[l].items()), flush=True)
-for l in (0, 4, 5):
+for l in (0, m.n_blocks - 1, m.n_blocks):
     ctrl[l] = {}
     for lo, hi in ((1, 1), (5, 6), (13, 24)):
         hA, nA = probe_bin(l, FA, HA, lo, hi, True); hB, nB = probe_bin(l, FB, HB, lo, hi, True)
         ctrl[l][f"{lo}-{hi}"] = (hA + hB) / max(nA + nB, 1)
 print("label-shuffle control:", ctrl, flush=True)
 json.dump(dict(by_layer_and_remaining_hops=res, shuffle_control=ctrl, n_words=int(B), n_test_words=int(len(te)), chance=1 / 25),
-          open("input_probe_results.json", "w"), indent=1)
+          open(f"input_probe_results{ckpt_env.SUF}.json", "w"), indent=1)
 print("DONE", flush=True)

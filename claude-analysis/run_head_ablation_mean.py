@@ -10,13 +10,14 @@ Usage: python run_head_ablation_mean.py MODEL N_WORDS N_MEAN_WORDS     -> head_a
 import json, sys, time
 import numpy as np
 from attn_tools import *
+from ckpt_env import SUF
 
 kind = sys.argv[1]
 NW = int(sys.argv[2]) if len(sys.argv) > 2 else 100
 NM = int(sys.argv[3]) if len(sys.argv) > 3 else 150
 m, cfg = load(kind)
 N, H, NL = cfg["N"], m.n_head, m.n_blocks
-Z = json.load(open(f"head_ablation_{kind}_results.json"))
+Z = json.load(open(f"head_ablation_{kind}{SUF}_results.json"))
 rng = np.random.default_rng({"general": 51, "elem": 52}[kind])
 t0 = time.time()
 results = dict(model=cfg["model"], N=N, threshold=0.92, by_L={})
@@ -47,5 +48,5 @@ for L in cfg["Ls"]:
                 res[w][f"{l},{h}"] = dict(mean=float((pred == tgt).mean()), zero=float(zero[w][l, h]))
         print(f"[{time.time()-t0:4.0f}s] {kind} L={L} {w}: " + "  ".join(f"b{k.split(',')[0] and int(k.split(',')[0])+1}h{k.split(',')[1]}: mean {v['mean']:.2f} (zero {v['zero']:.2f})" for k, v in res[w].items()), flush=True)
     results["by_L"][str(L)] = dict(n_words=B, n_mean_words=len(mt), results=res)
-    json.dump(results, open(f"head_ablation_mean_{kind}_results.json", "w"))
+    json.dump(results, open(f"head_ablation_mean_{kind}{SUF}_results.json", "w"))
 print("DONE", flush=True)

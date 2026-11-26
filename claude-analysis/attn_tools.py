@@ -9,6 +9,7 @@ The position that predicts output slot k is N + k (N = number of word positions;
 """
 import numpy as np
 from np_transformer import NPTransformer, layer_norm, softmax
+import ckpt_env
 
 CONFIGS = {
     "general": dict(n=25, N=25, Ls=(8, 12, 16), model="torn-bigger-13"),
@@ -17,13 +18,16 @@ CONFIGS = {
 
 
 def load(kind):
-    c = CONFIGS[kind]
+    """The model of this kind (see ckpt_env.py for running on another checkpoint) and its config."""
+    c = dict(CONFIGS[kind])
+    if ckpt_env.LS:
+        c["Ls"] = ckpt_env.LS
     path = f"../scaling-generator/trained-models/{c['model']}/model.safetensors"
     if kind == "general":
         from paths import MODEL_TORN
-        m = NPTransformer(MODEL_TORN)
+        m = NPTransformer(ckpt_env.CKPT or MODEL_TORN, n_blocks=ckpt_env.BLOCKS)
     else:
-        m = NPTransformer(path, max_group=c["n"], input_len=c["N"], num_trans=c["n"])
+        m = NPTransformer(ckpt_env.CKPT or path, max_group=c["n"], input_len=c["N"], num_trans=c["n"], n_blocks=ckpt_env.BLOCKS)
     return m, c
 
 

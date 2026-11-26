@@ -24,7 +24,8 @@ from elem_tools import *
 
 NW = int(sys.argv[1]) if len(sys.argv) > 1 else 200
 MODEL = "../scaling-generator/trained-models/elem-partitioned-long-boosted-1/model.safetensors"
-m = NPTransformer(MODEL, max_group=G, input_len=N, num_trans=G)
+import ckpt_env
+m = NPTransformer(ckpt_env.CKPT or MODEL, max_group=G, input_len=N, num_trans=G, n_blocks=ckpt_env.BLOCKS)
 rng = np.random.default_rng(2025)
 W_WIDTH = 8
 KINDS = ("all", "chain", "corrchain", "left", "right", "self", "nonchain")
@@ -158,5 +159,5 @@ if __name__ == "__main__":
                   f"unpatched restored/follows-corrupt = {r['unpatched'][0]:.2f}/{r['unpatched'][1]:.2f}", flush=True)
             for kd in pa:
                 print("     patch %-9s restored by layer: " % kd + " ".join(f"{pa[kd][l][0]:.2f}" for l in range(6)), flush=True)
-            json.dump(results, open("patching_elem_results.json", "w"), indent=1)
+            json.dump(results, open(f"patching_elem_results{ckpt_env.SUF}.json", "w"), indent=1)
     print("DONE", flush=True)

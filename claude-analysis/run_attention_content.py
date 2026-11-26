@@ -14,6 +14,7 @@ Usage: python run_attention_content.py MODEL N_WORDS      -> attention_content_<
 import json, sys, time
 import numpy as np
 from attn_tools import *
+from ckpt_env import SUF
 
 kind = sys.argv[1]
 NW = int(sys.argv[2]) if len(sys.argv) > 2 else 200
@@ -61,7 +62,7 @@ for s in range(0, NW, 25):
 hop = hop_sum / np.maximum(hop_n, 1); non = non_sum / np.maximum(non_n, 1); dec = dec_sum / np.maximum(dec_n, 1)
 res = dict(model=cfg["model"], N=N, offsets=OFFS, n_words=NW, n_pairs=npairs, hop_n=hop_n.tolist(), non_n=non_n.tolist(),
            attn_to_hop=hop.tolist(), attn_to_nonchain=non.tolist(), attn_to_decoy=dec.tolist(), decoy_n=dec_n.tolist())
-json.dump(res, open(f"attention_content_{kind}_results.json", "w"))
+json.dump(res, open(f"attention_content_{kind}{SUF}_results.json", "w"))
 print(f"[{time.time()-t0:.0f}s] {kind}: {npairs} (slot, hop letter) pairs with >=2 hops; hop-letter cases per offset: {hop_n.astype(int).tolist()}; decoy cases: {dec_n.astype(int).tolist()}", flush=True)
 print("head   offset:  " + " ".join(f"{d:6d}" for d in OFFS))
 for l in range(NL):

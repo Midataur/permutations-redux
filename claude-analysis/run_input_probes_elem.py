@@ -21,7 +21,8 @@ from elem_tools import *
 
 NW = int(sys.argv[1]) if len(sys.argv) > 1 else 450
 MODEL = "../scaling-generator/trained-models/elem-partitioned-long-boosted-1/model.safetensors"
-m = NPTransformer(MODEL, max_group=G, input_len=N, num_trans=G)
+import ckpt_env
+m = NPTransformer(ckpt_env.CKPT or MODEL, max_group=G, input_len=N, num_trans=G, n_blocks=ckpt_env.BLOCKS)
 rng = np.random.default_rng(778)
 LAMS = [10.0, 100.0, 1000.0, 10000.0]
 n = G
@@ -119,8 +120,8 @@ for l in range(m.n_blocks + 1):
         res[l][f"{lo}-{hi}"] = [(hA + hB) / max(nA + nB, 1), nA + nB]
     print(f"[{time.time()-t0:3.0f}s] layer {l}: " + "  ".join(f"h{k}:{v[0]:.2f}" for k, v in res[l].items()), flush=True)
     json.dump(dict(by_layer_and_remaining_hops=res, n_words=int(B), n_test_words=int(len(te)), chance=1 / n),
-              open("input_probe_elem_results.json", "w"), indent=1)
-for l in (0, 4, 5):
+              open(f"input_probe_elem_results{ckpt_env.SUF}.json", "w"), indent=1)
+for l in (0, m.n_blocks - 1, m.n_blocks):
     ctrl[l] = {}
     for lo, hi in ((1, 1), (5, 6), (13, 24), (25, 48)):
         hA, nA = probe_bin(l, FA, HA, lo, hi, True); hB, nB = probe_bin(l, FB, HB, lo, hi, True)
@@ -145,7 +146,7 @@ tgroups = [(0, 60), (60, 100), (100, 120)]
 bins3 = [(5, 6), (7, 8), (9, 12), (13, 16), (17, 24), (25, 48), (49, 120)]
 for sname in ("natural", "L80"):
     by_t[sname] = {}
-    for l in (0, 4, 5):
+    for l in (0, m.n_blocks - 1, m.n_blocks):
         by_t[sname][l] = {}
         for (t0_, t1_) in tgroups:
             by_t[sname][l][f"t{t0_}-{t1_}"] = {}
@@ -155,5 +156,5 @@ for sname in ("natural", "L80"):
             row = by_t[sname][l][f"t{t0_}-{t1_}"]
             print(f"[{time.time()-t0:3.0f}s] {sname:8s} layer {l} t in [{t0_},{t1_}): " + "  ".join(f"h{k}:{v[0]:.2f}({v[1]})" for k, v in row.items() if v[1]), flush=True)
 json.dump(dict(by_layer_and_remaining_hops=res, by_source=by_src, by_position=by_t, shuffle_control=ctrl, n_words=int(B), n_test_words=int(len(te)), chance=1 / n),
-          open("input_probe_elem_results.json", "w"), indent=1)
+          open(f"input_probe_elem_results{ckpt_env.SUF}.json", "w"), indent=1)
 print("DONE", flush=True)

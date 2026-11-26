@@ -15,6 +15,7 @@ answer for slot k becomes p*_k != p_k.  Teacher forcing uses the CLEAN word's ou
 Usage: python run_patching.py N_WORDS
 """
 from paths import MODEL_TORN
+import ckpt_env
 import json, sys, time
 import numpy as np
 from np_transformer import NPTransformer, layer_norm, softmax
@@ -22,7 +23,7 @@ from permdata import plant_batch, apply_words
 
 NW = int(sys.argv[1]) if len(sys.argv) > 1 else 200
 n, N = 25, 25
-m = NPTransformer(MODEL_TORN)
+m = NPTransformer(ckpt_env.CKPT or MODEL_TORN, n_blocks=ckpt_env.BLOCKS)
 rng = np.random.default_rng(2024)
 
 
@@ -106,8 +107,8 @@ def run_batch(words, ks, hops, j, bs=100):
                 M[i, :N] = True; M[i, chain_pos[i]] = False
         return M
     masks = {kd: mask_for(kd) for kd in ("all", "chain", "left", "right", "self", "nonchain")}
-    out = {kd: np.zeros((6, B, 2), bool) for kd in masks}           # [layer, word, (restored, follows_corrupted)]
-    base = np.zeros((B, 2), bool); infl = np.zeros((6, N), np.float64)
+    out = {kd: np.zeros((m.n_blocks + 1, B, 2), bool) for kd in masks}           # [layer, word, (restored, follows_corrupted)]
+    base = np.zeros((B, 2), bool); infl = np.zeros((m.n_blocks + 1, N), np.float64)
     for s in range(0, B, bs):
         sl = slice(s, s + bs)
         lg_c, h_c = forward_patched(toks_clean[sl])
@@ -115,12 +116,12 @@ def run_batch(words, ks, hops, j, bs=100):
         idx = np.arange(len(words[sl]))
         base[sl, 0] = lg_k[idx, ks[sl]].argmax(-1) - m.num_trans == clean_perm[sl][idx, ks[sl]]
         base[sl, 1] = lg_k[idx, ks[sl]].argmax(-1) - m.num_trans == cperm[sl][idx, ks[sl]]
-        for l in range(6):
+        for l in range(m.n_blocks + 1):
             d = np.linalg.norm(h_k[l][:, :N] - h_c[l][:, :N], axis=-1) / np.linalg.norm(h_c[l][:, :N], axis=-1)
             # align by position relative to the corrupted letter: store the mean per absolute position (grouped later)
             infl[l] += d.sum(0)
         for kd, M in masks.items():
-            for l in range(6):
+            for l in range(m.n_blocks + 1):
                 msk_b = M[sl]
                 # patch with per-word masks: apply word by word through a combined clean tensor
                 # implement via blending: build patched hidden at layer l = where(mask, clean, corrupted) inside forward
@@ -153,7 +154,7 @@ def run_batch(words, ks, hops, j, bs=100):
     keep = differs
     res = dict(n=int(keep.sum()),
                unpatched=[float(base[keep, 0].mean()), float(base[keep, 1].mean())],
-               patched={kd: [[float(out[kd][l, keep, 0].mean()), float(out[kd][l, keep, 1].mean())] for l in range(6)] for kd in out},
+               patched={kd: [[float(out[kd][l, keep, 0].mean()), float(out[kd][l, keep, 1].mean())] for l in range(m.n_blocks + 1)] for kd in out},
                influence_by_position=(infl / B).tolist())
     # influence relative to the corrupted letter's position (offset = t - t_j), averaged
     return res
@@ -178,6 +179,6 @@ for L in (8, 12, 16):
         pa = r["patched"]
         print(f"[{time.time()-t0:4.0f}s] L={L} corrupt hop #{j+1} ({jname}), n={r['n']}: unpatched restored/follows-corrupt = {r['unpatched'][0]:.2f}/{r['unpatched'][1]:.2f}", flush=True)
         for kd in pa:
-            print("     patch %-9s restored by layer: " % kd + " ".join(f"{pa[kd][l][0]:.2f}" for l in range(6)), flush=True)
-json.dump(results, open("patching_results.json", "w"), indent=1)
+            print("     patch %-9s restored by layer: " % kd + " ".join(f"{pa[kd][l][0]:.2f}" for l in range(m.n_blocks + 1)), flush=True)
+json.dump(results, open(f"patching_results{ckpt_env.SUF}.json", "w"), indent=1)
 print("DONE", flush=True)

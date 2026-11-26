@@ -12,6 +12,7 @@ Usage: python run_head_ablation.py MODEL N_WORDS      (MODEL = general | elem)  
 import json, sys, time
 import numpy as np
 from attn_tools import *
+from ckpt_env import SUF
 
 kind = sys.argv[1]
 NW = int(sys.argv[2]) if len(sys.argv) > 2 else 200
@@ -36,5 +37,5 @@ for L in cfg["Ls"]:
         print(f"[{time.time()-t0:4.0f}s] {kind} L={L} layer {l+1}: word-position ablation " + " ".join(f"{a:.2f}" for a in acc['word'][l]) +
               "   output-side ablation " + " ".join(f"{a:.2f}" for a in acc['output'][l]), flush=True)
     results["by_L"][str(L)] = dict(n_words=B, model_right_on_planted=p_ok, acc_word=acc["word"].tolist(), acc_output=acc["output"].tolist())
-    json.dump(results, open(f"head_ablation_{kind}_results.json", "w"))
+    json.dump(results, open(f"head_ablation_{kind}{SUF}_results.json", "w"))
 print("DONE", flush=True)

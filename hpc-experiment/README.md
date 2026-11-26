@@ -98,6 +98,19 @@ The Slurm output of each job is in `hpc-outputs/logs/perm-<arm>-<jobid>.out`; it
 `summary.json` (and `bash collect.sh ... --status`) say, for each arm, whether it is `done`, `truncated` (stopped at the deadline)
 or `failed`; upload the zip when all four are done, or earlier if one job is slow to start and you want a first look.
 
+## After the run: analysing the checkpoints (done off the cluster)
+
+Each arm saves two checkpoints (at 25% and at the end, or where it was stopped at the deadline). They are in the **`-extras` zip**
+(`hpc-run-<id>-extras.zip`, a few hundred MB), not in the main one, so upload both zips. Then, from `claude-analysis/` (NumPy only, no GPU):
+
+    python analyze_run.py hpc-run-<id>.zip hpc-run-<id>-extras.zip --out analysis-<id> --patching
+
+It takes the last checkpoint of each arm and runs the planted-chain accuracy sweep (also beyond the 10-point support), the probes at the
+word positions (section 3.9), attention patterns and single-head ablation (section 3.12), and with `--patching` activation patching
+(section 3.10), about 1.5 hours for all four arms on 2 cores (`--quick` for a rough pass in about 20 minutes). `summary.md` puts the arms
+side by side. Finished jobs are skipped, so it can be re-run. The 8-block arm was checked with a checkpoint that is the 5-block model
+plus three blocks that add nothing: the results agree with the 5-block ones exactly on the shared blocks.
+
 ## Time
 
 I could not measure GPU speed from here, so the number of steps is fixed when you submit: `STEPS_G=200000` for every general arm

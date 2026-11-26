@@ -15,6 +15,7 @@ Usage: python run_attention.py MODEL N_WORDS      (MODEL = general | elem)   -> 
 import json, sys, time
 import numpy as np
 from attn_tools import *
+from ckpt_env import SUF
 
 kind = sys.argv[1]
 NW = int(sys.argv[2]) if len(sys.argv) > 2 else 200
@@ -96,5 +97,5 @@ for L in cfg["Ls"]:
         print(f"      top {c:4s}-hop shares (expected {word_exp[ci]:.3f}): " + "  ".join(f"L{l}H{h}={v:.2f}" for v, l, h in top), flush=True)
     top = sorted(((q_hop[l, h].sum(), l + 1, h) for l in range(NL) for h in range(H)), reverse=True)[:5]
     print(f"      query heads with most attention on hop letters (uniform {q_exp_chain:.2f}): " + "  ".join(f"L{l}H{h}={v:.2f}" for v, l, h in top), flush=True)
-    json.dump(results, open(f"attention_{kind}_results.json", "w"))
+    json.dump(results, open(f"attention_{kind}{SUF}_results.json", "w"))
 print("DONE", flush=True)

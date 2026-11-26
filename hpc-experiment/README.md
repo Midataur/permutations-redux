@@ -1,13 +1,29 @@
-# One job: coverage vs depth, and embedding pictures during training
+# Coverage vs depth, and embedding pictures during training: one command, one single-GPU job per arm
 
-Everything runs from **one** `sbatch`. It trains four models in parallel (one per GPU), takes snapshots of the position and
-token embeddings while they train, scores each snapshot on fixed test sets split by number of hops, and writes **one zip**
-for you to upload. Nothing is pushed from the cluster.
+One command submits one **single-GPU job per arm** (four by default). The arms train independently, take snapshots of the
+position and token embeddings while they train, score each snapshot on fixed test sets split by number of hops, and the results
+end up in **one zip** for you to upload. Nothing is pushed from the cluster.
 
 ```
 cd hpc-experiment        # after a git pull
-sbatch run.slurm
+bash submit.sh
 ```
+
+**Why one job per arm.** A job that asks for 4 GPUs has to wait for a whole free node; four jobs that ask for one GPU each can
+start on whatever is free, one by one. **The jobs do not depend on each other, so they can start and finish in any order**:
+
+* each job builds the evaluation sets it needs from fixed seeds (the same sets for every arm of a kind) and trains for the same
+  fixed number of steps as the other arms of its kind, so nothing has to be measured across arms (`STEPS_G` for the general
+  arms, `STEPS_E` for the elementary one, set once when you submit);
+* each job writes only into its own folder `hpc-outputs/run-<RUN_ID>/<arm>/`;
+* when a job finishes it refreshes the combined zip `hpc-outputs/hpc-run-<RUN_ID>.zip` with whatever exists at that moment
+  (arms that are still running appear with their state and the snapshots so far). The zip is replaced atomically and the
+  refreshes take turns, so the last job to finish leaves the complete zip, whatever the order was. You can also rebuild it by
+  hand at any moment: `bash collect.sh hpc-outputs/run-<RUN_ID>`, or look at the state of each arm with `--status`.
+
+`submit.sh` prints the run folder and the zip name. Settings are environment variables, for example
+`STEPS_G=250000 WALL_HOURS=12 bash submit.sh` (all listed at the top of `submit.sh`). The older single 4-GPU job
+(`sbatch run.slurm`, `run_all.py`) still works if you have a whole node free.
 
 ### Setting up the Python environment (once)
 
@@ -23,7 +39,7 @@ pip install --upgrade pip
 pip install torch numpy safetensors matplotlib
 ```
 
-`run.slurm` loads the same modules (`PY_MODULES`, empty to skip), then uses `./venv` (or `$VENV`, or `../scaling-generator/venv`),
+`job_arm.slurm` (through `env.sh`) loads the same modules (`PY_MODULES`, empty to skip), then uses `./venv` (or `$VENV`, or `../scaling-generator/venv`),
 checks that torch sees a GPU, and stops with a clear message if not. I tested on Python 3.13 with torch 2.15, numpy 2.5 and
 safetensors 0.8 (CPU only). Those packages all have wheels for Python 3.14, but I have not run on 3.14 or on a GPU myself. The code
 uses only features that exist in torch 2.1 as well, in case you reuse an older environment.
@@ -38,15 +54,15 @@ training data has essentially no chain that long. Two explanations remain:
   continuations becoming readable one layer at a time with a reach that roughly doubles per layer (about 1, 1, 4, 8, 13 or more
   hops at layers 1 to 5), which is what log-depth "pointer jumping" would look like, and would cap five blocks near 16 hops.
 
-| arm | GPU | what it is | what it tells you |
+| arm | job | what it is | what it tells you |
 |---|---|---|---|
-| `g_m10` | 0 | the paper's distribution: natural words over 10 points | control. Should reproduce the cliff at 15 to 20 hops |
-| `g_plant10` | 1 | 50% natural + 50% words with one planted chain of 3 to 25 hops through 2 to 10 points; the whole word stays on 10 points | **coverage**: does the cliff move when long chains are in the data? |
-| `g_plant10_b8` | 2 | same data, 8 blocks | **depth**: does more depth remove the cliff? |
-| `e_base` | 3 | the elementary-transposition model (Figure 5b): 120 letters, S_16, partitioned windows | **embedding pictures during training**: when do the position-embedding blocks (72 and 120 in Figure 5b) form? |
+| `g_m10` | 1 GPU | the paper's distribution: natural words over 10 points | control. Should reproduce the cliff at 15 to 20 hops |
+| `g_plant10` | 1 GPU | 50% natural + 50% words with one planted chain of 3 to 25 hops through 2 to 10 points; the whole word stays on 10 points | **coverage**: does the cliff move when long chains are in the data? |
+| `g_plant10_b8` | 1 GPU | same data, 8 blocks | **depth**: does more depth remove the cliff? |
+| `e_base` | 1 GPU | the elementary-transposition model (Figure 5b): 120 letters, S_16, partitioned windows | **embedding pictures during training**: when do the position-embedding blocks (72 and 120 in Figure 5b) form? |
 
 Optional extras (`ARMS="..."`): `g_plant10_b3` (3 blocks), `g_plant5` (planted chains on 5 points only: how much support
-is needed?), `g_m5` (natural words on 5 points). More arms than GPUs share GPUs, so each gets fewer steps in the same time.
+is needed?), `g_m5` (natural words on 5 points). Each extra arm is one more job (`ARMS="g_m10 g_plant10 g_plant10_b8 e_base g_plant5" bash submit.sh`).
 
 ### What I expect (written before the run, so that it can be wrong)
 
@@ -73,19 +89,25 @@ For every arm, at about 60 snapshots (log-spaced in step, plus evenly spaced one
 
 ## Output
 
-`hpc-outputs/hpc-run-<jobid>.zip` (about 15 MB) is what I need. It has `summary.json` (final numbers), per arm
-`metrics.jsonl`, `pos_emb.npz`, `config.json`, `train.log`, the first pictures, `env.json`, `plan.json`, `orchestrator.log`.
-`hpc-run-<jobid>-extras.zip` (about 200 MB: checkpoints, token embeddings, the evaluation sets) is optional; I can run all my
+`hpc-outputs/hpc-run-<RUN_ID>.zip` (about 15 MB) is what I need. It has `summary.json` (final numbers and the state of every arm),
+per arm `metrics.jsonl`, `pos_emb.npz`, `config.json`, `train.log`, `job.log`, `env.json`, and the first pictures.
+`hpc-run-<RUN_ID>-extras.zip` (about 200 MB: checkpoints, token embeddings, the evaluation sets) is optional; I can run all my
 inference-only tests on those checkpoints (they are in the repo's format), so keep it.
 
-The last lines of the Slurm output file print the path of the zip.
+The Slurm output of each job is in `hpc-outputs/logs/perm-<arm>-<jobid>.out`; its last lines print the path of the zip.
+`summary.json` (and `bash collect.sh ... --status`) say, for each arm, whether it is `done`, `truncated` (stopped at the deadline)
+or `failed`; upload the zip when all four are done, or earlier if one job is slow to start and you want a first look.
 
 ## Time
 
-I could not measure GPU speed from here. In its first two minutes the job times 60 seconds of real training for every arm (all
-at once, so contention is included), then sets the number of steps so that training takes `TRAIN_HOURS` (default 8). All
-general arms get the same number of steps. Total run time is about `TRAIN_HOURS` + 30 minutes. `#SBATCH --time=0-10:00:00` and
-`WALL_HOURS=10` go together: if you change one, change the other. For a first look, `TRAIN_HOURS=3 sbatch run.slurm`.
+I could not measure GPU speed from here, so the number of steps is fixed when you submit: `STEPS_G=200000` for every general arm
+(205M words) and `STEPS_E=110000` for the elementary arm (113M words), chosen from the speeds in your logs (below) so that
+the slowest arm, the 8-block one, should still fit in the 10-hour limit. The same number for all general arms is what makes them
+comparable, and it is what lets the jobs run in any order. Each job starts with `--calib-seconds` (default 30) of real training,
+which fails fast if the arm cannot run, and prints the measured speed and how many hours its steps need. If that is more than
+the time limit, the job says so, trains until the deadline (20 minutes before the limit), stops cleanly, and you can continue it:
+`ARMS=g_plant10_b8 RESUME_DIR=hpc-outputs/run-<RUN_ID> bash submit.sh`. `WALL_HOURS` (default 10) sets the limit of every job.
+For a first look, `STEPS_G=60000 STEPS_E=40000 bash submit.sh`.
 Batch size 1024 words per step, learning rate 3e-4, AdamW (weight decay 0.05).
 
 ### How many steps? (from your two training logs)
@@ -102,12 +124,13 @@ Your logs of the original runs (`torn-bigger-13`, `elem-partitioned-long-boosted
 | 99.99% train accuracy | epoch 44 | epoch 21 |
 | whole run | 161 epochs, about 7.4 hours | 96 epochs, about 27 hours |
 
-So an arm needs roughly 160M words to be converged, and the plateau lasts 70M words or fewer. After calibration the job prints, for every arm, steps x batch = words and warns if that is below 1.5 times 160M. If your GPUs run as fast as in your logs, 8 hours gives about 345M words to a general arm (less for the 8-block arm) but only about 115M to the elementary arm, which is a little short of converged; it will still show the early phase of the position-embedding pictures. To give every arm more: `TRAIN_HOURS=14 WALL_HOURS=16 sbatch --time=0-16:00:00 run.slurm`. The batch is 1,024 words per step (your runs: 4,096); `BATCH=2048 sbatch run.slurm` changes it, if the memory of the elementary arm allows.
+So an arm needs roughly 160M words to be converged, and the plateau lasts 70M words or fewer. Each job prints steps x batch = words and notes if that is below 1.5 times 160M (the default for the general arms, 205M, is 1.3 times). If your GPUs run as fast as in your logs, a general arm needs about 4.7 hours for 205M words (more for the 8-block arm) and the elementary arm about 7.8 hours for 113M words, which is a little short of converged; it will still show the early phase of the position-embedding pictures. To give every arm more: `STEPS_G=300000 STEPS_E=150000 WALL_HOURS=16 bash submit.sh`. The batch is 1,024 words per step (your runs: 4,096); `BATCH=2048 bash submit.sh` changes it, if the memory of the elementary arm allows.
 
 **Safety.**
-* A failing arm fails in the calibration minute, before any real training, and the zip then contains the logs.
-* 25 minutes before the time limit Slurm sends a warning, and the arms stop cleanly, take a last snapshot, and the zip is still written.
-* Resume: `RESUME_DIR=hpc-outputs/run-<jobid> sbatch run.slurm` continues every arm from its last `resume.pt` (saved every 20 minutes and at a clean stop).
+* A failing arm fails in its first minute, before any real training, and the zip then contains its logs.
+* 25 minutes before the time limit Slurm sends a warning, and the arm stops cleanly, takes a last snapshot, and the zip is still refreshed.
+* One arm can be stopped without touching the others: `touch hpc-outputs/run-<RUN_ID>/<arm>/STOP`.
+* Resume: `RESUME_DIR=hpc-outputs/run-<RUN_ID> bash submit.sh` continues the arms in `ARMS` (default: all four) from their last `resume.pt` (saved every 20 minutes and at a clean stop), with the original number of steps. Name the arms to continue only some: `ARMS="g_plant10_b8" RESUME_DIR=... bash submit.sh`.
 
 ## How this differs from `scaling-generator/training.py`
 
@@ -136,9 +159,13 @@ So an arm needs roughly 160M words to be converged, and the plateau lasts 70M wo
 
 `test_equivalence.py` (model == your `transformer.py` for both configs; saved file readable by the NumPy port),
 `test_datagen.py` (generators == NumPy references == real-data statistics; planted chains have exactly the requested `L` and `s`),
-and a tiny end-to-end run of the whole pipeline.
+`test_independent_jobs.py` (about 7 minutes on CPU: three single-arm jobs started in a scrambled order and overlapping each end up
+in one complete zip with no leftovers; an arm stopped through its own `STOP` file is resumed with its original number of steps
+and another arm is unaffected), and a tiny end-to-end run of the older 4-GPU pipeline.
 
 ## Files
 
-`run.slurm` (the one command), `run_all.py` (orchestrator), `exp/` (`model.py`, `datagen.py`, `evalsets.py`, `evaluate.py`,
+`submit.sh` (the one command), `job_arm.slurm` (one arm, one GPU), `run_arm.py` (what one job does), `collect_run.py` and `collect.sh`
+(build the zip from whatever exists, or show the state of each arm), `env.sh` (modules and venv), `run.slurm` and `run_all.py`
+(the older single 4-GPU job), `exp/` (`model.py`, `datagen.py`, `evalsets.py`, `evaluate.py`,
 `train.py`, `arms.py`, `collect.py`, `figures.py`, `np_tools.py`), `tests/`, `export_wandb.py` (dumps wandb run histories to a zip).

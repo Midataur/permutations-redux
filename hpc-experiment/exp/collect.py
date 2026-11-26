@@ -58,7 +58,7 @@ def collect(out_dir, run_id, arms, extra_files=(), make_figs=True):
         if tok is not None:
             p = os.path.join(out_dir, f"_tok_{arm}.npz"); np.savez_compressed(p, steps=tsteps, tok=tok)
             extras[f"{root}-extras/{arm}/tok_emb.npz"] = p
-        for fn in ("metrics.jsonl", "status.json", "config.json", "calib.json"):
+        for fn in ("metrics.jsonl", "status.json", "config.json", "calib.json", "env.json", "job.log"):
             if os.path.exists(os.path.join(d, fn)):
                 bundle[f"{root}/{arm}/{fn}"] = os.path.join(d, fn)
         if os.path.exists(os.path.join(d, "train.log")):
@@ -73,8 +73,9 @@ def collect(out_dir, run_id, arms, extra_files=(), make_figs=True):
     for p in extra_files:
         if os.path.exists(p):
             bundle[f"{root}/{os.path.basename(p)}"] = p
-    if os.path.exists(os.path.join(out_dir, "evalsets.npz")):
-        extras[f"{root}-extras/evalsets.npz"] = os.path.join(out_dir, "evalsets.npz")
+    for fn in ("evalsets.npz", "evalsets_general.npz", "evalsets_elementary.npz"):
+        if os.path.exists(os.path.join(out_dir, fn)):
+            extras[f"{root}-extras/{fn}"] = os.path.join(out_dir, fn)
     summ = summarize(out_dir, arms)
     bundle[f"{root}/summary.json"] = json.dumps(summ, indent=1).encode()
     # ---- figures (best effort)
@@ -90,10 +91,12 @@ def collect(out_dir, run_id, arms, extra_files=(), make_figs=True):
     for zpath, items in ((main_zip, bundle), (ex_zip, extras)):
         if not items:
             continue
-        with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as z:
+        tmp = f"{zpath}.{os.getpid()}.tmp"                    # write next to the target, then rename: a reader never sees half a zip
+        with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as z:
             for arc, src in items.items():
                 if isinstance(src, bytes):
                     z.writestr(arc, src)
                 else:
                     z.write(src, arc)
+        os.replace(tmp, zpath)
     return main_zip, (ex_zip if extras else None), time.time() - t0

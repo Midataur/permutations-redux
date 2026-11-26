@@ -1,5 +1,7 @@
 #!/bin/bash
-# Coverage-vs-depth experiment + embedding pictures during training.  ONE job, FOUR arms (one per GPU).
+# OLDER single-node version: ONE job, FOUR arms (one per GPU).  Prefer  bash submit.sh  (one single-GPU job per arm, which starts
+# sooner because it does not need a whole free node, and in which the arms are independent of each other).
+# Coverage-vs-depth experiment + embedding pictures during training.
 # Submit with:   cd hpc-experiment && sbatch run.slurm
 # Output:        hpc-outputs/hpc-run-<jobid>.zip   (upload this)      [+ ...-extras.zip, optional]
 # See README.md for what it does, how to shorten it, and how to resume it.

@@ -71,7 +71,8 @@ def main(argv=None):
     adir = os.path.join(a.out, a.arm)
     for sub in ("pos", "tok", "ckpt"):
         os.makedirs(os.path.join(adir, sub), exist_ok=True)
-    status_path, stop_path = os.path.join(adir, "status.json"), os.path.join(a.out, "STOP")
+    status_path = os.path.join(adir, "status.json")
+    stop_paths = (os.path.join(a.out, "STOP"), os.path.join(adir, "STOP"))        # run-wide (run_all.py) or this arm only (run_arm.py)
     t0 = time.time()
 
     def status(state, **kw):
@@ -190,7 +191,7 @@ def main(argv=None):
             if step in sched_set:
                 snap(step)
             if step % 50 == 0:
-                if os.path.exists(stop_path) or (a.deadline and time.time() > a.deadline):
+                if any(os.path.exists(q) for q in stop_paths) or (a.deadline and time.time() > a.deadline):
                     truncated = True
                     log(f"stopping early at step {step} (stop file or deadline)")
                     break

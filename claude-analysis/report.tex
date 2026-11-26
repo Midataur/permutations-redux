@@ -36,7 +36,7 @@
 \usepackage[headsepline,footsepline=false,plainheadsepline=false]{scrlayer-scrpage}
 \clearpairofpagestyles
 \ihead{\sffamily\small Two trained models and a training experiment}
-\ohead{\sffamily\small Version 8 \textperiodcentered{} 27 November 2026}
+\ohead{\sffamily\small Version 9 \textperiodcentered{} 27 November 2026}
 \cfoot*{\sffamily\small\pagemark}
 
 \setkomafont{disposition}{\sffamily\bfseries\color{accent}}
@@ -86,12 +86,12 @@
   left=10pt,right=10pt,top=6pt,bottom=6pt,before skip=10pt,after skip=10pt}
 
 \usepackage[colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent,bookmarksnumbered=true,
-  pdftitle={Tests on two trained models, and a training experiment on four more: torn-bigger-13 and elem-partitioned-long-boosted-1},pdfsubject={Version 8}]{hyperref}
+  pdftitle={Tests on two trained models, and a training experiment on four more: torn-bigger-13 and elem-partitioned-long-boosted-1},pdfsubject={Version 9}]{hyperref}
 
 \begin{document}
 
 \begin{flushleft}
-{\sffamily\bfseries\color{accent}\small\MakeUppercase{Version 8}\hspace{0.7em}\textcolor{rulegray}{\textperiodcentered}\hspace{0.7em}\textcolor{rulegray}{27 November 2026}\par}
+{\sffamily\bfseries\color{accent}\small\MakeUppercase{Version 9}\hspace{0.7em}\textcolor{rulegray}{\textperiodcentered}\hspace{0.7em}\textcolor{rulegray}{27 November 2026}\par}
 \vspace{8pt}
 {\sffamily\bfseries\fontsize{24}{28}\selectfont Tests on two trained models,\par}
 \vspace{0pt}
@@ -101,16 +101,16 @@
 \vspace{3pt}
 {\ttfamily\fontsize{15}{19}\selectfont elem-partitioned-long-boosted-1}\hspace{0.5em}{\sffamily\large (elementary transpositions)\par}
 \vspace{6pt}
-{\sffamily\color{rulegray}Results of the Spartan training run\par}
+{\sffamily\color{rulegray}Correction: distinct words against words presented\par}
 \vspace{6pt}
 {\color{accent}\rule{\linewidth}{1.1pt}}
 \end{flushleft}
 
-Run on 2026-11-25 to 2026-11-27. \textbf{\tagupd{}} \S\,\ref{sec:3.1}–\ref{sec:3.13} use the two trained
-checkpoints as they are, with no retraining; \S\,\ref{sec:3.14}–\ref{sec:3.16} use four models that I trained on
-Spartan from your \code{hpc-\allowbreak{}experiment} code (\S\,\ref{sec:6.1}). Section~\ref{sec:2.3} also uses
-one real training file and the real test file. Code, raw results and the figures are in this folder; commands to
-reproduce are in \S\,\ref{sec:7}.
+Run on 2026-11-25 to 2026-11-27. \S\,\ref{sec:3.1}–\ref{sec:3.13} use the two trained checkpoints as they are,
+with no retraining; \S\,\ref{sec:3.14}–\ref{sec:3.16} use four models that I trained on Spartan from your
+\code{hpc-\allowbreak{}experiment} code (\S\,\ref{sec:6.1}). Section~\ref{sec:2.3} also uses one real training
+file and the real test file. Code, raw results and the figures are in this folder; commands to reproduce are in
+\S\,\ref{sec:7}.
 
 \begin{frontbox}
 \lead{Version history.}
@@ -128,43 +128,35 @@ reproduce are in \S\,\ref{sec:7}.
 \item Version 6: the same probes and patching on the elementary model (\S\,\ref{sec:3.11}).
 \item Version 7: attention patterns and single-head ablation of both models (\S\,\ref{sec:3.12}); the training
   experiment is now one single-GPU job per model (\S\,\ref{sec:6.1}).
-\item Version 8 (this one): the results of the training run on Spartan (\S\,\ref{sec:3.14}–\ref{sec:3.16}), two
-  more inference tests on the original models (\S\,\ref{sec:3.13}), and the block question for the elementary
-  arm (\S\,\ref{sec:3.15}). The title changed accordingly.
+\item Version 8: the results of the training run on Spartan (\S\,\ref{sec:3.14}–\ref{sec:3.16}), two more
+  inference tests on the original models (\S\,\ref{sec:3.13}), and the block question for the elementary arm
+  (\S\,\ref{sec:3.15}). The title changed accordingly.
+\item Version 9 (this one): a correction to how the data seen by the original and by the retrained models is
+  compared (\S\,\ref{sec:3.14}, \S\,\ref{sec:3.15}, \S\,\ref{sec:5} item 12). No new experiments.
 \end{enumerate}
 
-\lead{What is new in this version (version 8).} The markers \textbf{\tagnew{}} and \textbf{\tagupd{}} show only
-what changed since version 7. Text without a marker is unchanged from version 7. Each new version clears the
-previous version’s markers.
+\lead{What is new in this version (version 9).} The markers \textbf{\tagnew{}} and \textbf{\tagupd{}} show only
+what changed since version 8. Text without a marker is unchanged from version 8. Each new version clears the
+previous version’s markers. There are no new experiments in this version.
 
 \begin{itemize}
-\item \lead{Title and header \tagupd{}:} the report now also covers the training run, so the title no longer
-  says “inference-only”.
-\item \lead{\S\,\ref{sec:3.13} \tagnew{}:} two more inference tests on the original models: the elementary model
-  beyond its longest training chase (Test 13), and zeroing groups of heads in the general model (Test 14).
-\item \lead{\S\,\ref{sec:3.14} \tagnew{}:} the results of the Spartan training run: learning curves,
-  planted-chain accuracy of the four models, how rare long chains are in the data, and the predictions of
-  \S\,\ref{sec:6.1} against the outcome.
-\item \lead{\S\,\ref{sec:3.15} \tagnew{}:} the position embeddings of the elementary arm during training, and
-  whether the block at 72 formed.
-\item \lead{\S\,\ref{sec:3.16} \tagnew{}:} probes, attention, single-head ablation, a new greedy head ablation
-  (Test 15) and activation patching on the four retrained models.
-\item \lead{\S\,\ref{sec:1} \tagupd{}:} items 6, 12, 15 and 17 changed; new items 20 to 23.
-\item \lead{\S\,\ref{sec:3.9} \tagupd{}:} one sentence pointing to \S\,\ref{sec:3.14} and \S\,\ref{sec:3.16}.
-\item \lead{\S\,\ref{sec:4} \tagupd{}:} bullets 2 and 4 and the list of results changed; a seventh result added.
-\item \lead{\S\,\ref{sec:5} \tagupd{}:} new item 11.
-\item \lead{\S\,\ref{sec:6} and \S\,\ref{sec:6.1} \tagupd{}:} what is done and what is open; the priorities are
-  rewritten; what happened in the run.
-\item \lead{\S\,\ref{sec:7} \tagupd{}:} new scripts, results and figures; how to analyse a run.
+\item \lead{\S\,\ref{sec:3.14} \tagupd{}:} a new table of the data each model saw (distinct words, epochs, words
+  presented, steps); the sentence on the original model’s accuracy and the list of differences between the
+  control and the original now use both counts.
+\item \lead{\S\,\ref{sec:3.15} \tagupd{}:} the comparison of \code{e\_\allowbreak{}base} with the original
+  elementary model gives distinct words as well as words presented.
+\item \lead{\S\,\ref{sec:1} \tagupd{}:} items 21 and 23 changed in the same way.
+\item \lead{\S\,\ref{sec:5} \tagupd{}:} new item 12, the comparison of data volume that version 8 put the wrong
+  way.
 \end{itemize}
 \end{frontbox}
 
 \tableofcontents
 
 % ====================================================================================================
-% 1 Summary
+% 1 Summary [UPDATED]
 % ====================================================================================================
-\section{Summary}\label{sec:1}
+\section{Summary \tagupd{}}\label{sec:1}
 \begin{enumerate}
 \item \lead{Baseline reproduced.} On the paper’s real test file the model gets 2,000/2,000 words right,
   free-running. On freshly generated words free-running accuracy was 3,000/3,000. Teacher-forced word accuracy
@@ -196,10 +188,9 @@ previous version’s markers.
   (\S\,\ref{sec:3.9}–\ref{sec:3.10}, items 15 and 16) make a depth limit a serious candidate; see items 12, 15
   and 16. Item 18 adds that the elementary model, which follows 80 hops, shows the same word-position staircase.
   Item 19 adds that both models have heads that link hop letters and that these are needed more as chains get
-  longer, without explaining how the elementary model composes 80 hops. \textbf{\tagupd{}} Items 20 and 21
-  settle it for the general model within the range a 25-letter word can test: with long chains in the data, five
-  blocks get 24 hops right, so depth was not what limited it, and a control without them does not show the
-  original’s cliff.
+  longer, without explaining how the elementary model composes 80 hops. Items 20 and 21 settle it for the
+  general model within the range a 25-letter word can test: with long chains in the data, five blocks get 24
+  hops right, so depth was not what limited it, and a control without them does not show the original’s cliff.
 \item \lead{Token embeddings are close to $S_{25}$-invariant} (\S\,\ref{sec:3.5}), but one of my earlier
   predictions about their spectrum failed.
 \item \lead{The training support is $m=10$}, measured from the real training data (\S\,\ref{sec:2.3}). The
@@ -234,9 +225,9 @@ previous version’s markers.
   The word-position results (items 15 and 16) weaken that lean: chain continuations are built layer by layer,
   which is how a depth limit would look, so I now treat the two readings as open (\S\,\ref{sec:5} item 8). The
   elementary model has the same word-position staircase and follows 80 hops (item 18), so the staircase does not
-  by itself separate the two readings. The head-level results (item 19) do not separate them either.
-  \textbf{\tagupd{}} The training run does (items 20 and 21): the general model’s cliff is not a five-block
-  limit, and the end of the training chains is not by itself its explanation either.
+  by itself separate the two readings. The head-level results (item 19) do not separate them either. The
+  training run does (items 20 and 21): the general model’s cliff is not a five-block limit, and the end of the
+  training chains is not by itself its explanation either.
 \item \lead{Figure 5b (\S\,\ref{sec:3.8}).} The saved picture in the original repo’s
   \code{embedding\_\allowbreak{}pictures/} matches the
   \code{elem-\allowbreak{}partitioned-\allowbreak{}long-\allowbreak{}boosted-\allowbreak{}1} checkpoint in this
@@ -260,8 +251,8 @@ previous version’s markers.
   at layers 1 to 5. That is the pattern a log-depth (“pointer-jumping”) composition would give, and it would cap
   five blocks near 16 hops. A probe does not show the algorithm, and the high-$h$ bins come from my planted
   words only (\S\,\ref{sec:3.9}). The elementary model shows the same staircase at its word positions and still
-  follows 80 hops (item 18). \textbf{\tagupd{}} A five-block model trained on long chains does 24 hops (item
-  20), and its probes do not follow this staircase (item 22).
+  follows 80 hops (item 18). A five-block model trained on long chains does 24 hops (item 20), and its probes do
+  not follow this staircase (item 22).
 \item \lead{Activation patching agrees (\S\,\ref{sec:3.10}).} Corrupt one hop letter of a planted chain ($L=8$,
   12 or 16, model right on the clean word) and patch clean activations into the corrupted run. For a middle or
   last hop, restoring the clean activations at \emph{all word positions} after block 4 brings back the clean
@@ -275,7 +266,7 @@ previous version’s markers.
   its \emph{left} (read later) restores nothing in any condition. So the corrupted letter’s influence travels
   towards the letters read before it, the direction in which continuations are built.
 \item \lead{The training experiment (\S\,\ref{sec:6.1}) was run on Spartan; its results are in items 20 to 23
-  (\S\,\ref{sec:3.14}–\ref{sec:3.16}).} \textbf{\tagupd{}} It ran as one single-GPU job per model (\code{bash
+  (\S\,\ref{sec:3.14}–\ref{sec:3.16}).} It ran as one single-GPU job per model (\code{bash
   submit.\allowbreak{}sh}). The three general arms finished their 200,000 steps (205M fresh words each; 5.3, 5.5
   and 8.6 hours), and the elementary arm was stopped by its time limit at step 106,250 of 110,000 (109M words,
   9.6 hours). The code matched \code{transformer.\allowbreak{}py} to 1e-6 and the data generators matched your
@@ -315,48 +306,49 @@ previous version’s markers.
   (\S\,\ref{sec:5} item 10). (e) I did not find how 80 hops are composed: the largest offsets are about 10 to 12
   hops, and the probe cannot read the answer from the letters that block 5 reads. One head at a time cannot see
   redundancy, and attention is not causal.
-\item \lead{\tagnew{} Planted long chains remove the cliff, and five blocks do 24 hops (\S\,\ref{sec:3.14}).}
-  The model trained on half natural words and half planted chains of 3 to 25 hops
-  (\code{g\_\allowbreak{}plant10}, whole words still on 10 points) gets 300 of 300 planted slots right in every
-  cell I tested, for up to 24 hops and up to 25 distinct points, which is outside the 10-point support; the same
-  model with 8 blocks (\code{g\_\allowbreak{}plant10\_\allowbreak{}b8}) does the same. My prediction for the
-  coverage reading (at least 90\% at 20 to 24 hops, including $s=14$ and 20) is confirmed; my prediction for the
-  depth reading (the five-block planted model still falls off between 16 and 24 hops) is refuted. The 8-block
-  arm therefore says nothing about depth, because the five-block arm is already at the ceiling of the test
-  (\S\,\ref{sec:5} item 11). Planted chains also bring the transition on natural words forward, by 1.7 times in
-  steps with 5 blocks and 2.5 times with 8.
-\item \lead{\tagnew{} The control does not reproduce the original’s cliff, and both kinds of model follow chains
-  beyond the ones they saw (\S\,\ref{sec:3.14}, \S\,\ref{sec:3.13}).} The control \code{g\_\allowbreak{}m10} has
-  the original’s data distribution (natural words over 10 points) and gets 97–100\% at 14 to 20 hops (for 10 or
-  more points), 95\% at 22 and 87\% at 24, where \code{torn-\allowbreak{}bigger-\allowbreak{}13} was at about
-  51\% at 20 hops. Its weak spot is chains that stay on few points (65–74\% at 16 or more hops through 3
-  points), which natural words essentially never contain. The number of hops of a slot in a natural word is
-  exactly Binomial(25, 0.18), so in its 205M words the control saw about 10 slots with 18 or more hops and, in
+\item \lead{Planted long chains remove the cliff, and five blocks do 24 hops (\S\,\ref{sec:3.14}).} The model
+  trained on half natural words and half planted chains of 3 to 25 hops (\code{g\_\allowbreak{}plant10}, whole
+  words still on 10 points) gets 300 of 300 planted slots right in every cell I tested, for up to 24 hops and up
+  to 25 distinct points, which is outside the 10-point support; the same model with 8 blocks
+  (\code{g\_\allowbreak{}plant10\_\allowbreak{}b8}) does the same. My prediction for the coverage reading (at
+  least 90\% at 20 to 24 hops, including $s=14$ and 20) is confirmed; my prediction for the depth reading (the
+  five-block planted model still falls off between 16 and 24 hops) is refuted. The 8-block arm therefore says
+  nothing about depth, because the five-block arm is already at the ceiling of the test (\S\,\ref{sec:5} item
+  11). Planted chains also bring the transition on natural words forward, by 1.7 times in steps with 5 blocks
+  and 2.5 times with 8.
+\item \lead{The control does not reproduce the original’s cliff, and both kinds of model follow chains beyond
+  the ones they saw (\S\,\ref{sec:3.14}, \S\,\ref{sec:3.13}).} The control \code{g\_\allowbreak{}m10} has the
+  original’s data distribution (natural words over 10 points) and gets 97–100\% at 14 to 20 hops (for 10 or more
+  points), 95\% at 22 and 87\% at 24, where \code{torn-\allowbreak{}bigger-\allowbreak{}13} was at about 51\% at
+  20 hops. Its weak spot is chains that stay on few points (65–74\% at 16 or more hops through 3 points), which
+  natural words essentially never contain. The number of hops of a slot in a natural word is exactly
+  Binomial(25, 0.18), so in its 205M words the control saw about 10 slots with 18 or more hops and, in
   expectation, none with 20 or more, yet it gets 97.7\% at 20. The elementary model does the same on its task:
   98.7\% at 100 hops and 92–95\% at 110 and 118, where my sample of its training data stops near 78 (Test 13).
-  The original run differs from the control in several ways (fresh data against an 8M-word file read 161 times,
-  batch size, schedule, total word views, seed), and I do not know which of them produced the original’s cliff.
-\item \lead{\tagnew{} A few word-position heads carry the chains in every general model, but the planted models
-  organise the work differently from the original and from the control (\S\,\ref{sec:3.13},
-  \S\,\ref{sec:3.16}).} (a) In \code{torn-\allowbreak{}bigger-\allowbreak{}13} the four next-hop heads (b1h3,
-  b2h5, b2h0, b3h4) zeroed together take the accuracy to 12\% at $L=8$ although each alone costs at most 3
-  points there (Test 14). (b) Greedy removal of word-position heads (Test 15): three of 24 heads bring the
-  control to 18\% ($L=16$), \code{g\_\allowbreak{}plant10} to 31\% and
-  \code{g\_\allowbreak{}plant10\_\allowbreak{}b8} (3 of 42) to 29\% ($L=24$); \code{e\_\allowbreak{}base} falls
-  to 33\% with one head and to 25\% with eight ($L=80$), and 17 of its 24 heads cost more than 10 points singly.
-  (c) In the planted models no single head’s word-dependent output is needed (mean replacement costs at most 6
-  points at $L=24$), the probes at the word positions read less (14–38\% at $h\ge5$, layer 5, for
-  \code{g\_\allowbreak{}plant10}), and in the 8-block model the probe staircase and the hand-over of the first
-  hop to the query are shifted three blocks later. (d) The attention of the general models stays at hop offsets
-  $\pm1$ (one head at $+2$): no doubling, and I did not find the mechanism. (e) \code{e\_\allowbreak{}base}
-  repeats the original elementary model’s staircase and doubling of attention offsets; its query takes in the
-  first hop about one block earlier than the original’s.
-\item \lead{\tagnew{} The block at position 72 has not formed in \code{e\_\allowbreak{}base}
-  (\S\,\ref{sec:3.15}).} After 109M words the pair of positions $(71,72)$ is as similar as an ordinary neighbour
-  pair (cosine 0.26 against a median of 0.27); the original has its lowest value there (0.18 against 0.40). The
-  position embeddings become smooth from the diagonal outwards from about step 4,000, before natural words reach
-  50\% (step 32,083), and are still smoothing at the end. The original elementary model saw 14 times as many
-  word views.
+  \textbf{\tagupd{}} The original run differs from the control in several ways (205M distinct words, each seen
+  once, against an 8M-word file read 161 times; batch size; number of steps; schedule; seed), and I do not know
+  which of them produced the original’s cliff.
+\item \lead{A few word-position heads carry the chains in every general model, but the planted models organise
+  the work differently from the original and from the control (\S\,\ref{sec:3.13}, \S\,\ref{sec:3.16}).} (a) In
+  \code{torn-\allowbreak{}bigger-\allowbreak{}13} the four next-hop heads (b1h3, b2h5, b2h0, b3h4) zeroed
+  together take the accuracy to 12\% at $L=8$ although each alone costs at most 3 points there (Test 14). (b)
+  Greedy removal of word-position heads (Test 15): three of 24 heads bring the control to 18\% ($L=16$),
+  \code{g\_\allowbreak{}plant10} to 31\% and \code{g\_\allowbreak{}plant10\_\allowbreak{}b8} (3 of 42) to 29\%
+  ($L=24$); \code{e\_\allowbreak{}base} falls to 33\% with one head and to 25\% with eight ($L=80$), and 17 of
+  its 24 heads cost more than 10 points singly. (c) In the planted models no single head’s word-dependent output
+  is needed (mean replacement costs at most 6 points at $L=24$), the probes at the word positions read less
+  (14–38\% at $h\ge5$, layer 5, for \code{g\_\allowbreak{}plant10}), and in the 8-block model the probe
+  staircase and the hand-over of the first hop to the query are shifted three blocks later. (d) The attention of
+  the general models stays at hop offsets $\pm1$ (one head at $+2$): no doubling, and I did not find the
+  mechanism. (e) \code{e\_\allowbreak{}base} repeats the original elementary model’s staircase and doubling of
+  attention offsets; its query takes in the first hop about one block earlier than the original’s.
+\item \lead{The block at position 72 has not formed in \code{e\_\allowbreak{}base} (\S\,\ref{sec:3.15}).} After
+  109M words the pair of positions $(71,72)$ is as similar as an ordinary neighbour pair (cosine 0.26 against a
+  median of 0.27); the original has its lowest value there (0.18 against 0.40). The position embeddings become
+  smooth from the diagonal outwards from about step 4,000, before natural words reach 50\% (step 32,083), and
+  are still smoothing at the end. \textbf{\tagupd{}} The original elementary model saw 14 times as many words
+  presented (96 epochs of 16M words), but \code{e\_\allowbreak{}base} saw about 7 times as many distinct words
+  (109M against 16M).
 \end{enumerate}
 
 % ====================================================================================================
@@ -1118,8 +1110,8 @@ and 13–24.
   falls (\S\,\ref{sec:3.3}). This is a reading of the pattern; the probe does not show the algorithm. The
   elementary model has the same staircase and follows 80 hops (\S\,\ref{sec:3.11}), so the staircase alone is
   not that reason. \S\,\ref{sec:3.12} shows the doubling directly in the elementary model’s attention offsets
-  and only partly in the general model’s. \textbf{\tagupd{}} \S\,\ref{sec:3.14} shows a five-block model trained
-  on long chains doing 24 hops, and \S\,\ref{sec:3.16} that its probes do not follow this staircase.
+  and only partly in the general model’s. \S\,\ref{sec:3.14} shows a five-block model trained on long chains
+  doing 24 hops, and \S\,\ref{sec:3.16} that its probes do not follow this staircase.
 \item This is also where \S\,\ref{sec:3.6} left a gap: the query position holds the first few pointer states
   only, and the rest of the chain is held here, at the word positions.
 \end{itemize}
@@ -1752,8 +1744,8 @@ For the last row, mean replacement gives 0.50 at $L=12$ and 0.28 at $L=40$.
 \end{itemize}
 \end{limbox}
 
-\subsection{Beyond the longest chase seen in training, and removing groups of heads (Tests 13 and 14)
-\tagnew{}}\label{sec:3.13}
+\subsection{Beyond the longest chase seen in training, and removing groups of heads (Tests 13 and
+14)}\label{sec:3.13}
 I ran these two while the training jobs were waiting. Both use the original checkpoints.
 
 \lead{Test 13: the elementary model beyond its longest training chase}
@@ -1865,7 +1857,7 @@ single-head and attention results, not by search (the greedy search of \S\,\ref{
 retrained models), and 173–200 words per cell.
 \end{limbox}
 
-\subsection{The training experiment: results (Spartan run 20261126-121524) \tagnew{}}\label{sec:3.14}
+\subsection{The training experiment: results (Spartan run 20261126-121524) \tagupd{}}\label{sec:3.14}
 \lead{What was run.} The four single-GPU jobs of \S\,\ref{sec:6.1}, one per model, each on fresh data at every
 step (no word is seen twice):
 
@@ -1886,6 +1878,34 @@ decay 0.05, bfloat16, one seed per arm. Accuracy on fixed test sets was recorded
 below are only as fine as those snapshots. All analyses in \S\,\ref{sec:3.14} to \S\,\ref{sec:3.16} use the
 final checkpoint of each arm (\code{analyze\_\allowbreak{}run.\allowbreak{}py}; the full per-arm tables are in
 \code{analysis-\allowbreak{}20261126-\allowbreak{}121524/\allowbreak{}summary.\allowbreak{}md}).
+
+\lead{\tagnew{} The data seen by the original models and by these runs.} “Distinct words” is how many different
+words a model was shown; “words presented” is that number times the epochs, which is what the optimiser
+processed. The figures for the original models come from their training files and epochs (\S\,\ref{sec:2.3},
+\S\,\ref{sec:3.8}, \S\,\ref{sec:3.13}) and, for the general model, the batch of 4,096; I did not check the batch
+size of the original elementary model.
+
+\begin{center}\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.2cm} >{\raggedleft\arraybackslash}p{1.5cm} r
+>{\raggedleft\arraybackslash}p{2.3cm} >{\raggedleft\arraybackslash}p{2.0cm}
+>{\raggedleft\arraybackslash}p{2.3cm}@{}}
+\toprule
+\hdr{model} & \hdr{distinct words} & \hdr{epochs} & \hdr{words presented} & \hdr{batch (words)} & \hdr{steps} \\
+\midrule
+original \code{torn-\allowbreak{}bigger-\allowbreak{}13} & 8M & 161 & 1.3 billion & 4,096 & about 315,000 \\
+\code{g\_\allowbreak{}m10}, \code{g\_\allowbreak{}plant10}, \code{g\_\allowbreak{}plant10\_\allowbreak{}b8} & 205M & 1 & 205M & 1,024 & 200,000 \\
+original \code{elem-\allowbreak{}partitioned-\allowbreak{}long-\allowbreak{}boosted-\allowbreak{}1} & 16M & 96 & 1.5 billion & not checked & not checked \\
+\code{e\_\allowbreak{}base} & 109M & 1 & 109M & 1,024 & 106,250 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+By distinct words, each general arm saw 25 times as many words as the original general model (205M against 8M),
+and \code{e\_\allowbreak{}base} about 7 times as many as the original elementary model (109M against 16M). By
+words presented, the original models saw about 6 times (1.3 billion against 205M) and 14 times (1.5 billion
+against 109M) as many. Which count matters depends on the question: distinct words for whether a model can rely
+on a finite stock of chains (the original general model’s 8M-word file holds about 38 slots with 16 or more hops
+and 0.4 with 18 or more, see the table below), words presented for how far the optimisation has got.
 
 \begin{figure}[htbp]\centering\includegraphics[width=1.00\linewidth]{fig_train_learning_curves.png}\caption{Accuracy (slot accuracy, teacher-forced) during training of the three general arms: natural 25-point words as in the paper’s test (left), natural 10-point words (middle) and the planted slot of planted chains of all tested $(L,s)$ cells (right). The $x$ axis is logarithmic.}\end{figure}
 
@@ -1932,9 +1952,10 @@ Final accuracy on natural words (2,000 words per set, teacher-forced; for the el
 
 (The last row has different test sets: words that look like the training data, and uniform words on the 16
 points as in the paper’s real test file.) The original \code{torn-\allowbreak{}bigger-\allowbreak{}13} got
-19,999 of 20,000 words on fresh natural words (\S\,\ref{sec:1} item 1); those are not the same words, and it saw
-161 epochs of 8M words (about 1.3 billion word views) against 205M here. With one seed each, I would not read
-the small differences between the three general arms as an effect of the data.
+19,999 of 20,000 words on fresh natural words (\S\,\ref{sec:1} item 1); those are not the same words.
+\textbf{\tagupd{}} It was trained on 8M distinct words, each seen 161 times (about 1.3 billion words presented),
+where each general arm here saw 205M distinct words once (table above). With one seed each, I would not read the
+small differences between the three general arms as an effect of the data.
 
 \begin{figure}[htbp]\centering\includegraphics[width=1.00\linewidth]{fig_train_hop_cliff.png}\caption{Accuracy at the planted slot at the final checkpoint, by the number of hops $L$ in the planted chain, for chains through 6 points where the word is on 25 points (left), through 14 points (middle, outside the 10-point support) and through 6 points inside the 10-point support (right). \code{g\_\allowbreak{}plant10} (orange) is hidden behind \code{g\_\allowbreak{}plant10\_\allowbreak{}b8} (green): both are at 100\% at every point. 300 words per point.}\end{figure}
 
@@ -2052,12 +2073,16 @@ Mixed outcomes are plausible & The control is worse than the planted arms at $L\
   pair $(L,s)$, not of $L$ alone, which is a refinement of \S\,\ref{sec:3.3}: for the original model I found $s$
   almost irrelevant at $L=20$ (about 50–56\% at 4 or at 21 points); for the control, the weak spot is chains
   with few points.
-\item \lead{The original model’s cliff is not reproduced, and I do not know why.} The control matches the data
-  distribution of \code{torn-\allowbreak{}bigger-\allowbreak{}13} but differs from the original run in at least:
-  fresh data at every step instead of an 8M-word file read 161 times, a batch of 1,024 words instead of 4,096,
-  my own learning-rate schedule, bfloat16 and fused attention, one seed, and a total of 205M word views instead
-  of 1.3 billion. The result says that the cliff is not a property of five blocks together with natural words
-  over 10 points as such; it does not say which of these differences made the original’s cliff.
+\item \lead{The original model’s cliff is not reproduced, and I do not know why.} \textbf{\tagupd{}} The control
+  matches the data distribution of \code{torn-\allowbreak{}bigger-\allowbreak{}13} but differs from the original
+  run in at least: fresh data at every step (205M distinct words, each seen once) instead of an 8M-word file
+  read 161 times, a batch of 1,024 words instead of 4,096 and 200,000 steps instead of about 315,000, my own
+  learning-rate schedule, bfloat16 and fused attention, and one seed. These pull in different directions: the
+  control saw 25 times as many distinct words, and so many more chains of every length, and about a sixth as
+  many words presented, so fewer updates. A cliff that came from repeating a finite file would be absent from
+  the control for the first reason; I did not test that (\S\,\ref{sec:6}, priority 2). The result says that the
+  cliff is not a property of five blocks together with natural words over 10 points as such; it does not say
+  which of these differences made the original’s cliff.
 \item \lead{The eight-block arm answers nothing about depth}, because the five-block planted arm is already at
   the ceiling of the test. A depth test needs a model with fewer blocks (the 3-block arm listed in
   \S\,\ref{sec:6.1}) or a harder task.
@@ -2074,7 +2099,7 @@ at the planted slot.
 \end{limbox}
 
 \subsection{Position embeddings of the elementary arm during training: has the block at 72 formed?
-(\texorpdfstring{\code{e\_\allowbreak{}base}}{e_base}) \tagnew{}}\label{sec:3.15}
+(\texorpdfstring{\code{e\_\allowbreak{}base}}{e_base}) \tagupd{}}\label{sec:3.15}
 \lead{Why.} In the original elementary model (Figure 5b, \S\,\ref{sec:3.8}) the word-position embeddings split
 into two blocks at position 72, and the 16 output positions form a third at 120. The training data are
 position-stationary (\S\,\ref{sec:3.8}), so the block is learned and not read off the data. The question for the
@@ -2124,11 +2149,13 @@ then grows: 0.01 at step 7,746, 0.03 at 15,037, 0.10 at 27,500, 0.16 at 40,670, 
   from step 27,500 to 68,750 and at 79 from step 82,500. Position 79 is already among the two largest row
   differences at initialisation (with 64), so at least that dip may come from the random initialisation and not
   from the data; I did not test this with a second seed.
-\item \lead{So the block is not an early event of training in this run.} \code{e\_\allowbreak{}base} has seen
-  109M words; the original elementary model was trained for 96 epochs of 16M words, about 1.5 billion word views
-  (14 times as many), with a median neighbour cosine that \code{e\_\allowbreak{}base} has not reached. Whether a
-  block at 72 (or somewhere) appears with much longer training, with another seed, or never, I cannot say from
-  this run.
+\item \lead{So the block is not an early event of training in this run.} \textbf{\tagupd{}}
+  \code{e\_\allowbreak{}base} has seen 109M distinct words, each once; the original elementary model was trained
+  on 16M distinct words for 96 epochs, about 1.5 billion words presented, and has a median neighbour cosine that
+  \code{e\_\allowbreak{}base} has not reached. So \code{e\_\allowbreak{}base} has had one fourteenth of the
+  original’s words presented and about 7 times its distinct words, and I cannot say which of the two matters for
+  the block; I tested neither. Whether a block at 72 (or somewhere) appears with much longer training, with a
+  repeated finite file, with another seed, or never, I cannot say from this run.
 \end{itemize}
 \end{findbox}
 
@@ -2138,7 +2165,7 @@ block structure (the original’s block is found from the whole matrix, which I 
 \end{limbox}
 
 \subsection{Inside the retrained models: probes, attention, ablation and patching (Tests 7 to 12 on the new
-checkpoints, and Test 15) \tagnew{}}\label{sec:3.16}
+checkpoints, and Test 15)}\label{sec:3.16}
 \lead{What was run.} The tests of \S\,\ref{sec:3.9} to \S\,\ref{sec:3.12}, unchanged, on the final checkpoint of
 each arm (\code{analyze\_\allowbreak{}run.\allowbreak{}py}; per-arm result files and logs are in
 \code{analysis-\allowbreak{}20261126-\allowbreak{}121524/\allowbreak{}<arm>/}; side-by-side tables in
@@ -2372,9 +2399,9 @@ at once, not one head at a time.
 \end{limbox}
 
 % ====================================================================================================
-% 4 What this means for the density idea [UPDATED]
+% 4 What this means for the density idea
 % ====================================================================================================
-\section{What this means for the density idea \tagupd{}}\label{sec:4}
+\section{What this means for the density idea}\label{sec:4}
 \begin{itemize}
 \item The algebraic reason the target is local (Moore’s presentation: every relation involves at most 4 points,
   and the pointer chase needs one point at a time) stands. The experiments above don’t test it directly.
@@ -2384,45 +2411,44 @@ at once, not one head at a time.
   a chain falls off at $L\approx15$ to 20, which is where the training data runs out of long chains. Crossing
   the support boundary ($s=10\to11$) costs only 2 to 4 points. An accurate statement of what training “covers”
   is therefore about \textbf{chain length (hop count)} much more than about how many distinct points a word or a
-  trajectory touches. \textbf{\tagupd{}} \S\,\ref{sec:3.14} qualifies this: a control trained on the same
-  distribution with fresh data does not show the cliff, and the weak spots it does show are in the pair (hops,
-  distinct points), chains through few points, so what training covers is hops and distinct points together.
+  trajectory touches. \S\,\ref{sec:3.14} qualifies this: a control trained on the same distribution with fresh
+  data does not show the cliff, and the weak spots it does show are in the pair (hops, distinct points), chains
+  through few points, so what training covers is hops and distinct points together.
 \item In the spirit of the $\mathbb{Q}\subset\mathbb{R}$ analogy: the objects that need to be dense are
   trajectories (chases), not words. The training distribution is dense in short chains, wherever they sit among
   25 points, and sparse in long ones. A density argument would need a metric in which “long chain” is far from
   “short chain”.
-\item \lead{\tagupd{}} The training experiment (\S\,\ref{sec:6.1}) separates the two readings for the general
-  model: with long chains in the data a five-block model gets 24 of 24 hops, so five blocks are not what limits
-  it (\S\,\ref{sec:3.14}). \S\,\ref{sec:3.9}–\ref{sec:3.10} had made the depth reading more plausible than I
-  judged in version 4 and \S\,\ref{sec:3.11} had qualified that; \S\,\ref{sec:3.14} settles it within the range
-  a 25-letter word can test. What does set the original’s cliff I do not know (\S\,\ref{sec:3.14}: the control
+\item The training experiment (\S\,\ref{sec:6.1}) separates the two readings for the general model: with long
+  chains in the data a five-block model gets 24 of 24 hops, so five blocks are not what limits it
+  (\S\,\ref{sec:3.14}). \S\,\ref{sec:3.9}–\ref{sec:3.10} had made the depth reading more plausible than I judged
+  in version 4 and \S\,\ref{sec:3.11} had qualified that; \S\,\ref{sec:3.14} settles it within the range a
+  25-letter word can test. What does set the original’s cliff I do not know (\S\,\ref{sec:3.14}: the control
   does not show it).
-\item \lead{\tagupd{}} Seven results from \S\,\ref{sec:3.6}–\ref{sec:3.14} bear on this. (i) The elementary
-  model, trained on far longer chases than the general model, shows no hop-count cliff up to 80 hops and loses
-  accuracy only beyond the widths it was trained on. That supports reading the general model’s cliff as a
-  coverage effect in hop count, though the two tasks differ, and the elementary model’s hops are $\pm1$ steps
-  inside a window of at most 11 positions, which may be composed differently. \textbf{\tagupd{}} Test 13
-  (\S\,\ref{sec:3.13}) adds that the elementary model also follows chains of 100 to 118 hops, longer than any in
-  my sample of its training data. (ii) The interventions say the general model is local in the sense the algebra
-  suggests: for $L\le12$ the output depends on the chase letters and nothing else. (iii) The probes at the query
-  position say it does not hold the chain’s later states (\S\,\ref{sec:3.6}); the probes and patching at the
-  word positions say they are built there, layer by layer, with a reach of roughly 1, 1, 4, 8 and 13 or more
-  hops at layers 1 to 5, and read in the last block (\S\,\ref{sec:3.9}–\ref{sec:3.10}). (iv) If that is how five
-  blocks compose chains, the hop limit may be set by depth, and more long chains in the data would not move it,
-  while a deeper model would. \textbf{\tagupd{}} \S\,\ref{sec:3.14} refutes this: planted chains moved the limit
-  beyond 24 hops with the same five blocks. (v) The elementary model has the same word-position staircase (about
-  1, 2, 4, 8 and 12 hops at layers 1 to 5) and still follows 80 hops (\S\,\ref{sec:3.11}), so a per-position
-  reach of about $2^\ell$ does not by itself cap the hop length, and (iv) is weaker than I wrote in version 5.
-  (vi) The heads that link hop letters are needed more as chains get longer, in both models, and in the
-  elementary model the hop offsets they attend to double with depth (\S\,\ref{sec:3.12}); but I did not find how
-  its 80 hops are composed, so (iv) is not settled either way. \textbf{\tagnew{}} (vii) The training run
-  (\S\,\ref{sec:3.14}): long chains in the data remove the cliff at five blocks (24 of 24 hops, including chains
-  through up to 25 points, outside the 10-point support), the control trained on the original distribution has
-  no cliff at 20 hops, and the retrained models do not show the probe staircase or the hop-offset doubling of
-  the others (\S\,\ref{sec:3.16}). A density argument built on chains would then need to be about what the data
-  contain, in hops and in distinct points together, and not about the architecture: up to 24 hops, which is all
-  a 25-letter word can test, I found no limit that five blocks set. How the model composes the chains I did not
-  find.
+\item Seven results from \S\,\ref{sec:3.6}–\ref{sec:3.14} bear on this. (i) The elementary model, trained on far
+  longer chases than the general model, shows no hop-count cliff up to 80 hops and loses accuracy only beyond
+  the widths it was trained on. That supports reading the general model’s cliff as a coverage effect in hop
+  count, though the two tasks differ, and the elementary model’s hops are $\pm1$ steps inside a window of at
+  most 11 positions, which may be composed differently. Test 13 (\S\,\ref{sec:3.13}) adds that the elementary
+  model also follows chains of 100 to 118 hops, longer than any in my sample of its training data. (ii) The
+  interventions say the general model is local in the sense the algebra suggests: for $L\le12$ the output
+  depends on the chase letters and nothing else. (iii) The probes at the query position say it does not hold the
+  chain’s later states (\S\,\ref{sec:3.6}); the probes and patching at the word positions say they are built
+  there, layer by layer, with a reach of roughly 1, 1, 4, 8 and 13 or more hops at layers 1 to 5, and read in
+  the last block (\S\,\ref{sec:3.9}–\ref{sec:3.10}). (iv) If that is how five blocks compose chains, the hop
+  limit may be set by depth, and more long chains in the data would not move it, while a deeper model would.
+  \S\,\ref{sec:3.14} refutes this: planted chains moved the limit beyond 24 hops with the same five blocks. (v)
+  The elementary model has the same word-position staircase (about 1, 2, 4, 8 and 12 hops at layers 1 to 5) and
+  still follows 80 hops (\S\,\ref{sec:3.11}), so a per-position reach of about $2^\ell$ does not by itself cap
+  the hop length, and (iv) is weaker than I wrote in version 5. (vi) The heads that link hop letters are needed
+  more as chains get longer, in both models, and in the elementary model the hop offsets they attend to double
+  with depth (\S\,\ref{sec:3.12}); but I did not find how its 80 hops are composed, so (iv) is not settled
+  either way. (vii) The training run (\S\,\ref{sec:3.14}): long chains in the data remove the cliff at five
+  blocks (24 of 24 hops, including chains through up to 25 points, outside the 10-point support), the control
+  trained on the original distribution has no cliff at 20 hops, and the retrained models do not show the probe
+  staircase or the hop-offset doubling of the others (\S\,\ref{sec:3.16}). A density argument built on chains
+  would then need to be about what the data contain, in hops and in distinct points together, and not about the
+  architecture: up to 24 hops, which is all a 25-letter word can test, I found no limit that five blocks set.
+  How the model composes the chains I did not find.
 \end{itemize}
 
 % ====================================================================================================
@@ -2474,10 +2500,10 @@ at once, not one head at a time.
   elementary model, mass peak at hop about 28 at $L=80$) as a rule about hop number. It reads a fixed range of
   word positions (72 to 83); the hop number grows with $L$ only because longer chains put more hops in the same
   positions.
-\item \lead{\tagnew{} Four things I said or assumed around the training run.} (a) \emph{Tail frequencies.} In a
-  message I gave the chance of 14 or more hops per slot as $1.2\times10^{-5}$ and of 16 or more as $10^{-6}$
-  (from a sample of 1M slots), and said that chains of 18 or more hops essentially never occur in the control’s
-  data. The number of hops is exactly Binomial(25, 0.18); the exact values are $2.2\times10^{-5}$ and
+\item \lead{Four things I said or assumed around the training run.} (a) \emph{Tail frequencies.} In a message I
+  gave the chance of 14 or more hops per slot as $1.2\times10^{-5}$ and of 16 or more as $10^{-6}$ (from a
+  sample of 1M slots), and said that chains of 18 or more hops essentially never occur in the control’s data.
+  The number of hops is exactly Binomial(25, 0.18); the exact values are $2.2\times10^{-5}$ and
   $4.7\times10^{-7}$, a 4M-slot simulation agrees, and the control saw about 10 slots with 18 or more hops
   (\S\,\ref{sec:3.14}). (b) \emph{Testing beyond the longest trained chain.} I said I could test
   \code{g\_\allowbreak{}plant10} beyond its longest training chain. A 25-letter word cannot hold a chain longer
@@ -2490,36 +2516,45 @@ at once, not one head at a time.
   that the general model’s cliff sits where its training data ends (\S\,\ref{sec:3.3}, \S\,\ref{sec:4}). The
   control extrapolates two to four hops beyond that point (\S\,\ref{sec:3.14}), so the end of the training
   chains is not by itself the explanation.
+\item \lead{\tagnew{} How I compared the data of the original and the retrained models (\S\,\ref{sec:3.14},
+  \S\,\ref{sec:3.15}).} In version 8 I wrote that the original general model saw 1.3 billion word views against
+  205M for the control, and that the original elementary model saw 14 times as many word views as
+  \code{e\_\allowbreak{}base}. Those are counts of words presented (epochs times file size), and I used them as
+  if they measured how much data each model had. By distinct words the order is the reverse: the original
+  general model saw 8M distinct words and the control 205M (25 times as many); the original elementary model saw
+  16M and \code{e\_\allowbreak{}base} 109M (about 7 times as many). Both counts are now given in a table in
+  \S\,\ref{sec:3.14}, and \S\,\ref{sec:1} items 21 and 23, \S\,\ref{sec:3.14} and \S\,\ref{sec:3.15} say which
+  of them each statement is about. You pointed this out.
 \end{enumerate}
 
 % ====================================================================================================
-% 6 Not done, and suggested next steps [UPDATED]
+% 6 Not done, and suggested next steps
 % ====================================================================================================
-\section{Not done, and suggested next steps \tagupd{}}\label{sec:6}
+\section{Not done, and suggested next steps}\label{sec:6}
 \lead{Inference-only tests run in this version:} layer-wise probes (\S\,\ref{sec:3.6}), irrelevance
 interventions (\S\,\ref{sec:3.7}), the elementary-transposition port with baseline, width and hop-count tests
 (\S\,\ref{sec:3.8}, Tests 6a and 6b), probes and activation patching at the word positions (\S\,\ref{sec:3.9},
 \S\,\ref{sec:3.10}), the same two tests on the elementary model (\S\,\ref{sec:3.11}), and attention patterns and
-single-head ablation of both models (\S\,\ref{sec:3.12}). \textbf{\tagnew{}} In this version: the elementary
-model beyond its longest training chase and zeroing groups of heads of the general model (\S\,\ref{sec:3.13}),
-and probes, attention, ablation, greedy ablation and patching on the four retrained models (\S\,\ref{sec:3.16}).
+single-head ablation of both models (\S\,\ref{sec:3.12}). In this version: the elementary model beyond its
+longest training chase and zeroing groups of heads of the general model (\S\,\ref{sec:3.13}), and probes,
+attention, ablation, greedy ablation and patching on the four retrained models (\S\,\ref{sec:3.16}).
 
 \lead{Inference-only tests not yet run:} gap/alignment variations beyond spread versus contiguous; weight-level
 equivariance; removing the block structure itself from the elementary model’s position embeddings (for example
 by projecting out the directions that separate the blocks), and swaps involving the 16 output positions
 (\S\,\ref{sec:3.8}). Patching the general model for $L=20$ and above (the elementary model is patched up to
-$L=80$, \S\,\ref{sec:3.11}). \textbf{\tagupd{}} Patching one head or one component at a time (head groups are
-now ablated, \S\,\ref{sec:3.13} and \S\,\ref{sec:3.16}), which would say what the heads of \S\,\ref{sec:3.12}
-carry and how 24 hops (the planted models) and 80 hops (the elementary model) are composed.
+$L=80$, \S\,\ref{sec:3.11}). Patching one head or one component at a time (head groups are now ablated,
+\S\,\ref{sec:3.13} and \S\,\ref{sec:3.16}), which would say what the heads of \S\,\ref{sec:3.12} carry and how
+24 hops (the planted models) and 80 hops (the elementary model) are composed.
 
-\lead{Needs training (not possible in my environment):} \textbf{\tagupd{}} done once on Spartan
-(\S\,\ref{sec:3.14}): long-chain-enriched data, an 8-block model and a control, one seed each. Still open: more
-seeds; a model with fewer blocks as the depth test (3 blocks on the planted data); the control trained longer or
-with a constant learning rate (its planted-slot accuracy was still rising); a control with the original’s batch
-size, schedule and repeated 8M-word file, to see whether the cliff comes back; the support-size sweep (planted
-chains on 5 points); and \code{e\_\allowbreak{}base} run to its full length (the block at 72).
+\lead{Needs training (not possible in my environment):} done once on Spartan (\S\,\ref{sec:3.14}):
+long-chain-enriched data, an 8-block model and a control, one seed each. Still open: more seeds; a model with
+fewer blocks as the depth test (3 blocks on the planted data); the control trained longer or with a constant
+learning rate (its planted-slot accuracy was still rising); a control with the original’s batch size, schedule
+and repeated 8M-word file, to see whether the cliff comes back; the support-size sweep (planted chains on 5
+points); and \code{e\_\allowbreak{}base} run to its full length (the block at 72).
 
-\lead{\tagupd{}} Given \S\,\ref{sec:3.6}–\ref{sec:3.16}, I would prioritise:
+Given \S\,\ref{sec:3.6}–\ref{sec:3.16}, I would prioritise:
 
 \begin{enumerate}
 \item \lead{A depth test with fewer blocks:} 3 blocks (and perhaps 4) on the planted data of
@@ -2539,7 +2574,7 @@ chains on 5 points); and \code{e\_\allowbreak{}base} run to its full length (the
 
 \subsection{The training experiment
 (\texorpdfstring{\code{../\allowbreak{}hpc-\allowbreak{}experiment/}}{../hpc-experiment/}, run on Spartan on
-2026-11-26) \tagupd{}}\label{sec:6.1}
+2026-11-26)}\label{sec:6.1}
 \code{bash submit.\allowbreak{}sh} submits four independent single-GPU jobs, one per model (a single job asking
 for four GPUs waited too long to start). The jobs can start and finish in any order: each has a fixed step
 count, writes only into its own folder, and refreshes the combined zip when it finishes, so the last one to
@@ -2583,9 +2618,9 @@ README. The single-GPU version was tested on CPU only: three arms started out of
 complete zip and no leftovers, and a per-arm stop and resume while another arm ran;
 \code{submit.\allowbreak{}sh} was run against a stand-in for \code{sbatch}.
 
-{\raggedright \lead{\tagnew{} What happened.} The four jobs ran as one single-GPU job each (run
-20261126-121524). The general arms finished their 200,000 steps in 5.33 hours (\code{g\_\allowbreak{}m10}), 5.46
-hours (\code{g\_\allowbreak{}plant10}) and 8.56 hours (\code{g\_\allowbreak{}plant10\_\allowbreak{}b8});
+{\raggedright \lead{What happened.} The four jobs ran as one single-GPU job each (run 20261126-121524). The
+general arms finished their 200,000 steps in 5.33 hours (\code{g\_\allowbreak{}m10}), 5.46 hours
+(\code{g\_\allowbreak{}plant10}) and 8.56 hours (\code{g\_\allowbreak{}plant10\_\allowbreak{}b8});
 \code{e\_\allowbreak{}base} was stopped by the deadline at step 106,250 of 110,000 after 9.57 hours. The
 README’s estimate of how many words an arm needs was right for the general arms (natural words converge between
 steps 25,000 and 100,000) and a little short for \code{e\_\allowbreak{}base}, as I had written. The control’s
@@ -2594,9 +2629,9 @@ planted-slot accuracy was still rising at the end. The predictions and the outco
 \code{analyze\_\allowbreak{}run.\allowbreak{}py} (\S\,\ref{sec:7}).\par}
 
 % ====================================================================================================
-% 7 Reproducing [UPDATED]
+% 7 Reproducing
 % ====================================================================================================
-\section{Reproducing \tagupd{}}\label{sec:7}
+\section{Reproducing}\label{sec:7}
 {\raggedright Run from this folder (\code{claude-\allowbreak{}analysis/}). Scripts find the checkpoint at
 \code{../\allowbreak{}scaling-\allowbreak{}generator/\allowbreak{}trained-\allowbreak{}models/\allowbreak{}torn-\allowbreak{}bigger-\allowbreak{}13/\allowbreak{}model.\allowbreak{}safetensors};
 set \code{TORN\_\allowbreak{}MODEL} to override. Needs only \code{numpy} (plus \code{matplotlib} for figures);
@@ -2652,14 +2687,14 @@ in a clone of \code{Midataur/\allowbreak{}permutations} for \code{train\_\allowb
 \code{run\_\allowbreak{}head\_\allowbreak{}ablation.\allowbreak{}py MODEL N\_\allowbreak{}WORDS} & zeroing one head at a time (\S\,\ref{sec:3.12}; I used 200 and 100 words per $L$; about 9 and 12 minutes); output \code{head\_\allowbreak{}ablation\_\allowbreak{}<MODEL>\_\allowbreak{}results.\allowbreak{}json} \\
 \code{run\_\allowbreak{}head\_\allowbreak{}ablation\_\allowbreak{}mean.\allowbreak{}py MODEL N\_\allowbreak{}WORDS N\_\allowbreak{}MEAN\_\allowbreak{}WORDS} & the same with mean replacement for the heads that lost more than 8 points (\S\,\ref{sec:3.12}; I used \code{200 150} and \code{100 150}; about 2 to 3 minutes); output \code{head\_\allowbreak{}ablation\_\allowbreak{}mean\_\allowbreak{}<MODEL>\_\allowbreak{}results.\allowbreak{}json} \\
 \code{make\_\allowbreak{}attention\_\allowbreak{}figures.\allowbreak{}py} & draws \code{fig\_\allowbreak{}attention\_\allowbreak{}heads.\allowbreak{}png} and \code{fig\_\allowbreak{}attention\_\allowbreak{}profiles.\allowbreak{}png} from the result files \\
-\code{run\_\allowbreak{}elem\_\allowbreak{}beyond\_\allowbreak{}hops.\allowbreak{}py} \textbf{\tagnew{}} & Test 13 (\S\,\ref{sec:3.13}): the elementary model on planted chains of up to 118 hops (300 words per row; about 2 minutes); output \code{elem\_\allowbreak{}beyond\_\allowbreak{}hops\_\allowbreak{}log.\allowbreak{}txt}, \code{elem\_\allowbreak{}beyond\_\allowbreak{}hops\_\allowbreak{}results.\allowbreak{}json} \\
-\code{run\_\allowbreak{}group\_\allowbreak{}ablation.\allowbreak{}py [N\_\allowbreak{}WORDS]} \textbf{\tagnew{}} & Test 14 (\S\,\ref{sec:3.13}): every subset of the next-hop and previous-hop heads zeroed together (I used 200; about 3 minutes); output \code{group\_\allowbreak{}ablation\_\allowbreak{}general\_\allowbreak{}results.\allowbreak{}json}, \code{group\_\allowbreak{}ablation\_\allowbreak{}general\_\allowbreak{}log.\allowbreak{}txt} \\
-\code{ckpt\_\allowbreak{}env.\allowbreak{}py} \textbf{\tagnew{}} & reads \code{ATTN\_\allowbreak{}CKPT}, \code{ATTN\_\allowbreak{}BLOCKS}, \code{ATTN\_\allowbreak{}TAG} and \code{ATTN\_\allowbreak{}LS} from the environment, so that the scripts of \S\,\ref{sec:3.9}–\ref{sec:3.12} run unchanged on another checkpoint (also with 8 blocks) and write tagged output files \\
-\code{run\_\allowbreak{}arm\_\allowbreak{}accuracy.\allowbreak{}py MODEL N\_\allowbreak{}WORDS} \textbf{\tagnew{}} & planted-chain accuracy of any checkpoint, inside and beyond the 10-point support (general) or by width (elementary) (\S\,\ref{sec:3.14}; 300 words per cell); output \code{arm\_\allowbreak{}accuracy\_\allowbreak{}<MODEL>\_\allowbreak{}<TAG>\_\allowbreak{}results.\allowbreak{}json} \\
-\code{run\_\allowbreak{}greedy\_\allowbreak{}ablation.\allowbreak{}py MODEL N\_\allowbreak{}WORDS MAXK} \textbf{\tagnew{}} & Test 15 (\S\,\ref{sec:3.16}): greedy removal of word-position heads, at the longest $L$ tested (I used \code{general 150 8} and \code{elem 150 8}; 5 to 30 minutes per arm); output \code{greedy\_\allowbreak{}ablation\_\allowbreak{}<MODEL>\_\allowbreak{}<TAG>\_\allowbreak{}results.\allowbreak{}json} \\
-\code{compare\_\allowbreak{}arms.\allowbreak{}py OUT\_\allowbreak{}DIR} \textbf{\tagnew{}} & puts the arms side by side in \code{summary.\allowbreak{}md} \\
-\code{analyze\_\allowbreak{}run.\allowbreak{}py ZIPS --\allowbreak{}out DIR [--\allowbreak{}patching] [--\allowbreak{}greedy]} \textbf{\tagnew{}} & runs all of the above on the last checkpoint of every arm of an \code{hpc-\allowbreak{}experiment} run (about 1.5 hours for four arms on 2 cores, more with \code{--\allowbreak{}patching --\allowbreak{}greedy}; finished jobs are skipped) \\
-\code{make\_\allowbreak{}ebase\_\allowbreak{}figure.\allowbreak{}py RUN\_\allowbreak{}DIR} \textbf{\tagnew{}} & draws \code{fig\_\allowbreak{}ebase\_\allowbreak{}blocks.\allowbreak{}png} (\S\,\ref{sec:3.15}) from the position embeddings of \code{e\_\allowbreak{}base} and the original checkpoint \\
+\code{run\_\allowbreak{}elem\_\allowbreak{}beyond\_\allowbreak{}hops.\allowbreak{}py} & Test 13 (\S\,\ref{sec:3.13}): the elementary model on planted chains of up to 118 hops (300 words per row; about 2 minutes); output \code{elem\_\allowbreak{}beyond\_\allowbreak{}hops\_\allowbreak{}log.\allowbreak{}txt}, \code{elem\_\allowbreak{}beyond\_\allowbreak{}hops\_\allowbreak{}results.\allowbreak{}json} \\
+\code{run\_\allowbreak{}group\_\allowbreak{}ablation.\allowbreak{}py [N\_\allowbreak{}WORDS]} & Test 14 (\S\,\ref{sec:3.13}): every subset of the next-hop and previous-hop heads zeroed together (I used 200; about 3 minutes); output \code{group\_\allowbreak{}ablation\_\allowbreak{}general\_\allowbreak{}results.\allowbreak{}json}, \code{group\_\allowbreak{}ablation\_\allowbreak{}general\_\allowbreak{}log.\allowbreak{}txt} \\
+\code{ckpt\_\allowbreak{}env.\allowbreak{}py} & reads \code{ATTN\_\allowbreak{}CKPT}, \code{ATTN\_\allowbreak{}BLOCKS}, \code{ATTN\_\allowbreak{}TAG} and \code{ATTN\_\allowbreak{}LS} from the environment, so that the scripts of \S\,\ref{sec:3.9}–\ref{sec:3.12} run unchanged on another checkpoint (also with 8 blocks) and write tagged output files \\
+\code{run\_\allowbreak{}arm\_\allowbreak{}accuracy.\allowbreak{}py MODEL N\_\allowbreak{}WORDS} & planted-chain accuracy of any checkpoint, inside and beyond the 10-point support (general) or by width (elementary) (\S\,\ref{sec:3.14}; 300 words per cell); output \code{arm\_\allowbreak{}accuracy\_\allowbreak{}<MODEL>\_\allowbreak{}<TAG>\_\allowbreak{}results.\allowbreak{}json} \\
+\code{run\_\allowbreak{}greedy\_\allowbreak{}ablation.\allowbreak{}py MODEL N\_\allowbreak{}WORDS MAXK} & Test 15 (\S\,\ref{sec:3.16}): greedy removal of word-position heads, at the longest $L$ tested (I used \code{general 150 8} and \code{elem 150 8}; 5 to 30 minutes per arm); output \code{greedy\_\allowbreak{}ablation\_\allowbreak{}<MODEL>\_\allowbreak{}<TAG>\_\allowbreak{}results.\allowbreak{}json} \\
+\code{compare\_\allowbreak{}arms.\allowbreak{}py OUT\_\allowbreak{}DIR} & puts the arms side by side in \code{summary.\allowbreak{}md} \\
+\code{analyze\_\allowbreak{}run.\allowbreak{}py ZIPS --\allowbreak{}out DIR [--\allowbreak{}patching] [--\allowbreak{}greedy]} & runs all of the above on the last checkpoint of every arm of an \code{hpc-\allowbreak{}experiment} run (about 1.5 hours for four arms on 2 cores, more with \code{--\allowbreak{}patching --\allowbreak{}greedy}; finished jobs are skipped) \\
+\code{make\_\allowbreak{}ebase\_\allowbreak{}figure.\allowbreak{}py RUN\_\allowbreak{}DIR} & draws \code{fig\_\allowbreak{}ebase\_\allowbreak{}blocks.\allowbreak{}png} (\S\,\ref{sec:3.15}) from the position embeddings of \code{e\_\allowbreak{}base} and the original checkpoint \\
 \end{longtable}}
 
 {\raggedright The elementary data is in \code{Midataur/\allowbreak{}permutations} at commit \code{fdefb8c},
@@ -2716,7 +2751,7 @@ the matching \code{*\_\allowbreak{}log.\allowbreak{}txt} files,
 (\code{strat\_\allowbreak{}results.\allowbreak{}npz}, 2.3 MB) are not included;
 \code{run\_\allowbreak{}stratified.\allowbreak{}py} regenerates them with the same seed.\par}
 
-{\raggedright \lead{\tagnew{} Results of the training run} are in
+{\raggedright \lead{Results of the training run} are in
 \code{analysis-\allowbreak{}20261126-\allowbreak{}121524/} (one folder per arm with the result files and logs of
 every test, \code{run\_\allowbreak{}info.\allowbreak{}json}, and \code{summary.\allowbreak{}md} with the arms
 side by side; the unpacked checkpoints in \code{\_\allowbreak{}unzipped/} are not in the repository). The

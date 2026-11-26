@@ -20,8 +20,8 @@ DST = sys.argv[2] if len(sys.argv) > 2 else "report.tex"
 
 # ----------------------------------------------------------------------------------------------------------
 # Edit these when a new version of the report is made.
-VERSION = "Version 8"
-SUBTITLE = "Results of the Spartan training run"
+VERSION = "Version 9"
+SUBTITLE = "Correction: distinct words against words presented"
 DATE = "27 November 2026"
 EXPECTED_TITLE = "Tests on two trained models, and a training experiment on four more: `torn-bigger-13` (general transpositions, $S_{25}$) and `elem-partitioned-long-boosted-1` (elementary transpositions)"
 FIGURE_CAPTION_FOR_FILE_LINE = {
@@ -67,19 +67,20 @@ TABLE_SPECS = {
     # sections 3.13-3.16 (version 8)
     23: dict(cols="r " + RARR + "p{6.4cm} r r"),                                     # Test 13: hops, training slots, accuracy at widths 8 and 4
     24: dict(cols="l r r r"),                                     # Test 14: heads zeroed together
-    25: dict(cols="l r " + ARR + "p{1.9cm} r " + ARR + "p{2.2cm} " + ARR + "p{2.1cm} " + ARR + "p{2.1cm}", size="small"),   # learning milestones
-    26: dict(cols="l " + ARR + "p{2.6cm} " + ARR + "p{2.8cm} " + ARR + "p{4.2cm}", size="small"),                          # final accuracy on natural words
-    27: dict(cols="r r r r r"),                                   # planted-chain accuracy of the three general arms
-    28: dict(cols="r " + ARR + "p{3.3cm} " + ARR + "p{4.2cm} " + ARR + "p{4.2cm}", size="small"),                       # tail of the hop-count distribution
-    29: dict(cols=ARR + "p{6.0cm} " + ARR + "p{8.6cm}", size="small"),                                                    # predictions against outcomes
-    30: dict(cols=ARR + "p{5.0cm} " + ARR + "p{4.0cm} " + ARR + "p{4.6cm}", size="small"),             # e_base against the original: neighbour cosine
-    31: dict(cols="l *{8}{r}", size="small"),                     # probes of the retrained models
-    32: dict(cols=ARR + "p{2.9cm} " + ARR + "p{3.2cm} " + ARR + "p{8.0cm}", size="small"),                                # single-head ablation, four arms
-    33: dict(cols=ARR + "p{2.6cm} r r " + ARR + "p{9.0cm}", size="small"),                                                # greedy ablation
-    34: dict(cols="r r r r r"),                                   # patching, first hop corrupted, four models
+    25: dict(cols=ARR + "p{4.2cm} " + RARR + "p{1.5cm} r " + RARR + "p{2.3cm} " + RARR + "p{2.0cm} " + RARR + "p{2.3cm}", size="small"),   # data seen: original models and retrained runs
+    26: dict(cols="l r " + ARR + "p{1.9cm} r " + ARR + "p{2.2cm} " + ARR + "p{2.1cm} " + ARR + "p{2.1cm}", size="small"),   # learning milestones
+    27: dict(cols="l " + ARR + "p{2.6cm} " + ARR + "p{2.8cm} " + ARR + "p{4.2cm}", size="small"),                          # final accuracy on natural words
+    28: dict(cols="r r r r r"),                                   # planted-chain accuracy of the three general arms
+    29: dict(cols="r " + ARR + "p{3.3cm} " + ARR + "p{4.2cm} " + ARR + "p{4.2cm}", size="small"),                       # tail of the hop-count distribution
+    30: dict(cols=ARR + "p{6.0cm} " + ARR + "p{8.6cm}", size="small"),                                                    # predictions against outcomes
+    31: dict(cols=ARR + "p{5.0cm} " + ARR + "p{4.0cm} " + ARR + "p{4.6cm}", size="small"),             # e_base against the original: neighbour cosine
+    32: dict(cols="l *{8}{r}", size="small"),                     # probes of the retrained models
+    33: dict(cols=ARR + "p{2.9cm} " + ARR + "p{3.2cm} " + ARR + "p{8.0cm}", size="small"),                                # single-head ablation, four arms
+    34: dict(cols=ARR + "p{2.6cm} r r " + ARR + "p{9.0cm}", size="small"),                                                # greedy ablation
+    35: dict(cols="r r r r r"),                                   # patching, first hop corrupted, four models
     # section 6.1 and section 7
-    35: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
-    36: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
+    36: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
+    37: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
 }
 
 CALLOUTS = {"What it shows": "find", "What this does and does not say": "find",

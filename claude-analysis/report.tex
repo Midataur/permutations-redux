@@ -36,7 +36,7 @@
 \usepackage[headsepline,footsepline=false,plainheadsepline=false]{scrlayer-scrpage}
 \clearpairofpagestyles
 \ihead{\sffamily\small Two trained models and a training experiment}
-\ohead{\sffamily\small Version 11 \textperiodcentered{} 28 November 2026}
+\ohead{\sffamily\small Version 12 \textperiodcentered{} 28 November 2026}
 \cfoot*{\sffamily\small\pagemark}
 
 \setkomafont{disposition}{\sffamily\bfseries\color{accent}}
@@ -86,12 +86,12 @@
   left=10pt,right=10pt,top=6pt,bottom=6pt,before skip=10pt,after skip=10pt}
 
 \usepackage[colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent,bookmarksnumbered=true,
-  pdftitle={Tests on two trained models, and a training experiment on four more: torn-bigger-13 and elem-partitioned-long-boosted-1},pdfsubject={Version 11}]{hyperref}
+  pdftitle={Tests on two trained models, and a training experiment on four more: torn-bigger-13 and elem-partitioned-long-boosted-1},pdfsubject={Version 12}]{hyperref}
 
 \begin{document}
 
 \begin{flushleft}
-{\sffamily\bfseries\color{accent}\small\MakeUppercase{Version 11}\hspace{0.7em}\textcolor{rulegray}{\textperiodcentered}\hspace{0.7em}\textcolor{rulegray}{28 November 2026}\par}
+{\sffamily\bfseries\color{accent}\small\MakeUppercase{Version 12}\hspace{0.7em}\textcolor{rulegray}{\textperiodcentered}\hspace{0.7em}\textcolor{rulegray}{28 November 2026}\par}
 \vspace{8pt}
 {\sffamily\bfseries\fontsize{24}{28}\selectfont Tests on two trained models,\par}
 \vspace{0pt}
@@ -101,7 +101,7 @@
 \vspace{3pt}
 {\ttfamily\fontsize{15}{19}\selectfont elem-partitioned-long-boosted-1}\hspace{0.5em}{\sffamily\large (elementary transpositions)\par}
 \vspace{6pt}
-{\sffamily\color{rulegray}The algorithm, and a notion of density\par}
+{\sffamily\color{rulegray}A hypothesis for the block structure\par}
 \vspace{6pt}
 {\color{accent}\rule{\linewidth}{1.1pt}}
 \end{flushleft}
@@ -137,22 +137,21 @@ file and the real test file. Code, raw results and the figures are in this folde
   (\S\,\ref{sec:3.17}); the other runs in the Spartan model folder, with the block boundary in other seeds
   (\S\,\ref{sec:3.18}); a reassessment of several conclusions of versions 8 and 9 (\S\,\ref{sec:1},
   \S\,\ref{sec:3.14}, \S\,\ref{sec:3.16}, \S\,\ref{sec:4}, \S\,\ref{sec:5} item 13).
-\item Version 11 (this one): the algorithm I think the general model learned (\S\,\ref{sec:4.1}) and the notion
-  of density the results support (\S\,\ref{sec:4.2}).
+\item Version 11: the algorithm I think the general model learned (\S\,\ref{sec:4.1}) and the notion of density
+  the results support (\S\,\ref{sec:4.2}).
+\item Version 12 (this one): a hypothesis for the block structure (\S\,\ref{sec:4.3}).
 \end{enumerate}
 
-\lead{What is new in this version (version 11).} The markers \textbf{\tagnew{}} and \textbf{\tagupd{}} show only
-what changed since version 10. Text without a marker is unchanged from version 10. Each new version clears the
+\lead{What is new in this version (version 12).} The markers \textbf{\tagnew{}} and \textbf{\tagupd{}} show only
+what changed since version 11. Text without a marker is unchanged from version 11. Each new version clears the
 previous version’s markers.
 
 \begin{itemize}
-\item \lead{\S\,\ref{sec:4.1} \tagnew{}:} what algorithm I think the general model learned: suffix composition
-  at the word positions with a reach that grows about like pointer jumping, read by the query in the last block;
-  its limit is the reach, and long training chains are memorised beside it.
-\item \lead{\S\,\ref{sec:4.2} \tagnew{}:} the notion of density I think the results support: coverage of chain
-  patterns modulo relabelling (which explains the paper’s $S_{10}\to S_{25}$ result), and the closure the
-  training procedure adds to it (which decides the long-chain edge).
-\item \lead{\S\,\ref{sec:1} \tagupd{}:} new item 29.
+\item \lead{\S\,\ref{sec:4.3} \tagnew{}:} the best hypothesis I have for the block structure, with two new tests
+  that rule out two explanations (the query reading the letters after the boundary; a single ’which half’
+  direction).
+\item \lead{\S\,\ref{sec:1} \tagupd{}:} new item 30.
+\item \lead{\S\,\ref{sec:7} \tagupd{}:} the two new scripts.
 \end{itemize}
 \end{frontbox}
 
@@ -393,7 +392,7 @@ previous version’s markers.
   trained (63 to 341 epochs); an older run has the sharpest boundary of all, at 69. In every model with a
   boundary several heads of the first block hardly attend across it, but chains that straddle it are followed as
   well as chains inside a block.
-\item \lead{\tagnew{} The algorithm, and the notion of density (\S\,\ref{sec:4.1}, \S\,\ref{sec:4.2}).} I think
+\item \lead{The algorithm, and the notion of density (\S\,\ref{sec:4.1}, \S\,\ref{sec:4.2}).} I think
   \code{torn-\allowbreak{}bigger-\allowbreak{}13} composes, at each letter, where a pointer leaving it ends up
   after the rest of the word, with a reach that grows about like pointer jumping (1, 1, 4, 8, 13 or more hops
   after layers 1 to 5), and reads that at the chain’s first letter in the last block; its limit is the reach,
@@ -401,6 +400,13 @@ previous version’s markers.
   through their chain patterns up to relabelling. Every test slot’s pattern is contained in the training
   patterns, which explains the paper’s result. Beyond that, containment is not enough: what the model
   generalises to depends on how often a pattern occurs and on the training procedure (\S\,\ref{sec:4.2}).
+\item \lead{\tagnew{} The block structure is most likely a by-product of keeping early attention local
+  (\S\,\ref{sec:4.3}).} It is not in the data, not needed for accuracy, not fixed by the initialisation, not
+  where the query reads (on natural words), and not one ’which half’ direction. My best hypothesis is a symmetry
+  broken by the first layers: making the positions on each side of a split alike helps their heads keep
+  attention local over a 120-letter word, the place of the split hardly matters to the loss, so it falls where a
+  run’s details put it, and some runs never split. Snapshots during training and removing the boundary after
+  training would test it.
 \end{enumerate}
 
 % ====================================================================================================
@@ -2755,7 +2761,7 @@ other structure (the “chevron” patterns of
   original recipe is fewer than the data contain.
 \end{itemize}
 
-\subsection{What algorithm I think the general model learned \tagnew{}}\label{sec:4.1}
+\subsection{What algorithm I think the general model learned}\label{sec:4.1}
 This is an interpretation that puts together \S\,\ref{sec:3.6}–\ref{sec:3.18}. No single test shows it, and the
 parts I am least sure of are marked.
 
@@ -2822,7 +2828,7 @@ the end of a chain of hop letters, each of which shares a point with the next.
   guess.
 \end{itemize}
 
-\subsection{What notion of density fits the results \tagnew{}}\label{sec:4.2}
+\subsection{What notion of density fits the results}\label{sec:4.2}
 The aim is a statement of the form “the training distribution is dense in the test distribution in a sense that
 explains why the model generalises”, in the spirit of $\mathbb{Q}\subset\mathbb{R}$. Here is the notion I think
 the results support, built in three steps, each from a result.
@@ -2932,6 +2938,94 @@ closure, is a property of the training procedure as much as of the data, and I c
 \item Whether a larger static file moves the original’s edge (a single-change experiment) would say how much of
   the closure is frequency and how much is the recipe.
 \end{itemize}
+
+\subsection{The block structure: the best hypothesis I have \tagnew{}}\label{sec:4.3}
+\lead{What is established} (\S\,\ref{sec:3.8}, \S\,\ref{sec:3.15}, \S\,\ref{sec:3.18}):
+
+\begin{itemize}
+\item In Figure 5b’s model the 120 word positions split into two blocks at 72; the 16 output positions form a
+  third block.
+\item The training data are position-stationary: nothing in them singles out 72 or any other position.
+\item Of six fully trained runs with the same config, three have a clear boundary (72, 78 and 81), one a weak
+  one (about 79) and two none. An older run has the sharpest boundary, at 69. The place falls 58–68\% of the way
+  through the word.
+\item Having a boundary does not go with training length (63 to 341 epochs), accuracy, or (as far as the changed
+  environment lets me tell) the seed.
+\item Where there is a boundary, several heads of the first block, and some of the second, hardly attend across
+  it between nearby letters. Models without one show no such coordinated dip.
+\item Chains whose hops straddle the boundary are followed as well as chains inside a block, and swapping
+  position vectors across it changes nothing that swapping inside a block does not (Test 6b).
+\end{itemize}
+
+\lead{Explanations the results rule out or make unlikely.}
+
+\begin{itemize}
+\item \lead{A feature of the data.} The data are stationary, and the place moves from run to run.
+\item \lead{Something the task needs.} Equally accurate runs have no boundary, chains across it are not harder,
+  and swaps across it are harmless.
+\item \lead{A fixed effect of the initialisation.} The untrained seed-42 models have small irregularities near
+  80, and \code{rerun-\allowbreak{}2} (seed 42) has its weak boundary at 79. But \code{boosted-\allowbreak{}1},
+  also seed 42, has it at 72, and \S\,\ref{sec:3.15} found the lowest-cosine position of
+  \code{e\_\allowbreak{}base} drifting during training. The initialisation may bias where a boundary forms; it
+  does not fix it.
+\item \lead{The query reading the letters just after the boundary.} In \S\,\ref{sec:3.12} one head of
+  \code{boosted-\allowbreak{}1}’s last block read positions 72–83 on 80-hop planted chains, which suggested that
+  the query reads the end of the first segment in reading order. On natural test words this does not hold
+  (\code{block\_\allowbreak{}query\_\allowbreak{}read.\allowbreak{}py}, 100 words). In no model with a boundary
+  is any head’s most-read 12-letter window within 3 positions of the boundary with more than 20\% of its
+  attention. The heads’ share of the window $[b, b+12)$ is 0.12–0.19, against 0.10 if attention were uniform.
+\item \lead{A single ’which half’ direction.} If the boundary were one coordinate that flips sign at $b$, one
+  principal component of the position table should be a step there
+  (\code{block\_\allowbreak{}pc\_\allowbreak{}step.\allowbreak{}py}).
+\begin{itemize}
+\item In \code{boosted-\allowbreak{}1} and \code{long-\allowbreak{}14} the second component is a step at 69–70
+  ($R^2$ 0.64 and 0.68).
+\item In \code{boosted-\allowbreak{}2}, \code{rerun-\allowbreak{}2} and \code{rerun-\allowbreak{}3} no leading
+  component is.
+\item The models without a boundary have step-like components too, at other places.
+\item Each component carries only about 5\% of the variance. So the boundary is a feature of how the positions
+  relate to each other (the cosine matrix), not of one dominant direction.
+\end{itemize}
+\end{itemize}
+
+\lead{The hypothesis I find most likely: a symmetry broken by the first layers’ local attention.}
+
+\begin{enumerate}
+\item \lead{The pressure.} The first blocks link each letter to nearby letters that share a point
+  (\S\,\ref{sec:3.12}, \S\,\ref{sec:4.1}). In a 120-letter word most candidates for that link are distractors.
+  Position embeddings that make far-apart positions dissimilar help keep this attention local, and that is what
+  the training does first: the embeddings become smooth from the diagonal outwards, before the accuracy rises
+  (\S\,\ref{sec:3.15}).
+\item \lead{The choice.} A cheap way to keep attention local, beyond smoothness, is to make positions in one
+  stretch of the word look alike and unlike positions in the other stretch, so that heads can gate on “same
+  side”. Where the split falls hardly matters to the loss: chains across it are fixed by the later blocks
+  (crossing costs nothing, swaps across it are harmless). So the place is chosen by the details of a run, as in
+  spontaneous symmetry breaking, and some runs never break the symmetry at all and keep attention local another
+  way.
+\item \lead{Why 58–68\% of the way along.} I have no derivation. The chase reads right to left, so the
+  right-hand part of the word holds the first hops of every chain and is read first by the query
+  (\S\,\ref{sec:3.10}, \S\,\ref{sec:3.12}). A split that keeps that part, about the last 40–50 letters, apart
+  from the rest is a plausible preference, and the observed boundaries fall there. This part is the weakest.
+\item \lead{The output block} at 120–135 needs no special explanation: those positions do a different job (they
+  hold the answers given so far and ask for the next one) and they see all 120 word positions.
+\end{enumerate}
+
+\lead{What would test it.}
+
+\begin{itemize}
+\item \lead{Snapshots during training} of a run that forms a boundary: the hypothesis predicts that the
+  first-block heads’ avoidance of the boundary appears together with, or before, the boundary in the embeddings,
+  and that the place settles early and then stays.
+\item \lead{Removing the boundary after training} (projecting out what separates the blocks, listed in
+  \S\,\ref{sec:6} since version 4): the hypothesis predicts a small cost, mostly in the first layers’ attention,
+  not in accuracy, since the later blocks already bridge the split.
+\item \lead{A shorter word} (fewer letters per word) should need the split less and form it less often; a longer
+  one more often.
+\end{itemize}
+
+The hypothesis says the block structure is a by-product of how this architecture keeps its early attention local
+over a long word. It is not a signature of the algebra or of the data. For the density argument
+(\S\,\ref{sec:4.2}) it is therefore not evidence either way.
 
 % ====================================================================================================
 % 5 Corrections to my earlier messages
@@ -3142,9 +3236,9 @@ and schedule, as in \S\,\ref{sec:3.14}, changed too many things at once to say w
 original; this run changes nothing that affects training.\par}
 
 % ====================================================================================================
-% 7 Reproducing
+% 7 Reproducing [UPDATED]
 % ====================================================================================================
-\section{Reproducing}\label{sec:7}
+\section{Reproducing \tagupd{}}\label{sec:7}
 {\raggedright Run from this folder (\code{claude-\allowbreak{}analysis/}). Scripts find the checkpoint at
 \code{../\allowbreak{}scaling-\allowbreak{}generator/\allowbreak{}trained-\allowbreak{}models/\allowbreak{}torn-\allowbreak{}bigger-\allowbreak{}13/\allowbreak{}model.\allowbreak{}safetensors};
 set \code{TORN\_\allowbreak{}MODEL} to override. Needs only \code{numpy} (plus \code{matplotlib} for figures);
@@ -3214,6 +3308,8 @@ in a clone of \code{Midataur/\allowbreak{}permutations} for \code{train\_\allowb
 \code{elem\_\allowbreak{}memorisation.\allowbreak{}py REPO NFILES CAP name=\allowbreak{}path:\allowbreak{}blocks ...} & Test 16 for elementary models (\S\,\ref{sec:3.17}; needs torch for the generator) \\
 \code{elem\_\allowbreak{}train\_\allowbreak{}val\_\allowbreak{}check.\allowbreak{}py} & do the committed boosted files fit the reruns more tightly than validation words (\S\,\ref{sec:3.17}) \\
 \code{block\_\allowbreak{}survey.\allowbreak{}py}, \code{make\_\allowbreak{}block\_\allowbreak{}boundary\_\allowbreak{}figure.\allowbreak{}py}, \code{block\_\allowbreak{}attention.\allowbreak{}py}, \code{block\_\allowbreak{}crossing\_\allowbreak{}test.\allowbreak{}py}, \code{elem\_\allowbreak{}model\_\allowbreak{}survey.\allowbreak{}py}, \code{cliff\_\allowbreak{}survey.\allowbreak{}py} & the survey of the Spartan model folder (\S\,\ref{sec:3.18}); write-up in \code{snapshot-\allowbreak{}survey/\allowbreak{}README.\allowbreak{}md} \\
+\code{block\_\allowbreak{}query\_\allowbreak{}read.\allowbreak{}py TEST\_\allowbreak{}CSV N name=\allowbreak{}path:\allowbreak{}blocks:\allowbreak{}b ...} & where the query positions read, relative to the block boundary (\S\,\ref{sec:4.3}) \textbf{\tagnew{}} \\
+\code{block\_\allowbreak{}pc\_\allowbreak{}step.\allowbreak{}py name=\allowbreak{}path:\allowbreak{}b ...} & are the leading principal components of the position table a step at the boundary (\S\,\ref{sec:4.3}) \textbf{\tagnew{}} \\
 \end{longtable}}
 
 {\raggedright The elementary data is in \code{Midataur/\allowbreak{}permutations} at commit \code{fdefb8c},

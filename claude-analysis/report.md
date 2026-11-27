@@ -15,13 +15,14 @@ Code, raw results and the figures are in this folder; commands to reproduce are 
 8. Version 8: the results of the training run on Spartan (§3.14–3.16), two more inference tests on the original models (§3.13), and the block question for the elementary arm (§3.15). The title changed accordingly.
 9. Version 9: a correction to how the data seen by the original and by the retrained models is compared (§3.14, §3.15, §5 item 12). No new experiments.
 10. Version 10: memorisation in `torn-bigger-13` and hops against points (§3.17); the other runs in the Spartan model folder, with the block boundary in other seeds (§3.18); a reassessment of several conclusions of versions 8 and 9 (§1, §3.14, §3.16, §4, §5 item 13).
-11. Version 11 (this one): the algorithm I think the general model learned (§4.1) and the notion of density the results support (§4.2).
+11. Version 11: the algorithm I think the general model learned (§4.1) and the notion of density the results support (§4.2).
+12. Version 12 (this one): a hypothesis for the block structure (§4.3).
 
-**What is new in this version (version 11).** The markers **[NEW]** and **[UPDATED]** show only what changed since version 10. Text without a marker is unchanged from version 10. Each new version clears the previous version's markers.
+**What is new in this version (version 12).** The markers **[NEW]** and **[UPDATED]** show only what changed since version 11. Text without a marker is unchanged from version 11. Each new version clears the previous version's markers.
 
-- **§4.1 [NEW]:** what algorithm I think the general model learned: suffix composition at the word positions with a reach that grows about like pointer jumping, read by the query in the last block; its limit is the reach, and long training chains are memorised beside it.
-- **§4.2 [NEW]:** the notion of density I think the results support: coverage of chain patterns modulo relabelling (which explains the paper's $S_{10}\to S_{25}$ result), and the closure the training procedure adds to it (which decides the long-chain edge).
-- **§1 [UPDATED]:** new item 29.
+- **§4.3 [NEW]:** the best hypothesis I have for the block structure, with two new tests that rule out two explanations (the query reading the letters after the boundary; a single 'which half' direction).
+- **§1 [UPDATED]:** new item 30.
+- **§7 [UPDATED]:** the two new scripts.
 
 ## 1. Summary [UPDATED]
 
@@ -65,7 +66,8 @@ Code, raw results and the figures are in this folder; commands to reproduce are 
 26. **The elementary models do not memorise their long chains (§3.17).** In five elementary runs, training, validation and fresh slots with 40 to 80 or more hops get the same accuracy (99.3–100%) and the same margins, although four of them end with a validation loss 40 to 3,000 times their training loss. So `torn-bigger-13`'s pattern is not a general effect of training on a static file, and a large gap between the logged losses is not by itself a sign of it.
 27. **This report is about the February 2025 `torn-bigger-13`, and the resume changed it little (§3.18).** The repo checkpoint is the February model (161 epochs); the file now on Spartan was saved after a 24-epoch resume in November 2025 with a fresh optimiser. The resumed model is a little better at 15 to 22 hops (by 2 to 18 points, in every cell) and has the same shape of decline and the same memorisation.
 28. **The block boundary of Figure 5b appears in about half the runs with its config, at different places (§3.18).** Of six fully trained runs with `elem-partitioned-long-boosted-1`'s config, three have a clear boundary (at 72, 81 and 78), one a weak one (about 79) and two none, unrelated to how long they trained (63 to 341 epochs); an older run has the sharpest boundary of all, at 69. In every model with a boundary several heads of the first block hardly attend across it, but chains that straddle it are followed as well as chains inside a block.
-29. **[NEW] The algorithm, and the notion of density (§4.1, §4.2).** I think `torn-bigger-13` composes, at each letter, where a pointer leaving it ends up after the rest of the word, with a reach that grows about like pointer jumping (1, 1, 4, 8, 13 or more hops after layers 1 to 5), and reads that at the chain's first letter in the last block; its limit is the reach, and its long training chains are memorised beside it. The density notion that fits: the objects are slots through their chain patterns up to relabelling. Every test slot's pattern is contained in the training patterns, which explains the paper's result. Beyond that, containment is not enough: what the model generalises to depends on how often a pattern occurs and on the training procedure (§4.2).
+29. **The algorithm, and the notion of density (§4.1, §4.2).** I think `torn-bigger-13` composes, at each letter, where a pointer leaving it ends up after the rest of the word, with a reach that grows about like pointer jumping (1, 1, 4, 8, 13 or more hops after layers 1 to 5), and reads that at the chain's first letter in the last block; its limit is the reach, and its long training chains are memorised beside it. The density notion that fits: the objects are slots through their chain patterns up to relabelling. Every test slot's pattern is contained in the training patterns, which explains the paper's result. Beyond that, containment is not enough: what the model generalises to depends on how often a pattern occurs and on the training procedure (§4.2).
+30. **[NEW] The block structure is most likely a by-product of keeping early attention local (§4.3).** It is not in the data, not needed for accuracy, not fixed by the initialisation, not where the query reads (on natural words), and not one 'which half' direction. My best hypothesis is a symmetry broken by the first layers: making the positions on each side of a split alike helps their heads keep attention local over a 120-letter word, the place of the split hardly matters to the loss, so it falls where a run's details put it, and some runs never split. Snapshots during training and removing the boundary after training would test it.
 
 ## 2. Setup and provenance
 
@@ -983,7 +985,7 @@ You uploaded the model folder from Spartan (206 checkpoints, the final epoch of 
 - The training experiment (§6.1) separates the two readings for the general model: with long chains in the data a five-block model gets 24 of 24 hops, so five blocks are not what limits it (§3.14). §3.9–3.10 had made the depth reading more plausible than I judged in version 4 and §3.11 had qualified that; §3.14 settles it within the range a 25-letter word can test. That rules out a limit of the architecture, not that `torn-bigger-13` learned a rule limited by its depth: its accuracy on fresh chains falls with the number of hops whatever the number of points (§3.17), from about where its probe staircase stops (§3.9). What made it learn a short rule I do not know; the control, trained differently, learned a longer one (§3.14).
 - Seven results from §3.6–3.14 bear on this. (i) The elementary model, trained on far longer chases than the general model, shows no hop-count cliff up to 80 hops and loses accuracy only beyond the widths it was trained on. That supports reading the general model's cliff as a coverage effect in hop count, though the two tasks differ, and the elementary model's hops are $\pm1$ steps inside a window of at most 11 positions, which may be composed differently. Test 13 (§3.13) adds that the elementary model also follows chains of 100 to 118 hops, longer than any in my sample of its training data. (ii) The interventions say the general model is local in the sense the algebra suggests: for $L\le12$ the output depends on the chase letters and nothing else. (iii) The probes at the query position say it does not hold the chain's later states (§3.6); the probes and patching at the word positions say they are built there, layer by layer, with a reach of roughly 1, 1, 4, 8 and 13 or more hops at layers 1 to 5, and read in the last block (§3.9–3.10). (iv) If that is how five blocks compose chains, the hop limit may be set by depth, and more long chains in the data would not move it, while a deeper model would. §3.14 refutes this: planted chains moved the limit beyond 24 hops with the same five blocks. (v) The elementary model has the same word-position staircase (about 1, 2, 4, 8 and 12 hops at layers 1 to 5) and still follows 80 hops (§3.11), so a per-position reach of about $2^\ell$ does not by itself cap the hop length, and (iv) is weaker than I wrote in version 5. (vi) The heads that link hop letters are needed more as chains get longer, in both models, and in the elementary model the hop offsets they attend to double with depth (§3.12); but I did not find how its 80 hops are composed, so (iv) is not settled either way. (vii) The training run (§3.14): long chains in the data remove the cliff at five blocks (24 of 24 hops, including chains through up to 25 points, outside the 10-point support), the control trained on the original distribution has no cliff at 20 hops, and the retrained models do not show the probe staircase or the hop-offset doubling of the others (§3.16). A density argument built on chains would then need to be about what the data contain, in hops and in distinct points together, and not about the architecture: up to 24 hops, which is all a 25-letter word can test, I found no limit that five blocks set. How the model composes the chains I did not find. (viii) §3.17: the original's limit is in what it learned to generalise, not in what it stored; it knows every long chain of its file. A density argument therefore has to be about the chains a training procedure makes the model generalise to, which for the original recipe is fewer than the data contain.
 
-### 4.1 What algorithm I think the general model learned [NEW]
+### 4.1 What algorithm I think the general model learned
 
 This is an interpretation that puts together §3.6–3.18. No single test shows it, and the parts I am least sure of are marked.
 
@@ -1006,7 +1008,7 @@ This is an interpretation that puts together §3.6–3.18. No single test shows 
 - **The planted model (`g_plant10`)** does not show the staircase (§3.16) and its confidence does not depend on chain length at all (§3.17: median margin 14.4–14.7 from 12 to 17 hops, and 100% to 24 hops). Whatever it does is not limited by a reach that grows with depth. I did not find its algorithm.
 - **The fresh-data control (`g_m10`)** follows chains through 10 points to 22 hops but fails on chains that keep revisiting 3 to 5 points (§3.17). That suggests a computation organised around points rather than letters (for example, tracking the last letter that touched each point). This is a guess.
 
-### 4.2 What notion of density fits the results [NEW]
+### 4.2 What notion of density fits the results
 
 The aim is a statement of the form "the training distribution is dense in the test distribution in a sense that explains why the model generalises", in the spirit of $\mathbb{Q}\subset\mathbb{R}$. Here is the notion I think the results support, built in three steps, each from a result.
 
@@ -1050,6 +1052,40 @@ A density argument for generalisation then has two halves. The first, coverage, 
 - I have measured patterns only by $(L, s)$. The full pattern (the order of revisits, the gaps between hop letters) may matter at the edges; the control's weakness on few-point chains is one sign that it does.
 - The threshold $N$ at which `torn-bigger-13` stops generalising (about $10^3$–$10^4$ slots per hop count) comes from one run, and the control shows it is not a property of the data alone.
 - Whether a larger static file moves the original's edge (a single-change experiment) would say how much of the closure is frequency and how much is the recipe.
+
+### 4.3 The block structure: the best hypothesis I have [NEW]
+
+**What is established** (§3.8, §3.15, §3.18):
+- In Figure 5b's model the 120 word positions split into two blocks at 72; the 16 output positions form a third block.
+- The training data are position-stationary: nothing in them singles out 72 or any other position.
+- Of six fully trained runs with the same config, three have a clear boundary (72, 78 and 81), one a weak one (about 79) and two none. An older run has the sharpest boundary, at 69. The place falls 58–68% of the way through the word.
+- Having a boundary does not go with training length (63 to 341 epochs), accuracy, or (as far as the changed environment lets me tell) the seed.
+- Where there is a boundary, several heads of the first block, and some of the second, hardly attend across it between nearby letters. Models without one show no such coordinated dip.
+- Chains whose hops straddle the boundary are followed as well as chains inside a block, and swapping position vectors across it changes nothing that swapping inside a block does not (Test 6b).
+
+**Explanations the results rule out or make unlikely.**
+- **A feature of the data.** The data are stationary, and the place moves from run to run.
+- **Something the task needs.** Equally accurate runs have no boundary, chains across it are not harder, and swaps across it are harmless.
+- **A fixed effect of the initialisation.** The untrained seed-42 models have small irregularities near 80, and `rerun-2` (seed 42) has its weak boundary at 79. But `boosted-1`, also seed 42, has it at 72, and §3.15 found the lowest-cosine position of `e_base` drifting during training. The initialisation may bias where a boundary forms; it does not fix it.
+- **The query reading the letters just after the boundary.** In §3.12 one head of `boosted-1`'s last block read positions 72–83 on 80-hop planted chains, which suggested that the query reads the end of the first segment in reading order. On natural test words this does not hold (`block_query_read.py`, 100 words). In no model with a boundary is any head's most-read 12-letter window within 3 positions of the boundary with more than 20% of its attention. The heads' share of the window $[b, b+12)$ is 0.12–0.19, against 0.10 if attention were uniform.
+- **A single 'which half' direction.** If the boundary were one coordinate that flips sign at $b$, one principal component of the position table should be a step there (`block_pc_step.py`).
+  - In `boosted-1` and `long-14` the second component is a step at 69–70 ($R^2$ 0.64 and 0.68).
+  - In `boosted-2`, `rerun-2` and `rerun-3` no leading component is.
+  - The models without a boundary have step-like components too, at other places.
+  - Each component carries only about 5% of the variance. So the boundary is a feature of how the positions relate to each other (the cosine matrix), not of one dominant direction.
+
+**The hypothesis I find most likely: a symmetry broken by the first layers' local attention.**
+1. **The pressure.** The first blocks link each letter to nearby letters that share a point (§3.12, §4.1). In a 120-letter word most candidates for that link are distractors. Position embeddings that make far-apart positions dissimilar help keep this attention local, and that is what the training does first: the embeddings become smooth from the diagonal outwards, before the accuracy rises (§3.15).
+2. **The choice.** A cheap way to keep attention local, beyond smoothness, is to make positions in one stretch of the word look alike and unlike positions in the other stretch, so that heads can gate on "same side". Where the split falls hardly matters to the loss: chains across it are fixed by the later blocks (crossing costs nothing, swaps across it are harmless). So the place is chosen by the details of a run, as in spontaneous symmetry breaking, and some runs never break the symmetry at all and keep attention local another way.
+3. **Why 58–68% of the way along.** I have no derivation. The chase reads right to left, so the right-hand part of the word holds the first hops of every chain and is read first by the query (§3.10, §3.12). A split that keeps that part, about the last 40–50 letters, apart from the rest is a plausible preference, and the observed boundaries fall there. This part is the weakest.
+4. **The output block** at 120–135 needs no special explanation: those positions do a different job (they hold the answers given so far and ask for the next one) and they see all 120 word positions.
+
+**What would test it.**
+- **Snapshots during training** of a run that forms a boundary: the hypothesis predicts that the first-block heads' avoidance of the boundary appears together with, or before, the boundary in the embeddings, and that the place settles early and then stays.
+- **Removing the boundary after training** (projecting out what separates the blocks, listed in §6 since version 4): the hypothesis predicts a small cost, mostly in the first layers' attention, not in accuracy, since the later blocks already bridge the split.
+- **A shorter word** (fewer letters per word) should need the split less and form it less often; a longer one more often.
+
+The hypothesis says the block structure is a by-product of how this architecture keeps its early attention local over a long word. It is not a signature of the algebra or of the data. For the density argument (§4.2) it is therefore not evidence either way.
 
 ## 5. Corrections to my earlier messages
 1. **Ladder hypothesis.** I framed the ladder test around a boundary at 11 distinct points, the first beyond the $m=10$ support. That boundary is correct (§2.3). There is no collapse at it (summary item 5).
@@ -1107,7 +1143,7 @@ At about 60 snapshots per arm it records accuracy on fixed test sets split by ho
 
 **A faithful rerun, prepared and not run** (`../hpc-replication/`). One 4-GPU job that reruns the original training (code, config and data of commit `5863de5`, `accelerate launch` with DeepSpeed ZeRO 2, bfloat16 and 4 processes, seed 42) for 120 epochs, changing only the model name, the epoch count and wandb's offline mode, with a copy of the weights after every epoch. `setup_env.sh` builds a Python 3.9 environment with the original package versions, and `submit.sh` checks the environment, fetches the data from git history and submits. A first attempt stopped in `wandb.init` (wandb 0.16.1 fails against the current server); the scripts now log offline. Training on fresh data, a different batch and schedule, as in §3.14, changed too many things at once to say why the control differs from the original; this run changes nothing that affects training.
 
-## 7. Reproducing
+## 7. Reproducing [UPDATED]
 
 Run from this folder (`claude-analysis/`). Scripts find the checkpoint at `../scaling-generator/trained-models/torn-bigger-13/model.safetensors`; set `TORN_MODEL` to override. Needs only `numpy` (plus `matplotlib` for figures); no PyTorch. To get the real data for `data_stats.py`, run `git cat-file blob 5863de5:scaling-generator/data/torn_bigger/<file>` in a clone of `Midataur/permutations` for `train_data1.csv`, `train_data1_perms.csv`, `test_data.csv` and `test_data_perms.csv`.
 
@@ -1159,6 +1195,8 @@ Run from this folder (`claude-analysis/`). Scripts find the checkpoint at `../sc
 | `elem_memorisation.py REPO NFILES CAP name=path:blocks ...` | Test 16 for elementary models (§3.17; needs torch for the generator) |
 | `elem_train_val_check.py` | do the committed boosted files fit the reruns more tightly than validation words (§3.17) |
 | `block_survey.py`, `make_block_boundary_figure.py`, `block_attention.py`, `block_crossing_test.py`, `elem_model_survey.py`, `cliff_survey.py` | the survey of the Spartan model folder (§3.18); write-up in `snapshot-survey/README.md` |
+| `block_query_read.py TEST_CSV N name=path:blocks:b ...` | where the query positions read, relative to the block boundary (§4.3) **[NEW]** |
+| `block_pc_step.py name=path:b ...` | are the leading principal components of the position table a step at the boundary (§4.3) **[NEW]** |
 
 The elementary data is in `Midataur/permutations` at commit `fdefb8c`, folder `scaling-generator/data/elem_partitioned_long_boosted/`; fetch `train_data1.csv`, `train_data1_perms.csv`, `test_data.csv` and `test_data_perms.csv` with `git cat-file blob` as above. The elementary checkpoint is `elem-partitioned-long-boosted-1/model.safetensors` in the same `trained-models` folder as the general one.
 

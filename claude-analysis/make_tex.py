@@ -20,8 +20,8 @@ DST = sys.argv[2] if len(sys.argv) > 2 else "report.tex"
 
 # ----------------------------------------------------------------------------------------------------------
 # Edit these when a new version of the report is made.
-VERSION = "Version 11"
-SUBTITLE = "The algorithm, and a notion of density"
+VERSION = "Version 12"
+SUBTITLE = "A hypothesis for the block structure"
 DATE = "28 November 2026"
 EXPECTED_TITLE = "Tests on two trained models, and a training experiment on four more: `torn-bigger-13` (general transpositions, $S_{25}$) and `elem-partitioned-long-boosted-1` (elementary transpositions)"
 FIGURE_CAPTION_FOR_FILE_LINE = {

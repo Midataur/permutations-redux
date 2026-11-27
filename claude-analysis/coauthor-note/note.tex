@@ -268,18 +268,64 @@ date & work & by\\
 27 Nov & Exported the wandb histories, made the wandb project public, uploaded all checkpoints. & M\\
 27 Nov & Survey of all checkpoints: block boundaries across runs, which checkpoint is which, hops against points, elementary models do not memorise. & C (Opus)\\
 28 Nov & Re-examination of the Sonnet-era conclusions (report version 10, at M's request). & C (Opus)\\
-28 Nov & The algorithm and the density notion (at M's request); block hypothesis; coverage proof; walk-shape test; naive-window test; this note. & C (Opus)\\
+28 Nov & The algorithm and the density notion (at M's request); block hypothesis; coverage proof; walk-shape test; naive-window test; this note and its environmental estimate. & C (Opus)\\
 \bottomrule
 \end{tabular}
 \end{center}
 
 All code, results and the full reports are in the repository \texttt{Midataur/permutations-redux}, in the folder \texttt{claude-analysis/}.
 
+%=====================================================================
+\section{Environmental impact of this study}\label{sec:footprint}
+
+I have tried to estimate the energy use and greenhouse gas emissions of this study, from 25 November to the morning of 28 November 2026. The estimate has three parts: running me (the language models), the four training runs on Spartan, and the cloud sandbox in which I ran the tests. It does not include the training of the Claude models themselves, the original training runs behind the paper, Max's own devices, or the network. Anthropic does not publish energy figures for its models, so the largest part of the estimate rests on third-party numbers and is uncertain by at least a factor of a few. The arithmetic is in \texttt{claude-analysis/footprint/footprint.py}.
+
+\paragraph{Running the language models.} The session's own usage record gives exact token counts. Up to 28 November at about 11:00, Claude Sonnet 5.5 produced 1.4 million output tokens and Claude Opus 5.5 0.4 million, and the two together read 446 million cached input tokens and wrote 6.5 million new ones into the cache (a small helper model, Claude Haiku, used a negligible amount). The cached reads are large because every step of the work re-reads the whole conversation so far. To turn tokens into energy I used three sets of rates.
+\begin{enumerate}
+  \item \textbf{Central:} third-party estimates for Claude Code via the API~\cite{gist}: 1,950~Wh per million output tokens, 390 per million input tokens, 490 per million tokens written to the cache, and 39 per million cached tokens read.
+  \item \textbf{Low:} about 1~Wh per 1,000 output tokens, the median for frontier-scale models in a recent production-setting model~\cite{msft}, with the other rates scaled down by the same factor of about 4.
+  \item \textbf{High:} twice the central rates, to allow for larger models, long reasoning, and the overheads that narrow measurements miss (Google found that a comprehensive measurement gives 2.4 times the accelerator-only figure~\cite{google}).
+\end{enumerate}
+On the central rates the language models used about 24~kWh, of which about 17~kWh is the repeated reading of cached context, and the output tokens themselves only about 4~kWh.
+
+\paragraph{Training on Spartan.} The four training runs used one NVIDIA L40S each, for 5.3, 5.5, 8.6 and 9.6 hours, so 29 GPU-hours in total (the failed two-minute start of the replication job adds almost nothing). The L40S draws at most 350~W~\cite{l40s}. Our models are small for this card, so I assumed an average draw of 150--350~W, plus 50--100~W for the share of the host machine, and a data-centre overhead (PUE) of 1.2--1.5. That gives 7--20~kWh, with a central value of 12~kWh. Spartan is in Melbourne, so I used the 2026 Victorian electricity coefficient of 0.87~kg~CO$_2$e per kWh~\cite{esc}. The University buys wind power through a long-term purchase agreement, but I could not confirm whether it covers Spartan, so this is a location-based figure and may overstate the true emissions.
+
+\paragraph{The sandbox.} The tests ran on two virtual CPUs for about 16 hours of session time, which I estimate at well under 1~kWh.
+
+\paragraph{Totals.} For the data centres that serve the language models I used 0.10~kg~CO$_2$e per kWh (a market-based figure similar to Google's for 2024~\cite{google}) in the low case, 0.35 (Google's location-based figure) in the central case, and 0.42 (about the US average) in the high case. Water use is given only for the language models, at 1--4~mL per Wh.
+
+\begin{center}
+\small
+\begin{tabular}{lrrr}
+\toprule
+ & low & central & high\\
+\midrule
+energy, language models (kWh) & 7 & 24 & 49\\
+energy, Spartan training (kWh) & 7 & 12 & 20\\
+energy, sandbox (kWh) & 0.1 & 0.3 & 0.6\\
+\textbf{energy, total (kWh)} & \textbf{14} & \textbf{36} & \textbf{69}\\
+\midrule
+emissions, language models (kg CO$_2$e) & 0.7 & 8.5 & 20\\
+emissions, Spartan training (kg CO$_2$e) & 6.1 & 10 & 17\\
+\textbf{emissions, total (kg CO$_2$e)} & \textbf{7} & \textbf{19} & \textbf{38}\\
+\midrule
+water, language models (litres) & 8 & 49 & 197\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+So the whole study used something like 15--70~kWh of electricity, about the energy a 2~kW electric heater uses in 7 to 35 hours, and emitted something like 7--40~kg of CO$_2$e. About half of the central emissions come from the Spartan runs, mostly because Victoria's grid is carbon-intensive; the language-model half is dominated by re-reading the long conversation rather than by the writing itself. The work is still going on (the decompilation tests in the main report will add to these numbers), and the figures above should be read as an order of magnitude, not a measurement.
+
 \begin{thebibliography}{9}
 \bibitem{paper} M.~Petschack, A.~Garbali, J.~de~Gier, \emph{Learning the symmetric group: large from small}, arXiv:2502.12717 (2025).
 \bibitem{hillis} W.~D.~Hillis, G.~L.~Steele, \emph{Data parallel algorithms}, Commun.\ ACM \textbf{29} (1986) 1170--1183.
 \bibitem{probes} G.~Alain, Y.~Bengio, \emph{Understanding intermediate layers using linear classifier probes}, arXiv:1610.01644 (2016).
 \bibitem{rome} K.~Meng, D.~Bau, A.~Andonian, Y.~Belinkov, \emph{Locating and editing factual associations in GPT}, NeurIPS (2022).
+\bibitem{google} C.~Elsworth, K.~Huang, D.~Patterson et al., \emph{Measuring the environmental impact of delivering AI at Google scale}, arXiv:2508.15734 (2025).
+\bibitem{msft} F.~Oviedo, F.~Kazhamiaka, E.~Choukse et al., \emph{Energy use of AI inference, efficiency pathways, and test-time scaling}, arXiv:2509.20241 (2025).
+\bibitem{gist} M.~Dodkins, \emph{AI energy and water estimates} (GitHub gist, March 2026), citing S.~P.~Couch's analysis of Claude Code sessions (January 2026). Third-party estimates, not Anthropic figures.
+\bibitem{l40s} NVIDIA, \emph{L40S data sheet} (maximum power consumption 350~W).
+\bibitem{esc} Essential Services Commission (Victoria), \emph{Greenhouse gas co-efficient 2026} (0.87~kg CO$_2$e per kWh).
 \end{thebibliography}
 
 \end{document}

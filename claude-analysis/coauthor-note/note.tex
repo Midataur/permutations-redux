@@ -1,0 +1,348 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\setlist{itemsep=2pt,topsep=4pt}
+\newtheorem{proposition}{Proposition}
+\newtheorem*{definition*}{Definition}
+\newcommand{\tb}{\texttt{torn-bigger-13}}
+
+\title{Learning the symmetric group: what the models learned\\[4pt]\large Interpretability and generalisation of the models of arXiv:2502.12717}
+\author{Max Petschack, with Claude (Anthropic)\\[2pt]\small Internal note for co-authors}
+\date{28 November 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We report a three-day study of the models in~\cite{paper}. We explain the generalisation from $S_{10}$ to $S_{25}$ in terms of the chain of letters that moves each output entry. Every test slot's chain also occurs, up to relabelling, in the training distribution. We prove this with explicit constants. The trained network depends only on the letters of that chain. The elementary model generalises the same way. It also extends modestly past the chain widths it was trained on. We find that the naive window method fails because \textsc{[window result]}. The block structure of the position embeddings in Figure~5(b) appears in about half of the runs with the same configuration, at a different place each time (positions 69 to 81). Chains that cross it are no harder to follow. We think it is a symmetry broken by the first layers' local attention, not a property of the group or the data. Probes, activation patching and head ablation point to an algorithm that builds, at each letter, where a pointer leaving that letter ends up. Its reach grows like pointer jumping with depth. The general model's learned rule is reliable to about 13 hops. It has memorised the longer chains of its own training file. Chains that keep returning to the point they just left are the hardest for every model we tested, except one trained on planted chains.
+\end{abstract}
+
+%=====================================================================
+\section{Introduction}
+
+In~\cite{paper} a transformer trained on words of transpositions in $S_{10}$ (relabelled into $S_{25}$) computes the permutation of words in $S_{25}$ with near-perfect accuracy. With adjacent transpositions and partitioned windows, a model trained on $S_{10}$ works on $S_{16}$. The paper left four things open:
+\begin{itemize}
+  \item why this works;
+  \item whether the models found a general algorithm;
+  \item why the naive window method failed for adjacent transpositions;
+  \item what the block substructure of Figure~5(b) means.
+\end{itemize}
+This note summarises what we learned about these questions from the trained checkpoints of the paper, about 200 other checkpoints from our training runs, and four new training runs.
+
+\paragraph{Summary.}
+\begin{enumerate}
+  \item \textbf{The block structure} (Section~\ref{sec:blocks}) is not a property of the group, the data or the task. It forms in roughly half the runs with the Figure~5(b) configuration, at different places. The first layers use it, but nothing downstream needs it. Our best explanation is spontaneous symmetry breaking.
+  \item \textbf{The generalisation} (Section~\ref{sec:general}) is explained by locality and coverage. Each output entry depends only on its chain of hop letters. Every chain that occurs in a test word occurs often in training, up to relabelling (Proposition~\ref{prop:coverage}). The elementary model is the same, and in addition extends past the widest chains it saw. The naive window method fails because \textsc{[window result]}.
+  \item \textbf{The algorithm} (Section~\ref{sec:algorithm}). The networks link hop letters by the points they share, and compose chains with a reach that grows about like pointer jumping. The answer is read off the word positions in the last block.
+\end{enumerate}
+Section~\ref{sec:open} lists open questions, and Section~\ref{sec:timeline} gives a timeline with the division of work.
+
+%=====================================================================
+\section{The pointer picture}\label{sec:pointer}
+
+We use the conventions of~\cite{paper}: a word is a sequence of $N$ letters, and the output is the permutation $p=(p_1,\dots,p_n)$. The following reformulation underlies everything below. It can be checked directly against the stored permutations of the data.
+
+\begin{definition*}
+Fix an output slot $k$. Place a pointer on point $k$ and read the word \emph{from right to left}. A letter $s_{a,b}$ (adjacent case: $s_{a,a+1}$) moves the pointer to $b$ if it sits on $a$, to $a$ if it sits on $b$, and leaves it otherwise. Then $p_k$ is where the pointer ends.
+\begin{itemize}
+  \item The \emph{hop letters} of slot $k$ are the letters that move the pointer.
+  \item The \emph{chain} of slot $k$ is the walk of points the pointer visits, together with the positions of its hop letters.
+  \item $L$ is the number of hops, $s$ the number of distinct points visited (the start included), and, in the adjacent case, the \emph{width} is the length of the interval the walk covers.
+\end{itemize}
+\end{definition*}
+
+So $p_k$ is determined by the chain alone. Every other letter only has to avoid the pointer.
+\begin{itemize}
+  \item In a uniform test word of $S_{25}$ with $N=25$, a letter moves a given pointer with probability $48/625\approx 0.077$. So $L\sim\mathrm{Binomial}(25,0.077)$ per slot, with mean about $2$.
+  \item In the paper's test file the longest chain has 9 hops through 9 points.
+  \item Training words live on 10 points, so a letter moves a pointer much more often: there $L\sim\mathrm{Binomial}(25,0.18)$, and the longest chains in the 8 million training words have 18 hops.
+\end{itemize}
+
+\paragraph{Models.}
+\begin{itemize}
+  \item \textbf{General transpositions:} \tb{}, the paper's model, 5 blocks, trained on a static file of 8M words for 161 epochs.
+  \item \textbf{Adjacent transpositions:} \texttt{elem-partitioned-long-boosted-1} (Figure~5(b) of~\cite{paper}; ``the elementary model''), $n=16$, $N=120$, partitioned windows.
+  \item \textbf{Four new runs, same architecture:}
+  \begin{itemize}
+    \item \texttt{g\_m10}: the paper's general distribution, but fresh words every step;
+    \item \texttt{g\_plant10}: half the words with planted long chains, still on 10 points;
+    \item an 8-block version of \texttt{g\_plant10};
+    \item \texttt{e\_base}: an elementary run.
+  \end{itemize}
+  \item \textbf{The final checkpoints of our earlier runs} from Spartan, including the January 2025 naive-window models.
+\end{itemize}
+
+%=====================================================================
+\section{The block structure of Figure 5(b)}\label{sec:blocks}
+
+In Figure~5(b) the 120 word positions split into two blocks: positions $0$--$71$ and $72$--$119$. The output positions form a third block. We asked whether this structure comes from the data, the task, or the run.
+
+\paragraph{It is not in the data.} The training words are position-stationary: every letter is drawn the same way, and nothing singles out position 72. A per-position check of the token frequencies, chain statistics and window spans finds nothing special at 72 (or at 45, our earlier reading of the figure).
+
+\paragraph{It forms in about half the runs, at different places.} We scored every elementary checkpoint with a boundary detector. For each $b$ it measures how much rows $b$ and $b+1$ of the position-cosine matrix differ away from the diagonal, as a robust $z$-score. Untrained models score at most $2.5$.
+\begin{itemize}
+  \item Of six fully trained runs with the configuration of Figure~5(b), three have a clear boundary (at 72, 78 and 81), one a weak one (79) and two none (Figure~\ref{fig:blocks}).
+  \item An earlier run with the older architecture has the sharpest boundary of all, at 69.
+  \item Where there is a boundary, it lies 58--68\% of the way along the word.
+  \item It does not follow the training length (63 to 341 epochs), the final accuracy, or the seed: seed 42 gave 72 in February 2025 and only a weak bump in December 2025.
+  \item Our own elementary run (\texttt{e\_base}) had not formed one after 109M words.
+\end{itemize}
+This confirms the remark in~\cite{paper} that it ``was not always observed''.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_blocks.png}
+\caption{Cosine similarity of the position embeddings (top) and the boundary score (bottom) for four runs with the configuration of Figure~5(b) of~\cite{paper}. The first panel is that figure's model. Green lines mark detected boundaries; the black line separates word positions from output positions.}
+\label{fig:blocks}
+\end{figure}
+
+\paragraph{The first layers use it.}
+\begin{itemize}
+  \item In every model with a boundary, several heads of block~1 (and some of block~2) put far less attention across the boundary than elsewhere, between letters at most 6 positions apart: 4\% to 56\% of their average. In Figure~5(b)'s model, block~1 head~0 puts in 13\%.
+  \item Models without a boundary show no such coordinated dip.
+\end{itemize}
+
+\paragraph{Nothing downstream needs it.}
+\begin{itemize}
+  \item \textbf{Chains across it are no harder.} Chains of 24 hops placed across the boundary are followed as well as chains inside one block (1.000 against 1.000 in Figure~5(b)'s model).
+  \item \textbf{Swaps across it cost nothing extra.} Swapping entries of the position-embedding table makes the model's answers follow the rearranged word in 92.6--93.6\% of the slots where the answers differ, whether the swap crosses the boundary or not.
+  \item \textbf{Equally accurate runs have no boundary.}
+  \item \textbf{Two specific roles are ruled out.} The query does not read the letters next to the boundary. And the boundary is not a single ``which half'' direction: the components of the position table that look like a step carry only about 5\% of the variance each, and models without a boundary have them too.
+\end{itemize}
+
+\paragraph{Interpretation.} Our best explanation is spontaneous symmetry breaking. It has three parts:
+\begin{enumerate}
+  \item \textbf{The pressure.} The first layers link each letter to nearby letters that share a point (Section~\ref{sec:algorithm}). In a 120-letter word most candidates for that link are distractors, so these heads benefit from attention that stays local. The position embeddings become smooth from the diagonal outwards early in training, before the accuracy rises.
+  \item \textbf{A cheap extra gate.} Making the positions of one stretch alike, and unlike those of the other, lets heads gate on ``same side''.
+  \item \textbf{Where the split falls is almost free.} The later blocks bridge it, so the loss barely depends on its place. Each run settles wherever its details put it, and some never split.
+\end{enumerate}
+Why the split falls 58--68\% along we cannot derive. The right-hand part of the word, which is read first, holds the first hops of every chain, and that may make it preferable. The hypothesis predicts two things. In training snapshots, the boundary and the heads' avoidance of it should appear together and early. Projecting the boundary out after training should cost little. We have tested neither.
+
+%=====================================================================
+\section{Why the generalisation happened}\label{sec:general}
+
+\subsection{Locality: the output depends only on the chain}
+
+We replaced every letter of a test word that cannot touch slot $k$'s pointer with another such letter. The prediction at slot $k$ was unchanged in 98--100\% of 800 words per set, for natural words and for planted chains of up to 12 hops. Replacing a single hop letter instead changed it in about 96\%. The token embeddings are also close to $S_{25}$-invariant. So the trained model behaves as a function of the chain up to relabelling, as the pointer picture says it should.
+
+\subsection{Coverage, for general transpositions}
+
+We compare the two distributions that matter.
+\begin{itemize}
+  \item \textbf{Test words:} $N=25$ letters, each uniform over the $625$ tokens $(a,b)\in[25]^2$.
+  \item \textbf{Training words:} a uniformly random set $M$ of 10 of the 25 points, then 25 letters each uniform over the 100 tokens on $M$.
+\end{itemize}
+
+\begin{proposition}\label{prop:coverage}
+Let $c$ be a labelled chain of a slot: $L$ hop letters at given positions, with a walk visiting a set $V$ of $s$ points. The ratio of its probability under the training distribution to its probability under the test distribution is
+\[
+R(L,s)=\frac{\binom{25-s}{10-s}}{\binom{25}{10}}\Big(\frac{625}{100}\Big)^{L}\Big(\frac{82}{100}\cdot\frac{625}{577}\Big)^{25-L}\quad (s\le 10),\qquad R(L,s)=0\quad (s\ge 11),
+\]
+and the same ratio holds for the total probability of each class $(L,s)$.
+\end{proposition}
+\begin{proof}
+A hop letter must be one of the two tokens $\{(x,y),(y,x)\}$ of its step $x\to y$. Any other letter must avoid the pointer's current point $q$. The admissible tokens are those with no coordinate equal to $q$, plus the diagonal $(q,q)$, which moves nothing: $24^2+1=577$ of the $625$ test tokens and $9^2+1=82$ of the $100$ training tokens. Letters are independent, so
+\[
+P_{\mathrm{test}}(c)=\Big(\tfrac{2}{625}\Big)^{L}\Big(\tfrac{577}{625}\Big)^{25-L},\qquad P_{\mathrm{train}}(c)=\Pr(V\subseteq M)\Big(\tfrac{2}{100}\Big)^{L}\Big(\tfrac{82}{100}\Big)^{25-L},
+\]
+with $\Pr(V\subseteq M)=\binom{25-s}{10-s}/\binom{25}{10}$, which is zero for $s>10$. Both distributions are invariant under relabelling the 25 points and under moving the hop letters to other positions. So every labelled chain in the class $(L,s)$ has the same ratio, and so does the class.
+\end{proof}
+
+A simulation of $10^6$ words from each distribution reproduces $R$ in every class with enough samples. For example, $(L,s)=(4,4)$: simulated $2.105$, formula $2.101$; $(8,8)$: $12.96$ against $12.91$.
+
+\paragraph{Consequences.}
+\begin{itemize}
+  \item Only chains through 11 or more points are absent from training, and they make up $1.2\times10^{-6}$ of test slots. The paper's test file has none.
+  \item Over the slots of the real test file, $R\ge 0.055=R(1,2)$, with median $0.13$.
+  \item The rarest chain class of the test file, $(L,s)=(8,9)$, is expected about $27{,}000$ times among the $2\times 10^8$ slots of the training file.
+\end{itemize}
+So, in the space of chains up to relabelling, generalising from $S_{10}$ to $S_{25}$ needs no extrapolation at all. Every test word lies outside the training support, but every test slot lies inside it. This is the precise form of the density intuition: the training set is dense in the test set as a set of slot chains modulo $S_{25}$, not as a set of words.
+
+\subsection{Coverage is necessary but not sufficient}
+
+Containment in the training distribution does not guarantee that a model generalises to a chain. Frequency and the training procedure decide the edge (Figure~\ref{fig:memo}).
+
+\paragraph{\tb{} memorised its long chains.} The model is right on 100\% of its own training slots with 12 to 17 hops. On fresh slots with the same hop counts its accuracy is:
+
+\begin{center}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+hops & 12 & 13 & 14 & 15 & 16 & 17\\
+\midrule
+fresh slots, accuracy & 0.999 & 0.989 & 0.976 & 0.943 & 0.868 & 0.72\\
+training slots available & 1500 & 1500 & 1468 & 270 & 34 & 2\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+  \item The difference between training and fresh slots is significant at every hop count from 13 to 16.
+  \item The decline starts where the training file still holds about a thousand examples per hop count.
+  \item The wandb history agrees: from about epoch 80 the training loss falls to $4\times10^{-9}$, while the validation loss stays near $10^{-5}$.
+\end{itemize}
+The test file never needs more than 9 hops, so this does not affect the paper's result.
+
+\paragraph{More data generalises further.} The fresh-data run \texttt{g\_m10} has the same distribution and about 25 times as many examples. It stays at 0.93--0.95 on planted chains of 20--22 hops through 10 points, which is beyond any chain it saw.
+
+\paragraph{Planted chains remove the limit.} With planted long chains in the data (\texttt{g\_plant10}), the same five-block architecture is perfect up to 24 hops and up to 25 points. So the general model's limit is a property of the rule it learned, not of the architecture.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_memorisation.png}
+\caption{Left: accuracy on natural slots by hop count, for fresh slots of several models and for \tb{}'s own training slots (top line). Middle and right: planted chains by hops $L$ and distinct points $s$ for \tb{} and the fresh-data run.}
+\label{fig:memo}
+\end{figure}
+
+\subsection{The elementary model}\label{sec:elem}
+
+For adjacent transpositions the same picture holds, with one difference: there is no relabelling symmetry. The chain of a slot is a walk of $\pm1$ steps, and its natural parameters are the hop count and the width.
+
+\paragraph{Coverage.} In the paper's test words ($n=16$, $N=120$, uniform letters), chains are moderately long but narrow: median 14 hops, at most 29, and median width 5, at most 15. In the training words (partitioned windows), chains are longer but bounded in width:
+\begin{itemize}
+  \item hops: median 16, up to 76;
+  \item width: never more than 11, because a window has at most 10 points.
+\end{itemize}
+Partitioned windows place windows at random offsets, so every chain of width at most 11 occurs at every location. Only the 0.53\% of test slots whose chain is 12 or more wide fall outside training.
+
+\paragraph{Generalisation beyond coverage.} The model is right on 99.99\% of test slots, including those wide ones.
+\begin{itemize}
+  \item \textbf{Width.} On planted chains, accuracy falls only slowly with width beyond 11: 95.6\% at width 16 with 24 hops.
+  \item \textbf{Length.} It follows chains of 100 to 118 hops (92--99\%) inside a narrow window, longer than any chain in our sample of its training data (78).
+  \item \textbf{No memorisation.} Unlike \tb{}, the elementary models are equally accurate on training, validation and fresh slots at every hop count, even when their validation loss ends far above their training loss.
+\end{itemize}
+So the elementary model's rule extends beyond what it saw. In the language of Section~\ref{sec:general}, its ``closure'' is larger than its coverage.
+
+\subsection{Why the naive window method failed}\label{sec:window}
+
+\textsc{[to be filled from the experiment]}
+
+%=====================================================================
+\section{Interpretability: what algorithm the models learned}\label{sec:algorithm}
+
+We used four tools:
+\begin{itemize}
+  \item linear probes~\cite{probes} on the residual stream, at the query (output) positions and at the word positions;
+  \item activation patching~\cite{rome} between words that differ in one hop letter;
+  \item attention patterns on planted chains, with a control on natural words;
+  \item zero- and mean-ablation of single heads and groups of heads.
+\end{itemize}
+The main findings for \tb{} and the elementary model are below.
+
+\paragraph{The query position does not trace the chain.} At the position that predicts $p_k$, a probe recovers the pointer's location after the first 1--4 hops only. For $L=8$ or $12$, where the model is 100\% correct, it never recovers the later hops (at most 13\%, chance 4\%). There is no record of one hop per layer.
+
+\paragraph{The word positions build continuations, with a doubling reach.} For a letter, its \emph{continuation} is where a pointer leaving that letter ends up after the remaining letters. A probe at the word positions decodes the continuation of letters with $h$ hops still to go only from a certain layer on:
+
+\begin{center}
+\small
+\begin{tabular}{lccccc}
+\toprule
+layer & 1 & 2 & 3 & 4 & 5\\
+\midrule
+hops ahead first decodable, general model & 1 & 1 & 4 & 8 & $\ge 13$\\
+hops ahead first decodable, elementary model & 1 & 2 & 4 & 8 & 12\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+This doubling is the signature of pointer jumping~\cite{hillis}: each layer joins a letter's continuation to the continuation of the letter it points to. In the elementary model the attention offsets double as well. Heads attend to hop letters $\pm1$ hops away in blocks 1--2, $\pm2$ and $\pm4$ in block 3, and $\pm6$ to $\pm12$ in block 4.
+
+\paragraph{The answer is read off the word positions.}
+\begin{itemize}
+  \item Corrupt a middle or last hop letter, then restore the clean activations at all word positions after block~4. This restores the clean answer in every word, although the query's own state was computed from the corrupted word.
+  \item Corrupting the first hop can be repaired this way only up to block~3. By then the query has taken in the first hops itself.
+  \item Patching only the letters read before the corrupted one repairs it; patching the letters read after it does not. So information flows the way continuations are built.
+\end{itemize}
+
+\paragraph{Linking is by content, and a few heads carry it.}
+\begin{itemize}
+  \item Heads in blocks 1--3 attend to the next or previous letter of the chain: 3--4 times (general) and 13--40 times (elementary) the weight of a non-chain letter at the same distance.
+  \item In \tb{}, zeroing the four heads that do this drops accuracy at 8 hops to 12\%. Each alone costs at most 3 points, so they are redundant.
+\end{itemize}
+
+\paragraph{The proposed algorithm.} Putting these together:
+\begin{enumerate}
+  \item The first blocks link each hop letter to its chain neighbours through the points they share.
+  \item Successive blocks compose continuations, roughly doubling their reach.
+  \item The query takes in the chain's first hops by block~3, and in the last block reads the answer from the continuation stored at the word positions.
+\end{enumerate}
+This predicts a limit in hop count, not in points, at about the reach of the last layer. That is what we see for \tb{}: on fresh chains it is reliable to about 13 hops, whatever the number of points, and its longer training chains are memorised separately.
+
+Two parts are not pinned down:
+\begin{itemize}
+  \item In the general model the attention offsets show the doubling only weakly.
+  \item The elementary model follows 118 hops with a probed reach of about 12. So its long chains are composed in a way a linear probe does not see.
+\end{itemize}
+The planted model \texttt{g\_plant10} shows neither the staircase nor any hop limit, and we have not found its algorithm.
+
+\paragraph{The hardest chains go back and forth.} A finer test holds $L$ and $s$ fixed and varies only the shape of the walk (Figure~\ref{fig:shape}). Cycles ($a\,b\,c\,d\,e\,a\ldots$) are easy for every model. Walks that keep returning to the point just left ($a\,b\,a\,b\ldots$) are hard:
+\begin{itemize}
+  \item at 16 hops through 5 points, \tb{} falls from 0.96 to 0.68 and \texttt{g\_m10} from 0.99 to 0.86;
+  \item at 18 hops, they fall from 0.75 to 0.46 and from 1.00 to 0.70.
+\end{itemize}
+The fresh-data run's apparent weakness on chains through few points is therefore a weakness on back-and-forth chains. This fits content-based linking: in a back-and-forth stretch every hop letter is the same pair $\{a,b\}$, so content cannot tell the next link from any other. The planted model is perfect on all of them.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_pattern_families.png}
+\caption{Accuracy by the shape of the walk at fixed hops and points (200 planted words per point). In brackets: the share of hops that return to the point just left.}
+\label{fig:shape}
+\end{figure}
+
+%=====================================================================
+\section{Open questions}\label{sec:open}
+
+\begin{enumerate}
+  \item \textbf{Was \tb{}'s rule ever longer?} A faithful rerun with per-epoch snapshots would show whether the hop limit was there from the start or was overtaken by memorisation once the training loss reached $10^{-9}$. The run is prepared but has not been run.
+  \item \textbf{Data or recipe?} Does a larger static file move the general model's edge, with everything else as in the paper? The fresh-data run differs from the original in several respects at once.
+  \item \textbf{How are 118 hops composed?} The elementary model follows chains ten times longer than its probed reach. Head-level patching at long chains, and a test of whether it uses the narrowness of the walk, are next.
+  \item \textbf{What does the planted model do?} It shows no staircase, no hop limit and no cost for back-and-forth walks.
+  \item \textbf{Does the block hypothesis hold?} Training snapshots of a run that forms a boundary, and removing the boundary after training, would test it. So would words of other lengths.
+  \item \textbf{Is there a closure theory?} Coverage is now a theorem. What a training procedure makes of it is only measured. A description of which chains a model extends to, in terms of frequent short segments composed by the layers, would complete the density argument.
+\end{enumerate}
+
+%=====================================================================
+\section{Timeline and division of work}\label{sec:timeline}
+
+The study ran from 25 to 28 November 2026. Max (M) set the questions, supplied the models, code, data and training runs, and corrected several conclusions. Claude (C) designed and ran the tests on the checkpoints, wrote the analysis code, and wrote the reports. The earlier analysis was done with Claude Sonnet and the later with Claude Opus. The later work re-examined and revised several of the earlier conclusions. All training on the cluster was run by M.
+
+\begin{center}
+\small
+\begin{tabular}{p{2.0cm}p{9.8cm}c}
+\toprule
+date & work & by\\
+\midrule
+2024--25 & The paper, its models, data generator and training runs; about 200 further checkpoints. & M\\
+25 Nov 2026 & Repository with the two paper models; the questions (density argument, Figure~5(b)). & M\\
+25 Nov & Baseline, planted chains, the pointer picture, layer-wise probes, interventions, Figure 5(b) identified, position-embedding ablation. & C\\
+25 Nov & Confirmed the model behind Figure 5(b). & M\\
+26 Nov & Probes and patching at the word positions, attention and ablation, elementary model beyond its longest chains; design of a four-arm training experiment. & C\\
+26 Nov & Ran the four-arm experiment on the cluster. & M\\
+26--27 Nov & Analysis of the four new models. & C\\
+27 Nov & Corrections: data seen versus words presented; experiments should change one thing at a time; the original used bf16. & M\\
+27 Nov & Prepared a faithful rerun of \tb{} with snapshots (not yet run). & C\\
+27 Nov & Exported the wandb histories, made the wandb project public, uploaded all checkpoints. & M\\
+27 Nov & Survey of all checkpoints: block boundaries across runs, which checkpoint is which, memorisation in \tb{}, hops against points, elementary models do not memorise. & C\\
+28 Nov & The algorithm and the density notion (at M's request); block hypothesis; coverage proof; walk-shape test; naive-window test; this note. & C\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+All code, results and the full reports are in the repository \texttt{Midataur/permutations-redux}, folder \texttt{claude-analysis/}.
+
+\begin{thebibliography}{9}
+\bibitem{paper} M.~Petschack, A.~Garbali, J.~de~Gier, \emph{Learning the symmetric group: large from small}, arXiv:2502.12717 (2025).
+\bibitem{hillis} W.~D.~Hillis, G.~L.~Steele, \emph{Data parallel algorithms}, Commun.\ ACM \textbf{29} (1986) 1170--1183.
+\bibitem{probes} G.~Alain, Y.~Bengio, \emph{Understanding intermediate layers using linear classifier probes}, arXiv:1610.01644 (2016).
+\bibitem{rome} K.~Meng, D.~Bau, A.~Andonian, Y.~Belinkov, \emph{Locating and editing factual associations in GPT}, NeurIPS (2022).
+\end{thebibliography}
+
+\end{document}

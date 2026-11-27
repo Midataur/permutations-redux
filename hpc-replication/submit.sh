@@ -96,9 +96,9 @@ TRAIN_SECONDS=$(( 10#$hh * 3600 + 10#$mm * 60 + 10#$ss - 1500 ))
 cp "$HERE/snapshot_sidecar.py" "$HERE/make_zip.py" "$RUN/"
 jid=$(sbatch --parsable --time="$WALL" --chdir="$SG" \
       --output="$RUN/slurm-%j.out" \
-      --export=ALL,WANDB_MODE="${WANDB_MODE:-online}",RUN="$RUN",VENV="$VENV",ACCEL_CONFIG="$ACCEL_CONFIG",MODELNAME="$MODELNAME",TRAIN_SECONDS="$TRAIN_SECONDS",RUN_ID="$RUN_ID" \
+      --export=ALL,WANDB_MODE="${WANDB_MODE:-offline}",RUN="$RUN",VENV="$VENV",ACCEL_CONFIG="$ACCEL_CONFIG",MODELNAME="$MODELNAME",TRAIN_SECONDS="$TRAIN_SECONDS",RUN_ID="$RUN_ID" \
       "$HERE/job.slurm")
 echo "$jid" > "$RUN/job_id.txt"
 echo "submitted job $jid; output folder $RUN"
-if [ "${WANDB_MODE:-online}" = online ]; then echo "live progress: wandb project scaling-generator, run $MODELNAME"; fi
+echo "progress while it runs:  grep \"^Epoch\" $RUN/train_raw.log   (one line per epoch: train/val loss and accuracy)"
 echo "when it ends, upload $RUN/replication-$RUN_ID.zip"

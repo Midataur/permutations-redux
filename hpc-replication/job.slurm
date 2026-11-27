@@ -16,8 +16,9 @@ echo "job $SLURM_JOB_ID on $(hostname), $(date)"
 module load CUDA/12.4.1
 source "$VENV/bin/activate"
 set -u
-export WANDB_MODE="${WANDB_MODE:-online}"   # online as in the original run, so progress can be watched live;
-                                            # WANDB_MODE=offline bash submit.sh if the compute node has no network
+export WANDB_MODE="${WANDB_MODE:-offline}"  # wandb 0.16.1 (the original version) fails to start runs on the current wandb
+                                            # server; offline keeps the same calls and stores the run in the zip.
+                                            # Progress: grep "^Epoch" $RUN/train_raw.log
 
 nvidia-smi > "$RUN/env/nvidia_smi.txt" 2>&1
 python "$RUN/snapshot_sidecar.py" "model/$MODELNAME/model.safetensors" "$RUN/snapshots" 10 &
@@ -26,9 +27,11 @@ SIDE=$!
 # the original command was `accelerate launch main.py` (transformer-fos.slurm); training stops cleanly
 # 25 minutes before the wall time if it has not finished its epochs by then
 timeout --signal=INT --kill-after=300 "$TRAIN_SECONDS" accelerate launch ${ACCEL_CONFIG:+--config_file "$ACCEL_CONFIG"} main.py > "$RUN/train_raw.log" 2>&1
-echo "training exit code $? at $(date)" | tee "$RUN/train_exit.txt"
+rc=$?
+echo "training exit code $rc at $(date)" | tee "$RUN/train_exit.txt"
 
 touch "$RUN/snapshots/STOP"; wait $SIDE
 cp -r wandb "$RUN/wandb" 2>/dev/null
 python "$RUN/make_zip.py" "$RUN" "replication-$RUN_ID.zip"
 echo "done $(date)"
+exit $rc                 # so Slurm reports a failed training run as FAILED

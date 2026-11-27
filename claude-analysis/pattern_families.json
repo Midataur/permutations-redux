@@ -1,0 +1,393 @@
+{
+ "cells": {
+  "torn-bigger-13 (Feb 2025)": {
+   "walk": {
+    "L=16, s=5: cycle": {
+     "acc": 0.96,
+     "margin": 11.158313751220703,
+     "reversal_share": 0.0
+    },
+    "L=16, s=5: random, fewest reversals": {
+     "acc": 0.935,
+     "margin": 13.19696044921875,
+     "reversal_share": 0.26566666666666666
+    },
+    "L=16, s=5: random, most reversals": {
+     "acc": 0.805,
+     "margin": 7.978749752044678,
+     "reversal_share": 0.5533333333333332
+    },
+    "L=16, s=5: ping-pong": {
+     "acc": 0.68,
+     "margin": 3.852710008621216,
+     "reversal_share": 0.581
+    },
+    "L=18, s=5: cycle": {
+     "acc": 0.745,
+     "margin": 4.778038024902344,
+     "reversal_share": 0.0
+    },
+    "L=18, s=5: random, fewest reversals": {
+     "acc": 0.76,
+     "margin": 5.867403984069824,
+     "reversal_share": 0.2770588235294118
+    },
+    "L=18, s=5: random, most reversals": {
+     "acc": 0.645,
+     "margin": 4.932033061981201,
+     "reversal_share": 0.5655882352941177
+    },
+    "L=18, s=5: ping-pong": {
+     "acc": 0.455,
+     "margin": -0.5421361923217773,
+     "reversal_share": 0.6320588235294118
+    },
+    "L=16, s=10: cycle": {
+     "acc": 0.885,
+     "margin": 7.672640800476074,
+     "reversal_share": 0.0
+    },
+    "L=16, s=10: random, fewest reversals": {
+     "acc": 0.87,
+     "margin": 9.558711051940918,
+     "reversal_share": 0.047
+    },
+    "L=16, s=10: random, most reversals": {
+     "acc": 0.895,
+     "margin": 9.882719993591309,
+     "reversal_share": 0.24533333333333335
+    },
+    "L=16, s=10: ping-pong": {
+     "acc": 0.9,
+     "margin": 10.989137649536133,
+     "reversal_share": 0.20266666666666666
+    },
+    "L=20, s=10: cycle": {
+     "acc": 0.465,
+     "margin": -0.38220155239105225,
+     "reversal_share": 0.0
+    },
+    "L=20, s=10: random, fewest reversals": {
+     "acc": 0.57,
+     "margin": 0.7034881114959717,
+     "reversal_share": 0.10763157894736843
+    },
+    "L=20, s=10: random, most reversals": {
+     "acc": 0.595,
+     "margin": 1.7653815746307373,
+     "reversal_share": 0.2647368421052631
+    },
+    "L=20, s=10: ping-pong": {
+     "acc": 0.535,
+     "margin": 0.8717875480651855,
+     "reversal_share": 0.29894736842105263
+    }
+   },
+   "placement": {
+    "L=16, s=10: spread at random": {
+     "acc": 0.895,
+     "margin": 9.253634452819824
+    },
+    "L=16, s=10: block read first (end of word)": {
+     "acc": 0.86,
+     "margin": 5.1996750831604
+    },
+    "L=16, s=10: block in the middle": {
+     "acc": 0.815,
+     "margin": 5.6767144203186035
+    },
+    "L=16, s=10: block read last (start of word)": {
+     "acc": 0.77,
+     "margin": 4.570860862731934
+    },
+    "L=12, s=10: every other letter": {
+     "acc": 1.0,
+     "margin": 18.765735626220703
+    }
+   }
+  },
+  "g_m10": {
+   "walk": {
+    "L=16, s=5: cycle": {
+     "acc": 0.99,
+     "margin": 10.042545318603516,
+     "reversal_share": 0.0
+    },
+    "L=16, s=5: random, fewest reversals": {
+     "acc": 0.985,
+     "margin": 8.183637619018555,
+     "reversal_share": 0.26566666666666666
+    },
+    "L=16, s=5: random, most reversals": {
+     "acc": 0.93,
+     "margin": 7.559207916259766,
+     "reversal_share": 0.5533333333333332
+    },
+    "L=16, s=5: ping-pong": {
+     "acc": 0.855,
+     "margin": 4.820520877838135,
+     "reversal_share": 0.581
+    },
+    "L=18, s=5: cycle": {
+     "acc": 0.995,
+     "margin": 8.392613410949707,
+     "reversal_share": 0.0
+    },
+    "L=18, s=5: random, fewest reversals": {
+     "acc": 0.9,
+     "margin": 6.118542671203613,
+     "reversal_share": 0.2770588235294118
+    },
+    "L=18, s=5: random, most reversals": {
+     "acc": 0.8,
+     "margin": 4.2867937088012695,
+     "reversal_share": 0.5655882352941177
+    },
+    "L=18, s=5: ping-pong": {
+     "acc": 0.695,
+     "margin": 1.8331639766693115,
+     "reversal_share": 0.6320588235294118
+    },
+    "L=16, s=10: cycle": {
+     "acc": 0.995,
+     "margin": 9.615421295166016,
+     "reversal_share": 0.0
+    },
+    "L=16, s=10: random, fewest reversals": {
+     "acc": 0.99,
+     "margin": 8.811777114868164,
+     "reversal_share": 0.08366666666666667
+    },
+    "L=16, s=10: random, most reversals": {
+     "acc": 0.995,
+     "margin": 8.883607864379883,
+     "reversal_share": 0.24533333333333335
+    },
+    "L=16, s=10: ping-pong": {
+     "acc": 1.0,
+     "margin": 9.003032684326172,
+     "reversal_share": 0.20266666666666666
+    },
+    "L=20, s=10: cycle": {
+     "acc": 1.0,
+     "margin": 8.194860458374023,
+     "reversal_share": 0.0
+    },
+    "L=20, s=10: random, fewest reversals": {
+     "acc": 0.98,
+     "margin": 6.318313121795654,
+     "reversal_share": 0.10763157894736843
+    },
+    "L=20, s=10: random, most reversals": {
+     "acc": 0.945,
+     "margin": 6.008357048034668,
+     "reversal_share": 0.2647368421052631
+    },
+    "L=20, s=10: ping-pong": {
+     "acc": 0.895,
+     "margin": 5.18818473815918,
+     "reversal_share": 0.29894736842105263
+    }
+   },
+   "placement": {
+    "L=16, s=10: spread at random": {
+     "acc": 0.98,
+     "margin": 8.790067672729492
+    },
+    "L=16, s=10: block read first (end of word)": {
+     "acc": 0.97,
+     "margin": 6.441600799560547
+    },
+    "L=16, s=10: block in the middle": {
+     "acc": 1.0,
+     "margin": 9.318215370178223
+    },
+    "L=16, s=10: block read last (start of word)": {
+     "acc": 1.0,
+     "margin": 10.457559585571289
+    },
+    "L=12, s=10: every other letter": {
+     "acc": 1.0,
+     "margin": 12.439908027648926
+    }
+   }
+  },
+  "g_plant10": {
+   "walk": {
+    "L=16, s=5: cycle": {
+     "acc": 1.0,
+     "margin": 14.786566734313965,
+     "reversal_share": 0.0
+    },
+    "L=16, s=5: random, fewest reversals": {
+     "acc": 1.0,
+     "margin": 14.828962326049805,
+     "reversal_share": 0.26566666666666666
+    },
+    "L=16, s=5: random, most reversals": {
+     "acc": 1.0,
+     "margin": 14.376845359802246,
+     "reversal_share": 0.5533333333333332
+    },
+    "L=16, s=5: ping-pong": {
+     "acc": 1.0,
+     "margin": 13.930444717407227,
+     "reversal_share": 0.581
+    },
+    "L=18, s=5: cycle": {
+     "acc": 1.0,
+     "margin": 15.079815864562988,
+     "reversal_share": 0.0
+    },
+    "L=18, s=5: random, fewest reversals": {
+     "acc": 1.0,
+     "margin": 15.020944595336914,
+     "reversal_share": 0.2770588235294118
+    },
+    "L=18, s=5: random, most reversals": {
+     "acc": 1.0,
+     "margin": 14.901199340820312,
+     "reversal_share": 0.5655882352941177
+    },
+    "L=18, s=5: ping-pong": {
+     "acc": 1.0,
+     "margin": 13.860214233398438,
+     "reversal_share": 0.6320588235294118
+    },
+    "L=16, s=10: cycle": {
+     "acc": 1.0,
+     "margin": 13.672579765319824,
+     "reversal_share": 0.0
+    },
+    "L=16, s=10: random, fewest reversals": {
+     "acc": 1.0,
+     "margin": 14.028043746948242,
+     "reversal_share": 0.08366666666666667
+    },
+    "L=16, s=10: random, most reversals": {
+     "acc": 1.0,
+     "margin": 13.999429702758789,
+     "reversal_share": 0.24533333333333335
+    },
+    "L=16, s=10: ping-pong": {
+     "acc": 1.0,
+     "margin": 13.80518913269043,
+     "reversal_share": 0.20266666666666666
+    },
+    "L=20, s=10: cycle": {
+     "acc": 1.0,
+     "margin": 14.465116500854492,
+     "reversal_share": 0.0
+    },
+    "L=20, s=10: random, fewest reversals": {
+     "acc": 1.0,
+     "margin": 14.475580215454102,
+     "reversal_share": 0.10763157894736843
+    },
+    "L=20, s=10: random, most reversals": {
+     "acc": 1.0,
+     "margin": 14.735450744628906,
+     "reversal_share": 0.2647368421052631
+    },
+    "L=20, s=10: ping-pong": {
+     "acc": 1.0,
+     "margin": 14.450836181640625,
+     "reversal_share": 0.29894736842105263
+    }
+   },
+   "placement": {
+    "L=16, s=10: spread at random": {
+     "acc": 1.0,
+     "margin": 14.006208419799805
+    },
+    "L=16, s=10: block read first (end of word)": {
+     "acc": 1.0,
+     "margin": 13.027153015136719
+    },
+    "L=16, s=10: block in the middle": {
+     "acc": 1.0,
+     "margin": 13.068153381347656
+    },
+    "L=16, s=10: block read last (start of word)": {
+     "acc": 1.0,
+     "margin": 12.869190216064453
+    },
+    "L=12, s=10: every other letter": {
+     "acc": 1.0,
+     "margin": 13.911662101745605
+    }
+   }
+  }
+ },
+ "natural": {
+  "torn-bigger-13 (Feb 2025)": {
+   "14": {
+    "n": 300,
+    "low_reversal": 0.9761904761904762,
+    "high_reversal": 0.9848484848484849,
+    "hops_early_in_word": 0.9808917197452229,
+    "hops_late_in_word": 0.9790209790209791
+   },
+   "15": {
+    "n": 300,
+    "low_reversal": 0.9285714285714286,
+    "high_reversal": 0.952054794520548,
+    "hops_early_in_word": 0.9470198675496688,
+    "hops_late_in_word": 0.9328859060402684
+   },
+   "16": {
+    "n": 159,
+    "low_reversal": 0.9224137931034483,
+    "high_reversal": 0.9767441860465116,
+    "hops_early_in_word": 0.9135802469135802,
+    "hops_late_in_word": 0.9615384615384616
+   }
+  },
+  "g_m10": {
+   "14": {
+    "n": 300,
+    "low_reversal": 0.9940476190476191,
+    "high_reversal": 1.0,
+    "hops_early_in_word": 1.0,
+    "hops_late_in_word": 0.993006993006993
+   },
+   "15": {
+    "n": 300,
+    "low_reversal": 0.9805194805194806,
+    "high_reversal": 0.9931506849315068,
+    "hops_early_in_word": 0.9933774834437086,
+    "hops_late_in_word": 0.9798657718120806
+   },
+   "16": {
+    "n": 159,
+    "low_reversal": 0.9568965517241379,
+    "high_reversal": 0.9767441860465116,
+    "hops_early_in_word": 0.9876543209876543,
+    "hops_late_in_word": 0.9358974358974359
+   }
+  },
+  "g_plant10": {
+   "14": {
+    "n": 300,
+    "low_reversal": 1.0,
+    "high_reversal": 1.0,
+    "hops_early_in_word": 1.0,
+    "hops_late_in_word": 1.0
+   },
+   "15": {
+    "n": 300,
+    "low_reversal": 1.0,
+    "high_reversal": 1.0,
+    "hops_early_in_word": 1.0,
+    "hops_late_in_word": 1.0
+   },
+   "16": {
+    "n": 159,
+    "low_reversal": 1.0,
+    "high_reversal": 1.0,
+    "hops_early_in_word": 1.0,
+    "hops_late_in_word": 1.0
+   }
+  }
+ }
+}

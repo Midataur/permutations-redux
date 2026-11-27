@@ -15,7 +15,10 @@ When the job ends, upload `replication-runs/<run>/replication-<run>.zip`. Nothin
 Everything that wandb and the repo record for `torn-bigger-13`:
 
 * **code, config and data of commit `5863de5`** ("torn-bigger-13", 12 Feb 2025, 40 minutes before the run started).
-  The run itself logged commit `d85cbd4`, which is not on GitHub; `5863de5` is the last pushed commit before it and
+  If there is no clone of `Midataur/permutations` at `$REPO`, `submit.sh` makes one itself in
+  `replication-runs/permutations-history` (history without file contents; fetching the 46 data files makes it about
+  3.3 GB, because git also fetches the older data versions they are stored as deltas against; it can be deleted after
+  submitting, or kept for further runs). The run itself logged commit `d85cbd4`, which is not on GitHub; `5863de5` is the last pushed commit before it and
   its config is the released `torn-bigger-13-config.py`. The data files are taken out of your repo's history with
   `git show` (git checks their hashes); the job also records their sha256.
 * `accelerate launch main.py` with your accelerate default config, as in `transformer-fos.slurm`: 4 L40S GPUs,
@@ -26,9 +29,9 @@ Everything that wandb and the repo record for `torn-bigger-13`:
 
 | change | why |
 |---|---|
-| `MODELNAME = "torn-replica-s42"` | `training.py` resumes from `model/<MODELNAME>/model.safetensors` if it exists, and wandb resumes a run with the same id: a new name guarantees a fresh start |
+| `MODELNAME = "torn-replica-s42-<date>"` | `training.py` resumes from `model/<MODELNAME>/model.safetensors` if it exists, and wandb resumes a run with the same id: a new name guarantees a fresh start |
 | `num_epochs = 120` (original: unlimited; the run went to 161, then 24 more after an accidental resume) | to fit the wall time; memorisation (epochs 81-100) and most learning-rate drops happen before 120 |
-| `WANDB_MODE=offline` | no network needed on the compute node; the same wandb calls run, and the run folder goes into the zip (`wandb sync` uploads it later if you want) |
+| model name `torn-replica-s42-<date>` | also the wandb run id, so every submission is a new run; wandb logs online to your `scaling-generator` project as the original did, so progress can be watched live (`WANDB_MODE=offline` if the compute node has no network; the local run folder goes into the zip either way) |
 | a watcher process copies the model file after every epoch | `training.py` overwrites it each epoch; the copies are the point of the run. The training code is not touched |
 
 ## Checks before submitting

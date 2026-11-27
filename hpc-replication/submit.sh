@@ -28,9 +28,20 @@ OUT_BASE="${OUT_BASE:-$PWD/replication-runs}"
 COMMIT=5863de5
 RUN_ID="$(date +%Y%m%d-%H%M%S)-s${SEED}"
 RUN="$OUT_BASE/$RUN_ID"
-MODELNAME="torn-replica-s${SEED}"
+MODELNAME="torn-replica-s${SEED}-$(date +%m%d-%H%M)"   # also the wandb run id: unique, so no old run is resumed
 
 echo "== replication run $RUN_ID  (seed $SEED, $EPOCHS epochs, wall $WALL)"
+# The data files were deleted from the working tree later (commit eea242a) but are still in the history of 5863de5.
+# If there is no clone at $REPO, make a small one (history without file contents); git show then downloads only the
+# files needed (about 770 MB).
+if [ ! -d "$REPO/.git" ] && [ "$(git -C "$REPO" rev-parse --is-inside-work-tree 2>/dev/null)" != true ]; then
+  REPO="$OUT_BASE/permutations-history"
+  if [ ! -d "$REPO/.git" ]; then
+    echo "no clone of Midataur/permutations found; cloning its history (without file contents) into $REPO"
+    mkdir -p "$OUT_BASE"
+    git clone --filter=blob:none --no-checkout https://github.com/Midataur/permutations.git "$REPO"
+  fi
+fi
 git -C "$REPO" cat-file -e "${COMMIT}^{commit}" 2>/dev/null || { echo "fetching $COMMIT ..."; git -C "$REPO" fetch origin; }
 git -C "$REPO" cat-file -e "${COMMIT}^{commit}"
 
@@ -75,8 +86,9 @@ TRAIN_SECONDS=$(( 10#$hh * 3600 + 10#$mm * 60 + 10#$ss - 1500 ))
 cp "$HERE/snapshot_sidecar.py" "$HERE/make_zip.py" "$RUN/"
 jid=$(sbatch --parsable --time="$WALL" --chdir="$SG" \
       --output="$RUN/slurm-%j.out" \
-      --export=ALL,RUN="$RUN",VENV="$VENV",MODELNAME="$MODELNAME",TRAIN_SECONDS="$TRAIN_SECONDS",RUN_ID="$RUN_ID" \
+      --export=ALL,WANDB_MODE="${WANDB_MODE:-online}",RUN="$RUN",VENV="$VENV",MODELNAME="$MODELNAME",TRAIN_SECONDS="$TRAIN_SECONDS",RUN_ID="$RUN_ID" \
       "$HERE/job.slurm")
 echo "$jid" > "$RUN/job_id.txt"
 echo "submitted job $jid; output folder $RUN"
+if [ "${WANDB_MODE:-online}" = online ]; then echo "live progress: wandb project scaling-generator, run $MODELNAME"; fi
 echo "when it ends, upload $RUN/replication-$RUN_ID.zip"

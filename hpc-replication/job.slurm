@@ -16,7 +16,8 @@ echo "job $SLURM_JOB_ID on $(hostname), $(date)"
 module load CUDA/12.4.1
 source "$VENV/bin/activate"
 set -u
-export WANDB_MODE=offline            # same code path as the original; the run is stored locally and goes into the zip
+export WANDB_MODE="${WANDB_MODE:-online}"   # online as in the original run, so progress can be watched live;
+                                            # WANDB_MODE=offline bash submit.sh if the compute node has no network
 
 nvidia-smi > "$RUN/env/nvidia_smi.txt" 2>&1
 python "$RUN/snapshot_sidecar.py" "model/$MODELNAME/model.safetensors" "$RUN/snapshots" 10 &

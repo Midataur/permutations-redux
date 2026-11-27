@@ -35,6 +35,10 @@
 In this note I summarise a three-day study of the models from~\cite{paper}. The main result is an explanation of the generalisation from $S_{10}$ to $S_{25}$: each output entry depends only on a short chain of letters, and every chain that appears in a test word also appears, up to relabelling, in the training distribution. I prove the second statement with explicit constants. The elementary model generalises in the same way, and also extends somewhat past the chains it was trained on. The naive window method fails for a different reason; its chains are all covered, but its training words never contain letters far from a chain, so the model never learns to ignore them. Two windows at independent offsets are already enough to fix this. The block structure in Figure~5(b) turns out to appear in about half the runs with the same configuration, at a different place each time, and chains that cross it are no harder to follow. I suspect it is a symmetry broken by the first layers' local attention rather than anything to do with the group or the data. Finally, probes, activation patching and head ablation point to an algorithm that builds, at every letter, where a pointer leaving that letter ends up, with a reach that grows like pointer jumping.
 \end{abstract}
 
+\clearpage
+{\setlength{\parskip}{0pt}\tableofcontents}
+\clearpage
+
 %=====================================================================
 \section{Summary and scope}
 

@@ -1,0 +1,34 @@
+training: 2,000,000 words scanned; {'40-49': 300, '50-59': 300, '60-69': 300, '70-79': 158, '80-120': 1}
+validation: 100,000 words; {'40-49': 300, '50-59': 300, '60-69': 300, '70-79': 13, '80-120': 0}
+fresh: 12,000,000 words generated; {'40-49': 300, '50-59': 300, '60-69': 300, '70-79': 300, '80-120': 3}
+rerun-4:
+   hops 40-49  training 1.000 (n 300, margin 23.5, p10 18.3) | validation 1.000 (n 300, margin 23.7, p10 19.0) | fresh 1.000 (n 300, margin 23.3, p10 18.6)
+   hops 50-59  training 1.000 (n 300, margin 23.6, p10 19.0) | validation 0.997 (n 300, margin 23.4, p10 18.1) | fresh 1.000 (n 300, margin 23.8, p10 19.0)
+   hops 60-69  training 1.000 (n 300, margin 23.2, p10 17.9) | validation 0.997 (n 300, margin 23.3, p10 17.3) | fresh 0.997 (n 300, margin 22.8, p10 17.1)
+   hops 70-79  training 1.000 (n 158, margin 22.3, p10 15.1) | validation 1.000 (n 13, margin 22.1, p10 16.9) | fresh 1.000 (n 300, margin 22.2, p10 15.3)
+   hops 80-120 training 1.000 (n 1, margin 13.3, p10 13.3) | fresh 1.000 (n 3, margin 18.3, p10 16.7)
+boosted-2:
+   hops 40-49  training 1.000 (n 300, margin 20.4, p10 16.6) | validation 1.000 (n 300, margin 19.9, p10 15.8) | fresh 1.000 (n 300, margin 20.3, p10 16.0)
+   hops 50-59  training 1.000 (n 300, margin 19.7, p10 15.7) | validation 1.000 (n 300, margin 19.7, p10 15.6) | fresh 1.000 (n 300, margin 19.9, p10 16.1)
+   hops 60-69  training 1.000 (n 300, margin 19.5, p10 14.3) | validation 0.993 (n 300, margin 19.1, p10 14.8) | fresh 1.000 (n 300, margin 19.3, p10 14.8)
+   hops 70-79  training 1.000 (n 158, margin 18.3, p10 12.3) | validation 1.000 (n 13, margin 18.6, p10 13.7) | fresh 0.983 (n 300, margin 17.9, p10 10.0)
+   hops 80-120 training 1.000 (n 1, margin 15.9, p10 15.9) | fresh 1.000 (n 3, margin 14.7, p10 13.7)
+boosted-4:
+   hops 40-49  training 1.000 (n 300, margin 20.8, p10 17.6) | validation 1.000 (n 300, margin 21.1, p10 17.2) | fresh 1.000 (n 300, margin 20.9, p10 17.2)
+   hops 50-59  training 1.000 (n 300, margin 21.1, p10 17.5) | validation 1.000 (n 300, margin 21.3, p10 17.9) | fresh 1.000 (n 300, margin 20.7, p10 17.1)
+   hops 60-69  training 1.000 (n 300, margin 20.9, p10 16.6) | validation 1.000 (n 300, margin 20.5, p10 16.7) | fresh 1.000 (n 300, margin 20.8, p10 16.9)
+   hops 70-79  training 1.000 (n 158, margin 20.3, p10 16.4) | validation 1.000 (n 13, margin 20.5, p10 14.0) | fresh 0.997 (n 300, margin 20.3, p10 15.8)
+   hops 80-120 training 1.000 (n 1, margin 22.6, p10 22.6) | fresh 1.000 (n 3, margin 20.9, p10 20.4)
+rerun-3:
+   hops 40-49  training 1.000 (n 300, margin 23.1, p10 17.6) | validation 1.000 (n 300, margin 23.0, p10 17.3) | fresh 1.000 (n 300, margin 22.6, p10 17.8)
+   hops 50-59  training 1.000 (n 300, margin 20.8, p10 16.0) | validation 1.000 (n 300, margin 20.9, p10 16.0) | fresh 1.000 (n 300, margin 21.5, p10 15.9)
+   hops 60-69  training 0.997 (n 300, margin 20.0, p10 14.7) | validation 0.997 (n 300, margin 19.7, p10 13.6) | fresh 0.993 (n 300, margin 20.1, p10 14.1)
+   hops 70-79  training 0.994 (n 158, margin 18.3, p10 10.5) | validation 1.000 (n 13, margin 20.3, p10 16.9) | fresh 0.980 (n 300, margin 18.7, p10 11.6)
+   hops 80-120 training 1.000 (n 1, margin 16.1, p10 16.1) | fresh 1.000 (n 3, margin 21.1, p10 16.8)
+boosted-1:
+   hops 40-49  training 1.000 (n 300, margin 21.1, p10 17.9) | validation 1.000 (n 300, margin 21.1, p10 18.0) | fresh 1.000 (n 300, margin 21.5, p10 18.3)
+   hops 50-59  training 1.000 (n 300, margin 20.9, p10 17.7) | validation 1.000 (n 300, margin 21.3, p10 17.5) | fresh 1.000 (n 300, margin 21.1, p10 18.1)
+   hops 60-69  training 1.000 (n 300, margin 20.8, p10 17.4) | validation 1.000 (n 300, margin 20.8, p10 17.6) | fresh 1.000 (n 300, margin 20.7, p10 17.2)
+   hops 70-79  training 1.000 (n 158, margin 19.0, p10 14.8) | validation 1.000 (n 13, margin 19.6, p10 17.2) | fresh 1.000 (n 300, margin 19.8, p10 14.4)
+   hops 80-120 training 1.000 (n 1, margin 22.1, p10 22.1) | fresh 1.000 (n 3, margin 18.0, p10 15.0)
+DONE

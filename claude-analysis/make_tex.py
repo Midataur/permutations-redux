@@ -20,8 +20,8 @@ DST = sys.argv[2] if len(sys.argv) > 2 else "report.tex"
 
 # ----------------------------------------------------------------------------------------------------------
 # Edit these when a new version of the report is made.
-VERSION = "Version 10"
-SUBTITLE = "Memorisation, hops against points, and the other runs on Spartan"
+VERSION = "Version 11"
+SUBTITLE = "The algorithm, and a notion of density"
 DATE = "28 November 2026"
 EXPECTED_TITLE = "Tests on two trained models, and a training experiment on four more: `torn-bigger-13` (general transpositions, $S_{25}$) and `elem-partitioned-long-boosted-1` (elementary transpositions)"
 FIGURE_CAPTION_FOR_FILE_LINE = {
@@ -84,8 +84,9 @@ TABLE_SPECS = {
     37: dict(cols="r l l"),                                                 # hops x points grid
     38: dict(cols=ARR + "p{2.6cm} " + ARR + "p{3.4cm} " + ARR + "p{3.6cm} " + ARR + "p{3.6cm}", size="small"),   # elementary Test 16
     39: dict(cols=ARR + "p{5.2cm} r " + ARR + "p{2.6cm} r " + ARR + "p{3.2cm}", size="small"),   # block boundaries in other runs
-    40: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
-    41: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
+    40: dict(cols="r " + RARR + "p{1.9cm} " + RARR + "p{2.2cm} " + RARR + "p{2.4cm} " + RARR + "p{2.5cm} " + RARR + "p{2.5cm}", size="small"),   # 4.2: hop counts, data and accuracy
+    41: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
+    42: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
 }
 
 CALLOUTS = {"What it shows": "find", "What this does and does not say": "find",

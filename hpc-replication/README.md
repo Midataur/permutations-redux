@@ -41,7 +41,8 @@ Everything that wandb and the repo record for `torn-bigger-13`:
 |---|---|
 | `MODELNAME = "torn-replica-s42-<date>"` | `training.py` resumes from `model/<MODELNAME>/model.safetensors` if it exists, and wandb resumes a run with the same id: a new name guarantees a fresh start |
 | `num_epochs = 120` (original: unlimited; the run went to 161, then 24 more after an accidental resume) | to fit the wall time; memorisation (epochs 81-100) and most learning-rate drops happen before 120 |
-| model name `torn-replica-s42-<date>` | also the wandb run id, so every submission is a new run; wandb logs online to your `scaling-generator` project as the original did, so progress can be watched live (`WANDB_MODE=offline` if the compute node has no network; the local run folder goes into the zip either way) |
+| model name `torn-replica-s42-<date>` | also the wandb run id, so every submission is a new run |
+| `WANDB_MODE=offline` | wandb 0.16.1, the original run's version, fails in `wandb.init` against the current wandb server (`CommError: 'NoneType' object has no attribute 'get'`); offline runs the same calls and the run folder goes into the zip. Progress is in the log: `grep "^Epoch" <run>/train_raw.log` gives the same per-epoch numbers wandb would show |
 | a watcher process copies the model file after every epoch | `training.py` overwrites it each epoch; the copies are the point of the run. The training code is not touched |
 
 ## Checks before submitting

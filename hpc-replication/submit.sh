@@ -20,7 +20,13 @@ set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="${REPO:-/data/gpfs/projects/punim2163/permutations}"
-VENV="${VENV:-$REPO/scaling-generator/venv}"
+OUT_BASE_DEFAULT="$PWD/replication-runs"
+ENVD="${ENV_DIR:-${OUT_BASE:-$OUT_BASE_DEFAULT}/env-torn13}"   # made by setup_env.sh
+if [ -z "${VENV:-}" ]; then
+  if [ -d "$ENVD/venv" ]; then VENV="$ENVD/venv"; else VENV="$REPO/scaling-generator/venv"; fi
+fi
+if [ -z "${ACCEL_CONFIG:-}" ] && [ -f "$ENVD/accelerate_config.yaml" ]; then ACCEL_CONFIG="$ENVD/accelerate_config.yaml"; fi
+ACCEL_CONFIG="${ACCEL_CONFIG:-}"
 SEED="${SEED:-42}"
 EPOCHS="${EPOCHS:-120}"
 WALL="${WALL:-08:00:00}"
@@ -69,8 +75,9 @@ set +e
   python -m pip freeze > "$RUN/env/pip_freeze.txt" 2>/dev/null
   accelerate env > "$RUN/env/accelerate_env.txt" 2>&1
 )
-cfg="${HF_HOME:-$HOME/.cache/huggingface}/accelerate/default_config.yaml"
-[ -f "$cfg" ] && cp "$cfg" "$RUN/env/accelerate_default_config.yaml"
+cfg="${ACCEL_CONFIG:-${HF_HOME:-$HOME/.cache/huggingface}/accelerate/default_config.yaml}"
+[ -f "$cfg" ] && cp "$cfg" "$RUN/env/accelerate_config_used.yaml"
+echo "python environment: $VENV"; echo "accelerate config: $cfg"
 python3 "$HERE/check_env.py" "$RUN/env" "$HERE/original_requirements.txt"
 ok=$?
 set -e
@@ -86,7 +93,7 @@ TRAIN_SECONDS=$(( 10#$hh * 3600 + 10#$mm * 60 + 10#$ss - 1500 ))
 cp "$HERE/snapshot_sidecar.py" "$HERE/make_zip.py" "$RUN/"
 jid=$(sbatch --parsable --time="$WALL" --chdir="$SG" \
       --output="$RUN/slurm-%j.out" \
-      --export=ALL,WANDB_MODE="${WANDB_MODE:-online}",RUN="$RUN",VENV="$VENV",MODELNAME="$MODELNAME",TRAIN_SECONDS="$TRAIN_SECONDS",RUN_ID="$RUN_ID" \
+      --export=ALL,WANDB_MODE="${WANDB_MODE:-online}",RUN="$RUN",VENV="$VENV",ACCEL_CONFIG="$ACCEL_CONFIG",MODELNAME="$MODELNAME",TRAIN_SECONDS="$TRAIN_SECONDS",RUN_ID="$RUN_ID" \
       "$HERE/job.slurm")
 echo "$jid" > "$RUN/job_id.txt"
 echo "submitted job $jid; output folder $RUN"

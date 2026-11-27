@@ -32,7 +32,7 @@ for k in KEY:
     print(f"  {k:12s} {a:14s} {b}{flag}")
 
 cfg = {}
-p = os.path.join(env, "accelerate_default_config.yaml")
+p = os.path.join(env, "accelerate_config_used.yaml")
 if os.path.exists(p):
     for line in open(p):
         m = re.match(r"^\s*([A-Za-z_]+):\s*(.*?)\s*$", line)
@@ -47,7 +47,7 @@ if os.path.exists(p):
     if cfg.get("gradient_accumulation_steps", "1") not in ("1", ""):
         bad.append("accelerate gradient_accumulation_steps is not 1")
 else:
-    bad.append("no accelerate default_config.yaml found (the original run used `accelerate launch` with it)")
+    bad.append("no accelerate config found (run setup_env.sh, or set ACCEL_CONFIG)")
 
 if bad:
     print("DIFFERENCES FROM THE ORIGINAL RUN:")

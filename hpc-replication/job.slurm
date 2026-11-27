@@ -25,7 +25,7 @@ SIDE=$!
 
 # the original command was `accelerate launch main.py` (transformer-fos.slurm); training stops cleanly
 # 25 minutes before the wall time if it has not finished its epochs by then
-timeout --signal=INT --kill-after=300 "$TRAIN_SECONDS" accelerate launch main.py > "$RUN/train_raw.log" 2>&1
+timeout --signal=INT --kill-after=300 "$TRAIN_SECONDS" accelerate launch ${ACCEL_CONFIG:+--config_file "$ACCEL_CONFIG"} main.py > "$RUN/train_raw.log" 2>&1
 echo "training exit code $? at $(date)" | tee "$RUN/train_exit.txt"
 
 touch "$RUN/snapshots/STOP"; wait $SIDE

@@ -5,8 +5,17 @@ hops reproduces and *when* it forms. The previous experiment (`../hpc-experiment
 (fresh data, batch, schedule, seed, length); this one changes nothing that affects training.
 
 ```
-bash hpc-replication/submit.sh          # on the Spartan login node
+git pull                                 # in your permutations-redux clone
+bash hpc-replication/setup_env.sh        # once: Python 3.9 venv + accelerate config matching the original run
+bash hpc-replication/submit.sh           # on the Spartan login node
 ```
+
+`setup_env.sh` builds `replication-runs/env-torn13/` without touching your existing venv or your accelerate default
+config: a Python 3.9 venv with torch 1.13.1, accelerate 0.32.1, deepspeed 0.14.4 and every other package pinned to the
+original run's versions (`original_requirements.txt`, from wandb), and `accelerate_config.yaml` with 4 processes,
+DeepSpeed and bf16. `submit.sh` then uses both automatically. The original run's DeepSpeed settings were not logged
+(`"deepspeed": "enabled"` in wandb is a fixed string in `training.py`), so the config uses ZeRO stage 2 without gradient
+clipping, the defaults `accelerate config` offers; `ZERO_STAGE=... GRAD_CLIP=... bash setup_env.sh` changes them.
 
 When the job ends, upload `replication-runs/<run>/replication-<run>.zip`. Nothing is pushed to git.
 
@@ -23,7 +32,8 @@ Everything that wandb and the repo record for `torn-bigger-13`:
   `git show` (git checks their hashes); the job also records their sha256.
 * `accelerate launch main.py` with your accelerate default config, as in `transformer-fos.slurm`: 4 L40S GPUs,
   DeepSpeed, bf16, 1,024 words per GPU (4,096 per step), `ReduceLROnPlateau` on the training loss, seed 42.
-* your existing virtualenv (`$REPO/scaling-generator/venv`).
+* the package versions of the original run, in a separate venv made by `setup_env.sh` (your existing virtualenv,
+  `$REPO/scaling-generator/venv`, is used only if that has not been run).
 
 ## What is different, and why
 

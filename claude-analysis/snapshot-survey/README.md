@@ -178,7 +178,7 @@ to word) have position embeddings that are still flat, and I did not evaluate th
   - Most elementary runs also end with training loss far below validation loss: ratios of about 40 to 3,000
     (`boosted-2`, `boosted-4`, the reruns, `long-11`, `long-12`).
   - `boosted-1` has only 2.4, and `long-14` 1.1.
-  - Yet none of the trained elementary models has a hop-count cliff (all at 0.97–0.99 at 80 hops, width 8). So a large
+  - Yet none of these runs has a hop-count cliff (0.94–0.99 on planted chains of 80 hops, width 8). So a large
     gap in the logged losses is not by itself a sign of the general model's cliff. The specific evidence for
     memorisation in `torn-bigger-13` remains Test 16: its training slots against fresh slots at the same hop count.
   - This corrects what I said in chat: that the elementary run's lack of a gap fitted the memorisation reading. It holds

@@ -20,9 +20,9 @@ DST = sys.argv[2] if len(sys.argv) > 2 else "report.tex"
 
 # ----------------------------------------------------------------------------------------------------------
 # Edit these when a new version of the report is made.
-VERSION = "Version 9"
-SUBTITLE = "Correction: distinct words against words presented"
-DATE = "27 November 2026"
+VERSION = "Version 10"
+SUBTITLE = "Memorisation, hops against points, and the other runs on Spartan"
+DATE = "28 November 2026"
 EXPECTED_TITLE = "Tests on two trained models, and a training experiment on four more: `torn-bigger-13` (general transpositions, $S_{25}$) and `elem-partitioned-long-boosted-1` (elementary transpositions)"
 FIGURE_CAPTION_FOR_FILE_LINE = {
     # the line "**Figure:** `fig_accuracy_vs_hops.png` (...)" in section 3.3 stands for the picture itself
@@ -33,7 +33,7 @@ FIGURE_CAPTION_FOR_FILE_LINE = {
 FIGURE_WIDTH = {"fig_accuracy_vs_hops.png": 0.88, "fig_probe_layers.png": 1.0, "fig_influence_map.png": 1.0,
                 "fig_elem_cells.png": 1.0, "fig_input_positions.png": 1.0, "fig_patching_setup.png": 1.0, "fig_input_positions_elem.png": 1.0,
                 "fig_attention_heads.png": 1.0, "fig_attention_profiles.png": 1.0,
-                "fig_train_learning_curves.png": 1.0, "fig_train_hop_cliff.png": 1.0, "fig_ebase_blocks.png": 1.0}
+                "fig_train_learning_curves.png": 1.0, "fig_train_hop_cliff.png": 1.0, "fig_memorisation.png": 1.0, "fig_ebase_blocks.png": 1.0}
 
 ARR = r">{\raggedright\arraybackslash}"
 RARR = r">{\raggedleft\arraybackslash}"
@@ -79,8 +79,13 @@ TABLE_SPECS = {
     34: dict(cols=ARR + "p{2.6cm} r r " + ARR + "p{9.0cm}", size="small"),                                                # greedy ablation
     35: dict(cols="r r r r r"),                                   # patching, first hop corrupted, four models
     # section 6.1 and section 7
-    36: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
-    37: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
+    # sections 3.17 and 3.18 (version 10)
+    36: dict(cols="r r " + ARR + "p{2.0cm} " + ARR + "p{2.0cm} " + ARR + "p{2.0cm} " + ARR + "p{2.0cm} " + ARR + "p{2.0cm}", size="small"),   # Test 16, four models
+    37: dict(cols="r l l"),                                                 # hops x points grid
+    38: dict(cols=ARR + "p{2.6cm} " + ARR + "p{3.4cm} " + ARR + "p{3.6cm} " + ARR + "p{3.6cm}", size="small"),   # elementary Test 16
+    39: dict(cols=ARR + "p{5.2cm} r " + ARR + "p{2.6cm} r " + ARR + "p{3.2cm}", size="small"),   # block boundaries in other runs
+    40: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
+    41: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
 }
 
 CALLOUTS = {"What it shows": "find", "What this does and does not say": "find",

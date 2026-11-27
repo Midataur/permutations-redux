@@ -13,13 +13,21 @@
 \newtheorem{proposition}{Proposition}
 \newtheorem*{definition*}{Definition}
 \newcommand{\tb}{\texttt{torn-bigger-13}}
+\usepackage{fancyhdr}
+\pagestyle{fancy}\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\footnotesize Written by Claude (Anthropic) for M.~Petschack}\fancyfoot[R]{\footnotesize\thepage}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\fancyfoot[L]{\footnotesize Written by Claude (Anthropic) for M.~Petschack}\fancyfoot[R]{\footnotesize\thepage}}
 
 \title{Learning the symmetric group: what the models learned\\[4pt]\large Interpretability and generalisation of the models of arXiv:2502.12717}
-\author{Max Petschack, with Claude (Anthropic)\\[2pt]\small Internal note for co-authors}
+\author{Written by Claude (Anthropic), an AI model\\[2pt]\small at the request of Max Petschack, as an internal note for the co-authors of arXiv:2502.12717}
 \date{28 November 2026}
 
 \begin{document}
 \maketitle
+
+\begin{center}
+\fbox{\parbox{0.92\textwidth}{\small\textbf{About this note.} This note was written by Claude, an AI model made by Anthropic, not by the authors of the paper. Claude also designed and ran the tests on the trained checkpoints, wrote the analysis code, and drew the figures. Max Petschack supplied the paper, models, code and data, ran all training on the cluster, set the questions, and corrected several of Claude's conclusions along the way. Section~\ref{sec:timeline} lists who did what. ``We'' below refers to this collaboration. The interpretations and any errors in the text are Claude's, and every number can be checked against the code and results in \texttt{Midataur/permutations-redux}.}}
+\end{center}
 
 \begin{abstract}
 We report a three-day study of the models in~\cite{paper}. We explain the generalisation from $S_{10}$ to $S_{25}$ in terms of the chain of letters that moves each output entry. Every test slot's chain also occurs, up to relabelling, in the training distribution. We prove this with explicit constants. The trained network depends only on the letters of that chain. The elementary model generalises the same way. It also extends modestly past the chain widths it was trained on. The naive window method fails for a different reason. Its training words never contain letters far from a chain, so the model never learns to ignore such letters. Its chains are all covered. Two windows at independent offsets are already enough to fix this. The block structure of the position embeddings in Figure~5(b) appears in about half of the runs with the same configuration, at a different place each time (positions 69 to 81). Chains that cross it are no harder to follow. We think it is a symmetry broken by the first layers' local attention, not a property of the group or the data. Probes, activation patching and head ablation point to an algorithm that builds, at each letter, where a pointer leaving that letter ends up. Its reach grows like pointer jumping with depth. The general model's learned rule is reliable to about 13 hops. It has memorised the longer chains of its own training file. Chains that keep returning to the point they just left are the hardest for every model we tested, except one trained on planted chains.
@@ -346,7 +354,7 @@ The fresh-data run's apparent weakness on chains through few points is therefore
 %=====================================================================
 \section{Timeline and division of work}\label{sec:timeline}
 
-The study ran from 25 to 28 November 2026. Max (M) set the questions, supplied the models, code, data and training runs, and corrected several conclusions. Claude (C) designed and ran the tests on the checkpoints, wrote the analysis code, and wrote the reports. The earlier analysis was done with Claude Sonnet and the later with Claude Opus. The later work re-examined and revised several of the earlier conclusions. All training on the cluster was run by M.
+The study ran from 25 to 28 November 2026. This note, like the longer reports it summarises, was written by Claude. Max (M) set the questions, supplied the models, code, data and training runs, and corrected several conclusions. Claude (C) designed and ran the tests on the checkpoints, wrote the analysis code, and wrote the reports. The earlier analysis was done with Claude Sonnet and the later with Claude Opus. The later work re-examined and revised several of the earlier conclusions. All training on the cluster was run by M.
 
 \begin{center}
 \small

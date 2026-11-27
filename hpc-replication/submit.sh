@@ -14,23 +14,26 @@
 #   SEED      42 = the original run's seed              (default 42)
 #   EPOCHS    epochs to train                           (default 120; the original ran 161 + 24 after a resume)
 #   WALL      Slurm time limit                          (default 08:00:00; training is stopped 25 min before it)
-#   OUT_BASE  where run folders go                      (default ./replication-runs)
+#   OUT_BASE  where run folders go                      (default hpc-replication/replication-runs)
 #   CONFIRM=1 submit even if the environment check finds differences from the original run
 set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="${REPO:-/data/gpfs/projects/punim2163/permutations}"
-OUT_BASE_DEFAULT="$PWD/replication-runs"
+OUT_BASE_DEFAULT="$HERE/replication-runs"
 ENVD="${ENV_DIR:-${OUT_BASE:-$OUT_BASE_DEFAULT}/env-torn13}"   # made by setup_env.sh
 if [ -z "${VENV:-}" ]; then
   if [ -d "$ENVD/venv" ]; then VENV="$ENVD/venv"; else VENV="$REPO/scaling-generator/venv"; fi
 fi
 if [ -z "${ACCEL_CONFIG:-}" ] && [ -f "$ENVD/accelerate_config.yaml" ]; then ACCEL_CONFIG="$ENVD/accelerate_config.yaml"; fi
 ACCEL_CONFIG="${ACCEL_CONFIG:-}"
+if [ ! -d "$ENVD/venv" ]; then
+  echo "NOTE: no matched environment at $ENVD; run  bash $HERE/setup_env.sh  first (falling back to $VENV)"
+fi
 SEED="${SEED:-42}"
 EPOCHS="${EPOCHS:-120}"
 WALL="${WALL:-08:00:00}"
-OUT_BASE="${OUT_BASE:-$PWD/replication-runs}"
+OUT_BASE="${OUT_BASE:-$OUT_BASE_DEFAULT}"
 COMMIT=5863de5
 RUN_ID="$(date +%Y%m%d-%H%M%S)-s${SEED}"
 RUN="$OUT_BASE/$RUN_ID"

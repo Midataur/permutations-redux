@@ -55,15 +55,29 @@ class NPTransformer:
                 W1=W[p + "ffwd.net.0.weight"], b1=W[p + "ffwd.net.0.bias"],
                 W2=W[p + "ffwd.net.2.weight"], b2=W[p + "ffwd.net.2.bias"],
             ))
+        # models trained before LEGACY_ARCHITECTURE was introduced (elem-partitioned-long-boosted-1, 11 Feb 2025) have one
+        # extra multi-head attention layer, `sa_heads`, applied to the embeddings before the blocks, with no layer norm
+        # and no residual connection (x = sa_heads(tok_emb + pos_emb)); see transformer.py at commit 825be9c
+        self.legacy = None
+        if "sa_heads.heads.0.key.weight" in W:
+            cat0 = lambda nm: np.concatenate([W[f"sa_heads.heads.{h}.{nm}.weight"] for h in range(n_head)], axis=0)
+            self.legacy = dict(Wq=cat0("query"), Wk=cat0("key"), Wv=cat0("value"),
+                               Wo=W["sa_heads.proj.weight"], bo=W["sa_heads.proj.bias"])
         self.lnfw = W[f"blocks.{n_blocks}.weight"]
         self.lnfb = W[f"blocks.{n_blocks}.bias"]
         self.Wlm = W["lm_head.weight"]
         # sanity-check our mask against the one stored in the checkpoint
+        # Older checkpoints were trained with other masks (e.g. fully causal over the input letters, torn-bigger-5 to -9);
+        # the mask stored in the checkpoint is the one the model was trained with, so use it whenever it differs.
         stored = W["blocks.0.sa.heads.0.tril"]
-        assert np.array_equal(stored, self.mask(stored.shape[0])), "mask mismatch with checkpoint"
+        self.stored_mask = None
+        if not np.array_equal(stored, self.mask(stored.shape[0])):
+            self.stored_mask = stored.astype(np.float32)
 
     # ------------------------------------------------------------------ masks
     def mask(self, T):
+        if getattr(self, "stored_mask", None) is not None:
+            return self.stored_mask[:T, :T]
         L = self.input_len
         M = np.zeros((T, T), dtype=np.float32)
         M[:L, :L] = 1
@@ -78,6 +92,13 @@ class NPTransformer:
         B, T = tokens.shape
         x = self.E[tokens] + self.P[:T][None]
         M = self.mask(T)
+        if self.legacy is not None:
+            ly = self.legacy
+            q = (x @ ly["Wq"].T).reshape(B, T, self.n_head, self.hd).transpose(0, 2, 1, 3)
+            k = (x @ ly["Wk"].T).reshape(B, T, self.n_head, self.hd).transpose(0, 2, 1, 3)
+            v = (x @ ly["Wv"].T).reshape(B, T, self.n_head, self.hd).transpose(0, 2, 1, 3)
+            s = np.where(M[None, None] == 0, -np.inf, (q @ k.transpose(0, 1, 3, 2)) * self.scale)
+            x = (softmax(s) @ v).transpose(0, 2, 1, 3).reshape(B, T, self.D) @ ly["Wo"].T + ly["bo"]
         hidden, attns = [x.copy()], []
         for ly in self.layers:
             a = layer_norm(x, ly["ln1w"], ly["ln1b"])
@@ -106,6 +127,7 @@ class NPTransformer:
     # ----------------------------------------- incremental (KV-cache) generation
     def _encode_inputs(self, seq):
         """Run the 25 input tokens + START through the stack once; return per-layer K,V caches."""
+        assert self.legacy is None, "incremental generation is not implemented for the legacy architecture; use forward()"
         B = seq.shape[0]
         L = self.input_len
         toks = np.concatenate([seq, np.full((B, 1), self.START, dtype=seq.dtype)], axis=1)

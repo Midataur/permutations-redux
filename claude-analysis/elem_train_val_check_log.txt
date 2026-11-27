@@ -1,0 +1,10 @@
+rerun-4: training words mean CE 4.39e-07 (median 0.0e+00, share>1e-3 0.0000) | validation 1.64e-04 (median 0.0e+00, share>1e-3 0.0001)
+Traceback (most recent call last):
+  File "/home/claude/permutations-redux/claude-analysis/elem_train_val_check.py", line 14, in <module>
+    m=NPTransformer(p,max_group=G,input_len=N,num_trans=G)
+  File "/home/claude/permutations-redux/claude-analysis/np_transformer.py", line 40, in __init__
+    self.E = W["token_embedding_table.weight"]
+             ~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'token_embedding_table.weight'
+boosted-2: training words mean CE 6.47e-08 (median 0.0e+00, share>1e-3 0.0000) | validation 2.83e-08 (median 0.0e+00, share>1e-3 0.0000)
+boosted-1: training words mean CE 6.43e-09 (median 0.0e+00, share>1e-3 0.0000) | validation 7.06e-09 (median 0.0e+00, share>1e-3 0.0000)

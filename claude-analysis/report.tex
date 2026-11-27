@@ -36,7 +36,7 @@
 \usepackage[headsepline,footsepline=false,plainheadsepline=false]{scrlayer-scrpage}
 \clearpairofpagestyles
 \ihead{\sffamily\small Two trained models and a training experiment}
-\ohead{\sffamily\small Version 12 \textperiodcentered{} 28 November 2026}
+\ohead{\sffamily\small Version 13 \textperiodcentered{} 28 November 2026}
 \cfoot*{\sffamily\small\pagemark}
 
 \setkomafont{disposition}{\sffamily\bfseries\color{accent}}
@@ -86,12 +86,12 @@
   left=10pt,right=10pt,top=6pt,bottom=6pt,before skip=10pt,after skip=10pt}
 
 \usepackage[colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent,bookmarksnumbered=true,
-  pdftitle={Tests on two trained models, and a training experiment on four more: torn-bigger-13 and elem-partitioned-long-boosted-1},pdfsubject={Version 12}]{hyperref}
+  pdftitle={Tests on two trained models, and a training experiment on four more: torn-bigger-13 and elem-partitioned-long-boosted-1},pdfsubject={Version 13}]{hyperref}
 
 \begin{document}
 
 \begin{flushleft}
-{\sffamily\bfseries\color{accent}\small\MakeUppercase{Version 12}\hspace{0.7em}\textcolor{rulegray}{\textperiodcentered}\hspace{0.7em}\textcolor{rulegray}{28 November 2026}\par}
+{\sffamily\bfseries\color{accent}\small\MakeUppercase{Version 13}\hspace{0.7em}\textcolor{rulegray}{\textperiodcentered}\hspace{0.7em}\textcolor{rulegray}{28 November 2026}\par}
 \vspace{8pt}
 {\sffamily\bfseries\fontsize{24}{28}\selectfont Tests on two trained models,\par}
 \vspace{0pt}
@@ -101,12 +101,12 @@
 \vspace{3pt}
 {\ttfamily\fontsize{15}{19}\selectfont elem-partitioned-long-boosted-1}\hspace{0.5em}{\sffamily\large (elementary transpositions)\par}
 \vspace{6pt}
-{\sffamily\color{rulegray}A hypothesis for the block structure\par}
+{\sffamily\color{rulegray}Coverage proved, the shape of the walk, and the naive window\par}
 \vspace{6pt}
 {\color{accent}\rule{\linewidth}{1.1pt}}
 \end{flushleft}
 
-Run on 2026-11-25 to 2026-11-27. \S\,\ref{sec:3.1}–\ref{sec:3.13} use the two trained checkpoints as they are,
+Run on 2026-11-25 to 2026-11-28. \S\,\ref{sec:3.1}–\ref{sec:3.13} use the two trained checkpoints as they are,
 with no retraining; \S\,\ref{sec:3.14}–\ref{sec:3.16} use four models that I trained on Spartan from your
 \code{hpc-\allowbreak{}experiment} code (\S\,\ref{sec:6.1}). Section~\ref{sec:2.3} also uses one real training
 file and the real test file. Code, raw results and the figures are in this folder; commands to reproduce are in
@@ -139,20 +139,39 @@ file and the real test file. Code, raw results and the figures are in this folde
   \S\,\ref{sec:3.14}, \S\,\ref{sec:3.16}, \S\,\ref{sec:4}, \S\,\ref{sec:5} item 13).
 \item Version 11: the algorithm I think the general model learned (\S\,\ref{sec:4.1}) and the notion of density
   the results support (\S\,\ref{sec:4.2}).
-\item Version 12 (this one): a hypothesis for the block structure (\S\,\ref{sec:4.3}).
+\item Version 12: a hypothesis for the block structure (\S\,\ref{sec:4.3}).
+\item Version 13 (this one): coverage proved exactly (\S\,\ref{sec:3.19}), the shape of the walk
+  (\S\,\ref{sec:3.20}), and why the naive window method failed (\S\,\ref{sec:3.21}).
 \end{enumerate}
 
-\lead{What is new in this version (version 12).} The markers \textbf{\tagnew{}} and \textbf{\tagupd{}} show only
-what changed since version 11. Text without a marker is unchanged from version 11. Each new version clears the
+\lead{Who wrote which version \tagnew{}.} This report was written by Claude, an AI model made by Anthropic, at
+your request. Versions 1 to 9 were written by Claude Sonnet 5.5 and versions 10 onwards by Claude Opus 5.5. The
+switch happened on 27 November between 08:20 (version 9) and 09:16 (Test 16), as the model named in the
+repository’s commit records shows. Version 10 re-examined the earlier conclusions at your request
+(\S\,\ref{sec:5} item 13).
+
+\lead{What is new in this version (version 13).} The markers \textbf{\tagnew{}} and \textbf{\tagupd{}} show only
+what changed since version 12. Text without a marker is unchanged from version 12. Each new version clears the
 previous version’s markers.
 
 \begin{itemize}
-\item \lead{\S\,\ref{sec:4.3} \tagnew{}:} the best hypothesis I have for the block structure, with two new tests
-  that rule out two explanations (the query reading the letters after the boundary; a single ’which half’
-  direction).
-\item \lead{\S\,\ref{sec:1} \tagupd{}:} new item 30.
-\item \lead{\S\,\ref{sec:7} \tagupd{}:} the two new scripts.
+\item \lead{\S\,\ref{sec:3.19} \tagnew{}:} the coverage argument written out as an exact count, $R(L,s)$, with a
+  simulation check, the real test file, and the same comparison for the elementary model (Test 17).
+\item \lead{\S\,\ref{sec:3.20} \tagnew{}:} the shape of the walk and the placement of the hop letters at fixed
+  hops and points (Test 18). Going back and forth, not having few points, is what makes long chains hard.
+\item \lead{\S\,\ref{sec:3.21} \tagnew{}:} why the naive window method failed (Test 19). Its chains are all
+  covered; it fails because it never teaches the model to ignore letters far from a chain. Two windows at
+  independent offsets fix it.
+\item \lead{\S\,\ref{sec:1} \tagupd{}:} new items 31 to 33.
+\item \lead{\S\,\ref{sec:4.1}, \S\,\ref{sec:4.2} \tagupd{}:} the reversal result as support for linking by
+  content; coverage now proved; a third ingredient of the density notion (the irrelevant letters must be covered
+  too).
+\item \lead{\S\,\ref{sec:6}, \S\,\ref{sec:7} \tagupd{}:} what is done and what is next; the new scripts.
+\item \lead{Who wrote which version \tagnew{}:} above.
 \end{itemize}
+
+The same results are summarised in \code{subreport-\allowbreak{}20261128.\allowbreak{}md} and in a note for the
+co-authors (\code{coauthor-\allowbreak{}note/\allowbreak{}note.\allowbreak{}pdf}).
 \end{frontbox}
 
 \tableofcontents
@@ -400,13 +419,36 @@ previous version’s markers.
   through their chain patterns up to relabelling. Every test slot’s pattern is contained in the training
   patterns, which explains the paper’s result. Beyond that, containment is not enough: what the model
   generalises to depends on how often a pattern occurs and on the training procedure (\S\,\ref{sec:4.2}).
-\item \lead{\tagnew{} The block structure is most likely a by-product of keeping early attention local
+\item \lead{The block structure is most likely a by-product of keeping early attention local
   (\S\,\ref{sec:4.3}).} It is not in the data, not needed for accuracy, not fixed by the initialisation, not
   where the query reads (on natural words), and not one ’which half’ direction. My best hypothesis is a symmetry
   broken by the first layers: making the positions on each side of a split alike helps their heads keep
   attention local over a 120-letter word, the place of the split hardly matters to the loss, so it falls where a
   run’s details put it, and some runs never split. Snapshots during training and removing the boundary after
   training would test it.
+\item \lead{\tagnew{} Coverage is now a theorem (\S\,\ref{sec:3.19}).} For a slot whose chain has $L$ hops
+  through $s$ points, the ratio of its probability in the training distribution to that in the test distribution
+  is exactly $R(L,s)=\binom{25-s}{10-s}\binom{25}{10}^{-1}(625/100)^{L}(0.82\cdot625/577)^{25-L}$ for $s\le10$,
+  and 0 for $s\ge11$; a simulation of $10^6$ words from each reproduces it. Chains through 11 or more points are
+  $1.2\times10^{-6}$ of test slots, and the real test file has none; over its slots $R\ge0.055$, and its rarest
+  chain class is expected about 27,000 times in the 8M training words. For the elementary model, training chains
+  are longer than test chains at every quantile, but never wider than 11, and 0.53\% of test slots are wider;
+  the model gets those right too.
+\item \lead{\tagnew{} Going back and forth is what makes long chains hard (\S\,\ref{sec:3.20}).} At fixed hops
+  and points, cycles ($a\,b\,c\,d\,e\,a\ldots$) are easy for every model, and walks that keep returning to the
+  point just left are hard: at 16 hops through 5 points \code{torn-\allowbreak{}bigger-\allowbreak{}13} falls
+  from 0.96 to 0.68 and the fresh-data control from 0.99 to 0.86 ($p<10^{-8}$). The control’s weakness on
+  few-point chains (item 25) is this. \code{g\_\allowbreak{}plant10} is perfect on every shape. Packing the hop
+  letters into one block costs \code{torn-\allowbreak{}bigger-\allowbreak{}13} a little (0.77–0.86 against 0.895
+  spread out).
+\item \lead{\tagnew{} The naive window method failed because it does not teach locality (\S\,\ref{sec:3.21}).}
+  The January 2025 naive-window models (\code{elem-\allowbreak{}big-\allowbreak{}1}, \code{-\allowbreak{}2}) are
+  100\% right on their own distribution but only 72–78\% right on test slots with a single hop, chains they have
+  certainly seen. Inserting letters that cannot touch the chain lowers their accuracy (2 letters: 0.91–0.96; 8
+  letters: 0.79–0.87). A run identical except for using two windows of 5 at independent offsets
+  (\code{elem-\allowbreak{}wacky-\allowbreak{}2}) is 100\% right on the $S_{25}$ test file and in every
+  condition, as is a partitioned run. In a naive-window word every letter is within 10 points of every chain, so
+  the model never learns that distant letters are irrelevant.
 \end{enumerate}
 
 % ====================================================================================================
@@ -2693,6 +2735,368 @@ other structure (the “chevron” patterns of
 \code{fig\_\allowbreak{}block\_\allowbreak{}survey.\allowbreak{}png}).
 \end{limbox}
 
+\subsection{Coverage, exactly (Test 17) \tagnew{}}\label{sec:3.19}
+\lead{Why.} \S\,\ref{sec:4.2} (Step 2) argued from counts that every test slot’s chain is inside the training
+data. This section turns that into an exact statement with constants, checks it by simulation, and does the same
+count for the elementary model.
+
+\lead{Setup.} I compare two distributions.
+
+\begin{itemize}
+\item \lead{Test words:} 25 letters, each uniform over the 625 tokens $(a,b)\in[25]^2$.
+\item \lead{Training words:} a uniformly random set $M$ of 10 of the 25 points, then 25 letters each uniform
+  over the 100 tokens on $M$ (natural 10-point words relabelled into 25 points, as in the paper).
+\end{itemize}
+
+Fix one labelled chain $c$ for slot $k$: the positions of its $L$ hop letters, and its walk, which visits a set
+$V$ of $s$ points.
+
+\lead{The count.} The slot has exactly this chain when two things hold.
+
+\begin{itemize}
+\item Each hop letter is one of the two tokens $\{(x,y),(y,x)\}$ for its step $x\to y$.
+\item Every other letter avoids the pointer’s current point $q$. The admissible tokens are those with no
+  coordinate equal to $q$, plus the diagonal token $(q,q)$, which moves nothing. That is $24^2+1=577$ of the 625
+  test tokens, and $9^2+1=82$ of the 100 training tokens.
+\end{itemize}
+
+Letters are independent, so
+\[ P_{\text{test}}(c)=\Big(\tfrac{2}{625}\Big)^{L}\Big(\tfrac{577}{625}\Big)^{25-L},\qquad
+P_{\text{train}}(c)=\Pr(V\subseteq M)\,\Big(\tfrac{2}{100}\Big)^{L}\Big(\tfrac{82}{100}\Big)^{25-L}, \]
+where $\Pr(V\subseteq M)=\binom{25-s}{10-s}\big/\binom{25}{10}$, which is zero for $s>10$.
+
+\lead{The ratio depends only on $(L,s)$:}
+\[
+R(L,s)=\frac{P_{\text{train}}}{P_{\text{test}}}=\frac{\binom{25-s}{10-s}}{\binom{25}{10}}\Big(\tfrac{625}{100}\Big)^{L}\Big(\tfrac{0.82\cdot625}{577}\Big)^{25-L}\quad(s\le10),\qquad
+R(L,s)=0\quad(s\ge11). \]
+Both distributions are invariant under relabelling the 25 points and under moving the hop letters to other
+positions. So every labelled chain in a class $(L,s)$ has the same ratio, and the ratio of the class
+probabilities is also $R(L,s)$. That is the whole proof.
+
+\lead{Check} (\code{coverage.\allowbreak{}py}, $10^6$ words from each distribution). Every class with at least
+2,000 test slots:
+
+{\small\nopagebreak[4]
+\begin{longtable}{@{}l r r r r@{}}
+\toprule
+\hdr{$(L,s)$} & \hdr{test probability per slot} & \hdr{training probability per slot} & \hdr{ratio, simulated} & \hdr{ratio, formula} \\
+\midrule
+\endfirsthead
+\toprule
+\hdr{$(L,s)$} & \hdr{test probability per slot} & \hdr{training probability per slot} & \hdr{ratio, simulated} & \hdr{ratio, formula} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+(1, 2) & $2.82\times10^{-1}$ & $1.54\times10^{-2}$ & 0.055 & 0.055 \\
+(2, 3) & $2.70\times10^{-1}$ & $3.60\times10^{-2}$ & 0.134 & 0.133 \\
+(3, 3) & $2.15\times10^{-2}$ & $2.02\times10^{-2}$ & 0.940 & 0.939 \\
+(3, 4) & $1.58\times10^{-1}$ & $4.71\times10^{-2}$ & 0.298 & 0.299 \\
+(4, 4) & $1.80\times10^{-2}$ & $3.80\times10^{-2}$ & 2.105 & 2.101 \\
+(4, 5) & $6.32\times10^{-2}$ & $3.79\times10^{-2}$ & 0.600 & 0.600 \\
+(5, 5) & $9.19\times10^{-3}$ & $3.89\times10^{-2}$ & 4.230 & 4.225 \\
+(6, 6) & $3.18\times10^{-3}$ & $2.37\times10^{-2}$ & 7.449 & 7.432 \\
+(7, 7) & $8.04\times10^{-4}$ & $8.75\times10^{-3}$ & 10.887 & 11.010 \\
+(8, 8) & $1.49\times10^{-4}$ & $1.94\times10^{-3}$ & 12.959 & 12.912 \\
+(8, 9) & $9.04\times10^{-5}$ & $1.36\times10^{-4}$ & 1.502 & 1.519 \\
+\end{longtable}}
+
+\lead{What it gives.}
+
+\begin{itemize}
+\item \lead{Uncovered mass.} The only test chains the training distribution cannot contain pass through 11 or
+  more points. They make up $1.2\times10^{-6}$ of test slots (30 of 25 million in the simulation).
+\item \lead{The real test file} (2,000 words) has at most 9 hops and 9 points per slot. Over its moved slots,
+  $R\ge0.055$ (the minimum is $R(1,2)$), with a median of 0.13.
+\item \lead{The rarest class.} The rarest chain class in the test file, $(L,s)=(8,9)$, is expected about 27,000
+  times among the $2\times10^8$ slots of the 8M training words.
+\item \lead{Short chains are relatively rarer in training.} $R<1$ for short chains through many points: the test
+  distribution’s typical one-hop slot is 18 times rarer in training. In absolute numbers, those classes are
+  enormous in both.
+\end{itemize}
+
+So the coverage half of the density notion (\S\,\ref{sec:4.2}) is a theorem with explicit constants: every test
+pattern lies in the training support, at a rate at least $1/18$ of its test rate, except a $10^{-6}$ tail.
+
+\lead{The elementary model} (\code{elem\_\allowbreak{}coverage\_\allowbreak{}stats.\allowbreak{}py}, the whole
+2,000-word test file and 20,000 training words of the boosted data). There is no relabelling symmetry here, so I
+compare hops and widths directly.
+
+\begin{center}\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{6.4cm} r r@{}}
+\toprule
+\hdr{} & \hdr{test words} & \hdr{training words} \\
+\midrule
+hops per slot: median / 99\% / max & 14 / 23 / 29 & 16 / 47 / 76 \\
+width per slot: median / 99\% / max & 5 / 11 / 15 & 4 / 10 / 11 \\
+slots 12 or more wide & 0.53\% & none \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+\item \lead{Hops are well covered.} Training chains are longer than test chains at every quantile.
+\item \lead{Width is not quite covered.} No training chain is wider than 11, because a window has at most 10
+  points. Partitioned windows sit at random offsets, so every chain of width up to 11 occurs at every location.
+  The 0.53\% of test slots whose chain is 12 or more wide lie outside the training data.
+\item \lead{The model is right on them anyway.} It gets 99.99\% of test slots right (\S\,\ref{sec:3.8}), and on
+  planted chains it loses accuracy only slowly beyond width 11 (95.6\% at width 16 with 24 hops). Its rule
+  extends past its coverage in width, as it does in hops (\S\,\ref{sec:3.13}).
+\end{itemize}
+
+\begin{limbox}{Limits}
+The count assumes the model depends only on the chain. That is measured, not proved: \S\,\ref{sec:3.7} shows it
+for chains of up to 12 hops, and \S\,\ref{sec:3.21} shows it can fail when training does not teach it.
+\end{limbox}
+
+\subsection{Beyond hops and points: the shape of the walk and where the hop letters sit (Test 18)
+\tagnew{}}\label{sec:3.20}
+\lead{Why.} Until now I described each chain only by $(L,s)$. \S\,\ref{sec:4.2} listed “the order of revisits,
+the gaps between hop letters” as the obvious refinement. The fresh-data control’s weakness on chains through few
+points (\S\,\ref{sec:3.17}) also needed explaining.
+
+\lead{Test} (\code{pattern\_\allowbreak{}families.\allowbreak{}py}, 200 planted words per cell; three models:
+\code{torn-\allowbreak{}bigger-\allowbreak{}13} (February 2025), \code{g\_\allowbreak{}m10},
+\code{g\_\allowbreak{}plant10}).
+
+\emph{(A) Walk shape at fixed $(L,s)$.} The hop letters are spread at random over the word, and the other
+letters avoid the pointer. Four families of walk, ordered by the share of hops that return to the point just
+left (a \emph{reversal}):
+
+\begin{itemize}
+\item \lead{cycle}: $a\,b\,c\,d\,e\,a\,b\ldots$, which never reverses;
+\item \lead{random walks} from the lowest third of reversal shares;
+\item \lead{random walks} from the highest third;
+\item \lead{ping-pong}: $a\,b\,a\,b\ldots$, with the remaining points visited once each along the way.
+\end{itemize}
+
+\emph{(B) Placement.} At $L=16$, $s=10$ (random walk), the hop letters are placed:
+
+\begin{itemize}
+\item spread at random;
+\item as one contiguous block at the end of the word (read first);
+\item as one block in the middle;
+\item as one block at the start of the word (read last);
+\item on every other letter (12 hops, the most that fits).
+\end{itemize}
+
+\emph{(C) Natural slots.} \code{torn-\allowbreak{}bigger-\allowbreak{}13}’s fresh natural slots with 14, 15 and
+16 hops (the cached set of \code{cliff\_\allowbreak{}survey.\allowbreak{}py}), split at the median of the
+reversal share and at the median mean position of the hop letters.
+
+\lead{Walk shape} (accuracy; mean reversal share in brackets):
+
+{\small\nopagebreak[4]
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{6.6cm} r r r@{}}
+\toprule
+\hdr{$(L,s)$, family} & \hdr{\code{torn-\allowbreak{}bigger-\allowbreak{}13}} & \hdr{\code{g\_\allowbreak{}m10}} & \hdr{\code{g\_\allowbreak{}plant10}} \\
+\midrule
+\endfirsthead
+\toprule
+\hdr{$(L,s)$, family} & \hdr{\code{torn-\allowbreak{}bigger-\allowbreak{}13}} & \hdr{\code{g\_\allowbreak{}m10}} & \hdr{\code{g\_\allowbreak{}plant10}} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+(16, 5) cycle (0.00) & 0.960 & 0.990 & 1.000 \\
+(16, 5) random, fewest reversals (0.27) & 0.935 & 0.985 & 1.000 \\
+(16, 5) random, most reversals (0.55) & 0.805 & 0.930 & 1.000 \\
+(16, 5) ping-pong (0.58) & 0.680 & 0.855 & 1.000 \\
+(18, 5) cycle (0.00) & 0.745 & 0.995 & 1.000 \\
+(18, 5) random, fewest reversals (0.28) & 0.760 & 0.900 & 1.000 \\
+(18, 5) random, most reversals (0.57) & 0.645 & 0.800 & 1.000 \\
+(18, 5) ping-pong (0.63) & 0.455 & 0.695 & 1.000 \\
+(16, 10), range over the four families (0.00–0.25) & 0.870–0.900 & 0.990–1.000 & 1.000 \\
+(20, 10) cycle \ensuremath{\to} ping-pong (0.00 \ensuremath{\to} 0.30) & 0.465 \ensuremath{\to} 0.535 & 1.000 \ensuremath{\to} 0.895 & 1.000 \ensuremath{\to} 1.000 \\
+\end{longtable}}
+
+\begin{figure}[htbp]\centering\includegraphics[width=1.00\linewidth]{fig_pattern_families.png}\caption{Accuracy at the slot by walk shape, at four combinations of hops and points. In brackets: the mean reversal share of each family. \code{g\_\allowbreak{}plant10} is at 1.00 everywhere. 200 words per point (standard error at most 3.5 points).}\end{figure}
+
+\lead{Placement} (accuracy, with the median margin for \code{torn-\allowbreak{}bigger-\allowbreak{}13}):
+
+\begin{center}\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{6.6cm} r r r@{}}
+\toprule
+\hdr{hop letters} & \hdr{\code{torn-\allowbreak{}bigger-\allowbreak{}13}} & \hdr{\code{g\_\allowbreak{}m10}} & \hdr{\code{g\_\allowbreak{}plant10}} \\
+\midrule
+spread at random & 0.895 (9.3) & 0.980 & 1.000 \\
+one block, read first (end of the word) & 0.860 (5.2) & 0.970 & 1.000 \\
+one block in the middle & 0.815 (5.7) & 1.000 & 1.000 \\
+one block, read last (start of the word) & 0.770 (4.6) & 1.000 & 1.000 \\
+every other letter (12 hops) & 1.000 (18.8) & 1.000 & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{findbox}{What it shows}
+\begin{itemize}
+\item \lead{Reversals are what hurt.} At 5 points both \code{torn-\allowbreak{}bigger-\allowbreak{}13} and the
+  control are near perfect on cycles and fall steadily as the reversal share rises. Cycle against ping-pong
+  gives $p<10^{-8}$ (Fisher’s exact test) for both models at both lengths.
+\item \lead{This explains the control’s “few points” weakness} (\S\,\ref{sec:3.17}). Its weakness on chains
+  through 3 to 5 points is a weakness on back-and-forth chains; few-point chains are simply the ones that must
+  reverse often. With 10 points the walks cannot reverse much (at most about 30\% of hops), and the effect is
+  small: none for \code{torn-\allowbreak{}bigger-\allowbreak{}13}, which at that length is limited by hop count
+  anyway, and 10 points for the control at 20 hops.
+\item \lead{\code{torn-\allowbreak{}bigger-\allowbreak{}13} has both limits.} On cycles it still declines with
+  hop count (0.96 at 16 hops, 0.75 at 18, 0.47 at 20), so its hop limit remains; reversals add a second cost on
+  top.
+\item \lead{\code{g\_\allowbreak{}plant10} has neither.} It is perfect in every cell, with margins of 13 to 15
+  throughout.
+\item \lead{Packing the hops together costs \code{torn-\allowbreak{}bigger-\allowbreak{}13} a little.} Spread
+  against “read last” gives $p=0.001$, and its margins halve. Natural words almost never have 16 consecutive hop
+  letters, so this may just be unfamiliarity. The other two models are not affected. The “every other letter”
+  cell is uninformative, because 12 hops are within every model’s reach.
+\item \lead{Natural slots show neither effect.} Within 14, 15 and 16 hops, neither split separates
+  \code{torn-\allowbreak{}bigger-\allowbreak{}13}’s right and wrong slots significantly. The largest difference
+  is at 16 hops, 0.92 against 0.98 with about 80 slots per half, $p=0.28$, and it goes the other way from the
+  planted result. This is expected: natural slots with 14 to 16 hops visit 8 to 11 points, where planted walks
+  also showed no reversal effect.
+\end{itemize}
+\end{findbox}
+
+\lead{A possible mechanism} (an interpretation, not tested). The first blocks link each hop letter to the next
+\emph{by content}, attending to letters that share a point (\S\,\ref{sec:3.12}, \S\,\ref{sec:4.1}). In a cycle,
+each hop letter shares a point only with its two neighbours on the chain, so content picks out the next link. In
+a ping-pong stretch every hop letter is the same pair $\{a,b\}$, so content matches every other hop letter
+equally. The link then has to be made by position order alone, which content-based attention does badly. This
+predicts that the cost should grow with the length of the longest back-and-forth stretch rather than with the
+reversal share as such, which can be tested.
+
+\begin{limbox}{Limits}
+200 words per cell; one checkpoint per model; planted words, whose other letters avoid the pointer by
+construction.
+\end{limbox}
+
+\subsection{Why the naive window method failed (Test 19) \tagnew{}}\label{sec:3.21}
+\lead{Why.} The paper reports that the naive window method (an $S_m$ word shifted as a whole to a random place
+in $S_n$) “does not perform well in practice when testing on larger groups”, and suggests that the model learns
+the smaller group. Partitioned windows fixed it. The Spartan folder holds the runs that tested this, so the
+reason can be measured.
+
+\lead{The models} (configs from the git history of \code{Midataur/\allowbreak{}permutations}; all use the legacy
+architecture of \S\,\ref{sec:3.18}, with no attention mask at all, NULL padding, and the prediction read at the
+last position, as \code{transformer.\allowbreak{}py} at commit \code{4ee9609} did):
+
+\begin{center}\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.2cm} >{\raggedright\arraybackslash}p{2.0cm}
+>{\raggedright\arraybackslash}p{5.6cm} >{\raggedright\arraybackslash}p{3.2cm}@{}}
+\toprule
+\hdr{model} & \hdr{trained} & \hdr{data} & \hdr{test words} \\
+\midrule
+\code{elem-\allowbreak{}big-\allowbreak{}1}, \code{elem-\allowbreak{}big-\allowbreak{}2} & 1–6 Jan 2025 & naive window: an $S_{10}$ word of 20 letters shifted by one random offset into $S_{25}$ (tokens shift to shift+9) & 20 letters uniform over the 25 tokens \\
+\code{elem-\allowbreak{}wacky-\allowbreak{}2} & 2–6 Feb 2025 & two windows of 5 tokens at independent offsets; each letter falls in one of them at random ($S_{25}$, 20 letters) & as above \\
+\code{elem-\allowbreak{}partitioned-\allowbreak{}1} & 2–5 Feb 2025 & partitioned windows, $S_{16}$, $m=9$, 16 letters & 16 letters uniform over the 16 tokens \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\code{elem-\allowbreak{}wacky-\allowbreak{}2} matches the naive models in $n$, $m$, word length, architecture,
+learning rate and seed. Only the windows differ.
+
+\lead{Is it coverage?} No. The naive window can sit anywhere, so every chain of width up to 10 occurs at every
+location. Chains in uniform 20-letter test words are short and narrow. In the 1,000-word test file, 99.7\% of
+slots have at most 5 hops (the maximum is 8), and no chain is wider than 7. Every one of them occurs in the
+naive training data.
+
+\lead{Test} (\code{window\_\allowbreak{}failure.\allowbreak{}py},
+\code{window\_\allowbreak{}width\_\allowbreak{}sweep.\allowbreak{}py}; 250 words per condition, 6 slots per
+word, teacher-forced as the old models were trained). Three conditions:
+
+\begin{enumerate}
+\item accuracy on the validation file (the training distribution) and on the test file, by hop count;
+\item \emph{spread}: words whose letters are uniform over a contiguous range of tokens at a random offset, for
+  ranges from the training window (10) to the full group (24);
+\item \emph{far letters}: take a validation word and replace $j$ of its letters (dropped at random) with $j$
+  letters whose points are at least two away from anything the window can move, inserted at random places. The
+  answers in the window are unchanged in meaning; I score moved slots inside the window.
+\end{enumerate}
+
+\lead{Training distribution and test file} (accuracy at the sampled slots; slots with 1 hop in brackets):
+
+\begin{center}\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{5.0cm} r r r@{}}
+\toprule
+\hdr{model} & \hdr{own distribution} & \hdr{test file} & \hdr{test file, slots with 1 hop} \\
+\midrule
+\code{elem-\allowbreak{}big-\allowbreak{}1} (naive) & 1.000 & 0.831 & 0.776 \\
+\code{elem-\allowbreak{}big-\allowbreak{}2} (naive) & 1.000 & 0.803 & 0.721 \\
+\code{elem-\allowbreak{}wacky-\allowbreak{}2} (two windows) & 0.999 & 1.000 & 1.000 \\
+\code{elem-\allowbreak{}partitioned-\allowbreak{}1} (partitioned, $S_{16}$) & 0.999 & 1.000 & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+On the test file, the naive models are right on every unmoved slot (289 and 295 of them) and wrong on 18–28\% of
+slots with 1 to 4 hops, with no trend in the number of hops.
+
+\lead{Spread} (accuracy at slots with 1–3 hops):
+
+\begin{center}\small
+\begin{tabular}{@{}l *{5}{r}@{}}
+\toprule
+\hdr{range of tokens} & \hdr{10} & \hdr{12} & \hdr{15} & \hdr{19} & \hdr{24} \\
+\midrule
+\code{elem-\allowbreak{}big-\allowbreak{}1} & 1.000 & 0.945 & 0.881 & 0.851 & 0.818 \\
+\code{elem-\allowbreak{}big-\allowbreak{}2} & 1.000 & 0.935 & 0.823 & 0.765 & 0.737 \\
+\code{elem-\allowbreak{}wacky-\allowbreak{}2} & 1.000 & 1.000 & 1.000 & 1.000 & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\code{elem-\allowbreak{}partitioned-\allowbreak{}1} is at 1.000 for ranges 9, 11, 13 and 15 (its group is
+$S_{16}$).
+
+\lead{Far letters} (accuracy at moved slots in the window; mean hops of those slots in brackets):
+
+\begin{center}\small
+\begin{tabular}{@{}l r r r@{}}
+\toprule
+\hdr{letters inserted $j$} & \hdr{0} & \hdr{2} & \hdr{8} \\
+\midrule
+\code{elem-\allowbreak{}big-\allowbreak{}1} & 0.999 (3.8) & 0.963 (3.4) & 0.874 (2.5) \\
+\code{elem-\allowbreak{}big-\allowbreak{}2} & 1.000 (3.8) & 0.914 (3.5) & 0.786 (2.5) \\
+\code{elem-\allowbreak{}wacky-\allowbreak{}2} & 0.999 (4.2) & 0.999 (3.8) & 1.000 (2.7) \\
+\code{elem-\allowbreak{}partitioned-\allowbreak{}1} & 0.999 (3.7) & 1.000 (3.4) & 1.000 (2.2) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{figure}[htbp]\centering\includegraphics[width=1.00\linewidth]{fig_window.png}\caption{Naive against two and partitioned windows. (a) Accuracy at slots whose chain has 1–3 hops, for words whose letters are uniform over a contiguous range of tokens; a range of 10 is the naive training distribution and 24 is the full group. (b) Accuracy at the window’s moved slots after inserting $j$ letters that cannot touch any chain in the window; the two-window and partitioned runs coincide at 1.00.}\end{figure}
+
+\begin{findbox}{What it shows}
+\begin{itemize}
+\item \lead{The naive models fail on short, covered chains.} A slot with a single hop is wrong 22–28\% of the
+  time on test words, so the failure is not about long or unseen chains.
+\item \lead{Letters that cannot touch the chain change their answers.} Two such letters lower in-window accuracy
+  from 1.00 to 0.91–0.96, and eight lower it to 0.79–0.87, although the chains get shorter. Spreading the
+  letters over a wider range of tokens has the same effect, steadily.
+\item \lead{One more window fixes it.} The two-window run is perfect on the $S_{25}$ test file and in every
+  condition, and so is the partitioned run.
+\item \lead{So the naive model is not local.} It has not learned to ignore letters far from the chain, because
+  no training word had any: in a naive-window word every letter lies within 10 points of every chain. With two
+  independent windows, or partitioned ones, letters at all distances from a chain occur in training, and the
+  model learns that they are irrelevant.
+\item \lead{The general model gets this for free.} After relabelling into $S_{25}$ every point off the chain is
+  equivalent to every other, and training words already contain letters on such points. \S\,\ref{sec:3.7} found
+  the general model local.
+\item \lead{The paper’s reading fits.} The naive model “learns the smaller group” in the sense that it learns a
+  function of the whole word that agrees with the group only on words that fit inside one window.
+\end{itemize}
+\end{findbox}
+
+\begin{limbox}{Limits}
+\begin{itemize}
+\item \lead{Not the paper’s setup.} These are January–February 2025 runs ($n=25$ with 20 letters, or $n=16$ with
+  16 letters), not the final $n=16$, $N=120$ elementary setup. Whether a naive window fails the same way there I
+  have not tested; there is no such checkpoint.
+\item \lead{One run per method.} The two naive runs agree with each other.
+\item \lead{An earlier two-window run} (\code{elem-\allowbreak{}wacky-\allowbreak{}1}, January 2025, trained
+  before a fix to the window code) never trained (60\% of moved slots on its own distribution) and is left out.
+\item \lead{Sampling.} 1,500 sampled slots per condition.
+\end{itemize}
+\end{limbox}
+
 % ====================================================================================================
 % 4 What this means for the density idea [UPDATED]
 % ====================================================================================================
@@ -2761,7 +3165,7 @@ other structure (the “chevron” patterns of
   original recipe is fewer than the data contain.
 \end{itemize}
 
-\subsection{What algorithm I think the general model learned}\label{sec:4.1}
+\subsection{What algorithm I think the general model learned \tagupd{}}\label{sec:4.1}
 This is an interpretation that puts together \S\,\ref{sec:3.6}–\ref{sec:3.18}. No single test shows it, and the
 parts I am least sure of are marked.
 
@@ -2823,12 +3227,20 @@ the end of a chain of hop letters, each of which shares a point with the next.
   to 17 hops, and 100\% to 24 hops). Whatever it does is not limited by a reach that grows with depth. I did not
   find its algorithm.
 \item \lead{The fresh-data control (\code{g\_\allowbreak{}m10})} follows chains through 10 points to 22 hops but
-  fails on chains that keep revisiting 3 to 5 points (\S\,\ref{sec:3.17}). That suggests a computation organised
-  around points rather than letters (for example, tracking the last letter that touched each point). This is a
-  guess.
+  fails on chains that keep revisiting 3 to 5 points (\S\,\ref{sec:3.17}). \textbf{\tagupd{}} Version 12 guessed
+  that this pointed to a computation organised around points. \S\,\ref{sec:3.20} shows instead that what hurts
+  is going back and forth: cycles through 5 points are easy, ping-pong walks through the same 5 points are hard,
+  for the control and for \code{torn-\allowbreak{}bigger-\allowbreak{}13} alike.
 \end{itemize}
 
-\subsection{What notion of density fits the results}\label{sec:4.2}
+\lead{\tagnew{} Support from the shape of the walk (\S\,\ref{sec:3.20}).} Step 1 above says that letters are
+linked by the points they share. If so, a stretch in which every hop letter is the same pair $\{a,b\}$ should be
+hard, because content then matches every other hop letter equally and the next link has to be found by position
+alone. That is what \S\,\ref{sec:3.20} finds, in both \code{torn-\allowbreak{}bigger-\allowbreak{}13} and the
+control. It also predicts that the cost grows with the length of the longest back-and-forth stretch, which I
+have not tested.
+
+\subsection{What notion of density fits the results \tagupd{}}\label{sec:4.2}
 The aim is a statement of the form “the training distribution is dense in the test distribution in a sense that
 explains why the model generalises”, in the spirit of $\mathbb{Q}\subset\mathbb{R}$. Here is the notion I think
 the results support, built in three steps, each from a result.
@@ -2853,7 +3265,9 @@ outside the 10-point training support (\S\,\ref{sec:2.3}). But every slot of the
 at most 9 hops through at most 9 points (\S\,\ref{sec:1} item 3). Every such pattern fits in 10 points and
 occurs, under every relabelling, in the training data, and often: 0.8\% of training slots have 10 or more hops
 (Binomial(25, 0.18)), while a slot of a uniform 25-point test word has about 2 hops on average (Binomial(25,
-0.077)).
+0.077)). \textbf{\tagupd{}} \S\,\ref{sec:3.19} makes this exact: the ratio of training to test probability of
+every chain class is $R(L,s)$, at least 0.055 over the slots of the real test file, and the uncovered mass is
+$1.2\times10^{-6}$ per test slot.
 
 So the paper’s generalisation from $S_{10}$ to $S_{25}$ needs no extrapolation at all in pattern space:
 $\pi_*\mu_{\text{test}}$ is supported inside $\pi_*T$, and the model is right there (\S\,\ref{sec:3.2}). This is
@@ -2906,7 +3320,7 @@ the two runs on the same distribution disagree.
   (\S\,\ref{sec:3.17}).
 \end{itemize}
 
-\lead{The notion I would propose.} Two parts:
+\lead{The notion I would propose.} Two parts, and a condition \textbf{\tagupd{}}:
 
 \begin{enumerate}
 \item \lead{Coverage:} the set $C_N(T)$ of chain patterns, modulo relabelling, that occur at least $N$ times in
@@ -2920,6 +3334,13 @@ the two runs on the same distribution disagree.
   118 hops). If \S\,\ref{sec:4.1} is right, the closure is the set of patterns whose chains fit within the reach
   built by the layers from frequent short segments. That suggests a form: chains that split into at most about
   $2^{\ell}$ frequent segments after $\ell$ layers.
+\item \lead{\tagnew{} Locality has to be covered too.} Coverage of the chains is enough only if the model
+  depends on the chain alone, and the model has to learn that. \S\,\ref{sec:3.21} shows it learns to ignore only
+  the kinds of irrelevant letters it has seen: the naive-window models cover every chain and still fail, because
+  no training word has letters far from a chain. So the training distribution must also cover the configurations
+  of irrelevant letters around the chains. For general transpositions the relabelling symmetry provides this for
+  free (every point off the chain is equivalent to every other); for elementary transpositions it is what
+  splitting the window provides.
 \end{enumerate}
 
 A density argument for generalisation then has two halves. The first, coverage, is a property of the data and
@@ -2930,8 +3351,9 @@ closure, is a property of the training procedure as much as of the data, and I c
 \lead{What this leaves open.}
 
 \begin{itemize}
-\item I have measured patterns only by $(L, s)$. The full pattern (the order of revisits, the gaps between hop
-  letters) may matter at the edges; the control’s weakness on few-point chains is one sign that it does.
+\item \lead{\tagupd{}} The full pattern matters beyond $(L,s)$ for closure, not for coverage: at the edges the
+  reversal structure of the walk decides accuracy (\S\,\ref{sec:3.20}), while coverage needs only $(L,s)$
+  (\S\,\ref{sec:3.19}).
 \item The threshold $N$ at which \code{torn-\allowbreak{}bigger-\allowbreak{}13} stops generalising (about
   $10^3$–$10^4$ slots per hop count) comes from one run, and the control shows it is not a property of the data
   alone.
@@ -2939,7 +3361,7 @@ closure, is a property of the training procedure as much as of the data, and I c
   the closure is frequency and how much is the recipe.
 \end{itemize}
 
-\subsection{The block structure: the best hypothesis I have \tagnew{}}\label{sec:4.3}
+\subsection{The block structure: the best hypothesis I have}\label{sec:4.3}
 \lead{What is established} (\S\,\ref{sec:3.8}, \S\,\ref{sec:3.15}, \S\,\ref{sec:3.18}):
 
 \begin{itemize}
@@ -3122,26 +3544,29 @@ over a long word. It is not a signature of the algebra or of the data. For the d
 \end{enumerate}
 
 % ====================================================================================================
-% 6 Not done, and suggested next steps
+% 6 Not done, and suggested next steps [UPDATED]
 % ====================================================================================================
-\section{Not done, and suggested next steps}\label{sec:6}
-\lead{Inference-only tests run in this version:} Test 16 and the hops-against-points grid (\S\,\ref{sec:3.17}),
-and the survey of the Spartan model folder (\S\,\ref{sec:3.18}); before them, layer-wise probes
-(\S\,\ref{sec:3.6}), irrelevance interventions (\S\,\ref{sec:3.7}), the elementary-transposition port with
-baseline, width and hop-count tests (\S\,\ref{sec:3.8}, Tests 6a and 6b), probes and activation patching at the
-word positions (\S\,\ref{sec:3.9}, \S\,\ref{sec:3.10}), the same two tests on the elementary model
-(\S\,\ref{sec:3.11}), and attention patterns and single-head ablation of both models (\S\,\ref{sec:3.12}). In
-this version: the elementary model beyond its longest training chase and zeroing groups of heads of the general
-model (\S\,\ref{sec:3.13}), and probes, attention, ablation, greedy ablation and patching on the four retrained
-models (\S\,\ref{sec:3.16}).
+\section{Not done, and suggested next steps \tagupd{}}\label{sec:6}
+\lead{Inference-only tests run so far:} \textbf{\tagupd{}} in version 13, the exact coverage count
+(\S\,\ref{sec:3.19}), walk shape and hop-letter placement (\S\,\ref{sec:3.20}) and the naive-window models
+(\S\,\ref{sec:3.21}); before them, Test 16 and the hops-against-points grid (\S\,\ref{sec:3.17}), and the survey
+of the Spartan model folder (\S\,\ref{sec:3.18}); before them, layer-wise probes (\S\,\ref{sec:3.6}),
+irrelevance interventions (\S\,\ref{sec:3.7}), the elementary-transposition port with baseline, width and
+hop-count tests (\S\,\ref{sec:3.8}, Tests 6a and 6b), probes and activation patching at the word positions
+(\S\,\ref{sec:3.9}, \S\,\ref{sec:3.10}), the same two tests on the elementary model (\S\,\ref{sec:3.11}), and
+attention patterns and single-head ablation of both models (\S\,\ref{sec:3.12}). In this version: the elementary
+model beyond its longest training chase and zeroing groups of heads of the general model (\S\,\ref{sec:3.13}),
+and probes, attention, ablation, greedy ablation and patching on the four retrained models (\S\,\ref{sec:3.16}).
 
-\lead{Inference-only tests not yet run:} gap/alignment variations beyond spread versus contiguous; weight-level
-equivariance; removing the block structure itself from the elementary model’s position embeddings (for example
-by projecting out the directions that separate the blocks), and swaps involving the 16 output positions
-(\S\,\ref{sec:3.8}). Patching the general model for $L=20$ and above (the elementary model is patched up to
-$L=80$, \S\,\ref{sec:3.11}). Patching one head or one component at a time (head groups are now ablated,
-\S\,\ref{sec:3.13} and \S\,\ref{sec:3.16}), which would say what the heads of \S\,\ref{sec:3.12} carry and how
-24 hops (the planted models) and 80 hops (the elementary model) are composed.
+\lead{Inference-only tests not yet run:} \textbf{\tagupd{}} the length of the longest back-and-forth stretch,
+against the reversal share, as the cause of the cost in \S\,\ref{sec:3.20}; a naive window at the paper’s final
+elementary setup (no such checkpoint exists, so this needs training); weight-level equivariance; removing the
+block structure itself from the elementary model’s position embeddings (for example by projecting out the
+directions that separate the blocks), and swaps involving the 16 output positions (\S\,\ref{sec:3.8}). Patching
+the general model for $L=20$ and above (the elementary model is patched up to $L=80$, \S\,\ref{sec:3.11}).
+Patching one head or one component at a time (head groups are now ablated, \S\,\ref{sec:3.13} and
+\S\,\ref{sec:3.16}), which would say what the heads of \S\,\ref{sec:3.12} carry and how 24 hops (the planted
+models) and 80 hops (the elementary model) are composed.
 
 \lead{Needs training (not possible in my environment):} done once on Spartan (\S\,\ref{sec:3.14}):
 long-chain-enriched data, an 8-block model and a control, one seed each. Still open: more seeds; a model with
@@ -3150,7 +3575,8 @@ learning rate (its planted-slot accuracy was still rising); a control with the o
 and repeated 8M-word file, to see whether the cliff comes back; the support-size sweep (planted chains on 5
 points); and \code{e\_\allowbreak{}base} run to its full length (the block at 72).
 
-Given \S\,\ref{sec:3.6}–\ref{sec:3.18}, and with the density argument as the aim, I would prioritise:
+Given \S\,\ref{sec:3.6}–\ref{sec:3.21}, and with the density argument as the aim, I would prioritise
+\textbf{\tagupd{}}:
 
 \begin{enumerate}
 \item \lead{Which chains a training procedure makes the model generalise to}, measured as in \S\,\ref{sec:3.17}
@@ -3166,6 +3592,9 @@ Given \S\,\ref{sec:3.6}–\ref{sec:3.18}, and with the density argument as the a
   boundary of \S\,\ref{sec:3.18} shows how much one seed can differ from another.
 \item \lead{Head-level patching} of \code{g\_\allowbreak{}plant10} and \code{e\_\allowbreak{}base}, to find how
   24 and 80 hops are composed.
+\item \lead{\tagnew{} A theory of closure.} Coverage is now proved (\S\,\ref{sec:3.19}); which chains a training
+  procedure extends to (\S\,\ref{sec:3.17}, \S\,\ref{sec:3.20}) is only measured. A description in terms of
+  frequent short segments composed by the layers would complete the density argument.
 \end{enumerate}
 
 \subsection{The training experiment
@@ -3308,9 +3737,21 @@ in a clone of \code{Midataur/\allowbreak{}permutations} for \code{train\_\allowb
 \code{elem\_\allowbreak{}memorisation.\allowbreak{}py REPO NFILES CAP name=\allowbreak{}path:\allowbreak{}blocks ...} & Test 16 for elementary models (\S\,\ref{sec:3.17}; needs torch for the generator) \\
 \code{elem\_\allowbreak{}train\_\allowbreak{}val\_\allowbreak{}check.\allowbreak{}py} & do the committed boosted files fit the reruns more tightly than validation words (\S\,\ref{sec:3.17}) \\
 \code{block\_\allowbreak{}survey.\allowbreak{}py}, \code{make\_\allowbreak{}block\_\allowbreak{}boundary\_\allowbreak{}figure.\allowbreak{}py}, \code{block\_\allowbreak{}attention.\allowbreak{}py}, \code{block\_\allowbreak{}crossing\_\allowbreak{}test.\allowbreak{}py}, \code{elem\_\allowbreak{}model\_\allowbreak{}survey.\allowbreak{}py}, \code{cliff\_\allowbreak{}survey.\allowbreak{}py} & the survey of the Spartan model folder (\S\,\ref{sec:3.18}); write-up in \code{snapshot-\allowbreak{}survey/\allowbreak{}README.\allowbreak{}md} \\
-\code{block\_\allowbreak{}query\_\allowbreak{}read.\allowbreak{}py TEST\_\allowbreak{}CSV N name=\allowbreak{}path:\allowbreak{}blocks:\allowbreak{}b ...} & where the query positions read, relative to the block boundary (\S\,\ref{sec:4.3}) \textbf{\tagnew{}} \\
-\code{block\_\allowbreak{}pc\_\allowbreak{}step.\allowbreak{}py name=\allowbreak{}path:\allowbreak{}b ...} & are the leading principal components of the position table a step at the boundary (\S\,\ref{sec:4.3}) \textbf{\tagnew{}} \\
+\code{block\_\allowbreak{}query\_\allowbreak{}read.\allowbreak{}py TEST\_\allowbreak{}CSV N name=\allowbreak{}path:\allowbreak{}blocks:\allowbreak{}b ...} & where the query positions read, relative to the block boundary (\S\,\ref{sec:4.3}) \\
+\code{block\_\allowbreak{}pc\_\allowbreak{}step.\allowbreak{}py name=\allowbreak{}path:\allowbreak{}b ...} & are the leading principal components of the position table a step at the boundary (\S\,\ref{sec:4.3}) \\
+\code{coverage.\allowbreak{}py N\_\allowbreak{}WORDS TEST\_\allowbreak{}CSV} & the exact coverage ratio $R(L,s)$, its simulation check and the real test file (\S\,\ref{sec:3.19}; I used \code{1000000}, about 30 s); \code{coverage\_\allowbreak{}results.\allowbreak{}json} \textbf{\tagnew{}} \\
+\code{elem\_\allowbreak{}coverage\_\allowbreak{}stats.\allowbreak{}py TEST\_\allowbreak{}CSV TRAIN\_\allowbreak{}CSV [N]} & hops and widths of every slot’s chain in the elementary test and training words (\S\,\ref{sec:3.19}); \code{elem\_\allowbreak{}coverage\_\allowbreak{}stats.\allowbreak{}json} \textbf{\tagnew{}} \\
+\code{pattern\_\allowbreak{}families.\allowbreak{}py N name=\allowbreak{}path:\allowbreak{}blocks ...}, \code{make\_\allowbreak{}pattern\_\allowbreak{}figure.\allowbreak{}py} & walk shape and hop-letter placement at fixed hops and points, and natural slots (\S\,\ref{sec:3.20}; I used 200 words per cell); \code{pattern\_\allowbreak{}families.\allowbreak{}json}, \code{fig\_\allowbreak{}pattern\_\allowbreak{}families.\allowbreak{}png} \textbf{\tagnew{}} \\
+\code{window\_\allowbreak{}failure.\allowbreak{}py SNAPDIR DATADIR N [models]} & the naive-window, two-window and partitioned models on their own data, the test file and with far letters inserted (\S\,\ref{sec:3.21}; I used 250 words); \code{window\_\allowbreak{}failure.\allowbreak{}json}, \code{window\_\allowbreak{}failure\_\allowbreak{}log.\allowbreak{}txt} \textbf{\tagnew{}} \\
+\code{window\_\allowbreak{}width\_\allowbreak{}sweep.\allowbreak{}py SNAPDIR DATADIR N}, \code{make\_\allowbreak{}window\_\allowbreak{}figure.\allowbreak{}py} & the same models on words spread over a wider range of tokens (\S\,\ref{sec:3.21}); \code{window\_\allowbreak{}width\_\allowbreak{}sweep.\allowbreak{}json}, \code{fig\_\allowbreak{}window.\allowbreak{}png} \textbf{\tagnew{}} \\
 \end{longtable}}
+
+{\raggedright \lead{\tagnew{}} The data of \S\,\ref{sec:3.21} are in \code{Midataur/\allowbreak{}permutations}
+at commit \code{4ee9609}
+(\code{scaling-\allowbreak{}generator/\allowbreak{}data/\allowbreak{}elem\_\allowbreak{}big/}) and
+\code{058a27f} (\code{elem\_\allowbreak{}wacky/}, \code{elem\_\allowbreak{}partitioned/}); the checkpoints are
+in the Spartan model folder (\code{elem-\allowbreak{}big-\allowbreak{}1}, \code{-\allowbreak{}2},
+\code{elem-\allowbreak{}wacky-\allowbreak{}2}, \code{elem-\allowbreak{}partitioned-\allowbreak{}1}).\par}
 
 {\raggedright The elementary data is in \code{Midataur/\allowbreak{}permutations} at commit \code{fdefb8c},
 folder

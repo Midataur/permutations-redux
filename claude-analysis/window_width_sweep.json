@@ -1,0 +1,124 @@
+{
+ "elem-big-1": {
+  "10": {
+   "acc": 1.0,
+   "acc_short_moved": 1.0,
+   "n_short": 326,
+   "acc_unmoved": 1.0
+  },
+  "12": {
+   "acc": 0.9733333333333334,
+   "acc_short_moved": 0.9453302961275627,
+   "n_short": 439,
+   "acc_unmoved": 1.0
+  },
+  "15": {
+   "acc": 0.9293333333333333,
+   "acc_short_moved": 0.8814102564102564,
+   "n_short": 624,
+   "acc_unmoved": 1.0
+  },
+  "19": {
+   "acc": 0.8913333333333333,
+   "acc_short_moved": 0.8508670520231214,
+   "n_short": 865,
+   "acc_unmoved": 0.9978021978021978
+  },
+  "24": {
+   "acc": 0.858,
+   "acc_short_moved": 0.8184410646387833,
+   "n_short": 1052,
+   "acc_unmoved": 1.0
+  }
+ },
+ "elem-big-2": {
+  "10": {
+   "acc": 1.0,
+   "acc_short_moved": 1.0,
+   "n_short": 289,
+   "acc_unmoved": 1.0
+  },
+  "12": {
+   "acc": 0.9713333333333334,
+   "acc_short_moved": 0.9347826086956522,
+   "n_short": 414,
+   "acc_unmoved": 0.9987163029525032
+  },
+  "15": {
+   "acc": 0.8973333333333333,
+   "acc_short_moved": 0.8231884057971014,
+   "n_short": 690,
+   "acc_unmoved": 1.0
+  },
+  "19": {
+   "acc": 0.832,
+   "acc_short_moved": 0.765033407572383,
+   "n_short": 898,
+   "acc_unmoved": 1.0
+  },
+  "24": {
+   "acc": 0.7833333333333333,
+   "acc_short_moved": 0.7373188405797102,
+   "n_short": 1104,
+   "acc_unmoved": 1.0
+  }
+ },
+ "elem-wacky-2": {
+  "10": {
+   "acc": 1.0,
+   "acc_short_moved": 1.0,
+   "n_short": 308,
+   "acc_unmoved": 1.0
+  },
+  "12": {
+   "acc": 1.0,
+   "acc_short_moved": 1.0,
+   "n_short": 462,
+   "acc_unmoved": 1.0
+  },
+  "15": {
+   "acc": 1.0,
+   "acc_short_moved": 1.0,
+   "n_short": 671,
+   "acc_unmoved": 1.0
+  },
+  "19": {
+   "acc": 1.0,
+   "acc_short_moved": 1.0,
+   "n_short": 876,
+   "acc_unmoved": 1.0
+  },
+  "24": {
+   "acc": 1.0,
+   "acc_short_moved": 1.0,
+   "n_short": 1088,
+   "acc_unmoved": 1.0
+  }
+ },
+ "elem-partitioned-1": {
+  "9": {
+   "acc": 1.0,
+   "acc_short_moved": 1.0,
+   "n_short": 532,
+   "acc_unmoved": 1.0
+  },
+  "11": {
+   "acc": 1.0,
+   "acc_short_moved": 1.0,
+   "n_short": 730,
+   "acc_unmoved": 1.0
+  },
+  "13": {
+   "acc": 1.0,
+   "acc_short_moved": 1.0,
+   "n_short": 926,
+   "acc_unmoved": 1.0
+  },
+  "15": {
+   "acc": 1.0,
+   "acc_short_moved": 1.0,
+   "n_short": 1092,
+   "acc_unmoved": 1.0
+  }
+ }
+}

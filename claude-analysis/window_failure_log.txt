@@ -1,0 +1,30 @@
+elem-big-1
+  train distribution (val file)    slots 1.0000  moved slots 1.0000  (1500 scored)  by hops 0:1.000/867 1:1.000/45 2:1.000/107 3:1.000/137 4:1.000/143 5:1.000/102 6:1.000/51
+  test file                        slots 0.8313  moved slots 0.7911  (1500 scored)  by hops 0:1.000/289 1:0.776/492 2:0.822/428 3:0.764/199 4:0.754/65
+  far letters j=0: moved window slots 0.9993 (mean hops 3.77; 1500 scored, 250 words)
+  far letters j=2: moved window slots 0.9627 (mean hops 3.37; 1500 scored, 250 words)
+  far letters j=8: moved window slots 0.8740 (mean hops 2.47; 1500 scored, 250 words)
+elem-big-2
+  train distribution (val file)    slots 1.0000  moved slots 1.0000  (1500 scored)  by hops 0:1.000/829 1:1.000/56 2:1.000/116 3:1.000/148 4:1.000/156 5:1.000/95 6:1.000/50 7:1.000/31
+  test file                        slots 0.8027  moved slots 0.7544  (1500 scored)  by hops 0:1.000/295 1:0.721/517 2:0.811/403 3:0.724/192 4:0.806/72
+  far letters j=0: moved window slots 1.0000 (mean hops 3.81; 1500 scored, 250 words)
+  far letters j=2: moved window slots 0.9140 (mean hops 3.46; 1500 scored, 250 words)
+  far letters j=8: moved window slots 0.7860 (mean hops 2.47; 1500 scored, 250 words)
+elem-wacky-1
+  train distribution (val file)    slots 0.8340  moved slots 0.6013  (1500 scored)  by hops 0:0.997/883 1:0.463/67 2:0.681/113 3:0.611/108 4:0.646/113 5:0.506/81 6:0.532/62
+  test file                        slots 0.5960  moved slots 0.4793  (1500 scored)  by hops 0:0.997/338 1:0.401/476 2:0.608/383 3:0.408/213 4:0.561/66
+  far letters j=0: moved window slots 0.5721 (mean hops 4.10; 1498 scored, 250 words)
+  far letters j=2: moved window slots 0.5772 (mean hops 3.71; 1438 scored, 240 words)
+  far letters j=8: moved window slots 0.5171 (mean hops 2.72; 1435 scored, 240 words)
+elem-wacky-2
+  train distribution (val file)    slots 0.9993  moved slots 0.9984  (1500 scored)  by hops 0:1.000/891 1:1.000/56 2:1.000/106 3:1.000/128 4:1.000/115 5:1.000/85 6:1.000/58
+  test file                        slots 1.0000  moved slots 1.0000  (1500 scored)  by hops 0:1.000/330 1:1.000/487 2:1.000/381 3:1.000/214 4:1.000/67
+  far letters j=0: moved window slots 0.9987 (mean hops 4.15; 1498 scored, 250 words)
+  far letters j=2: moved window slots 0.9986 (mean hops 3.75; 1437 scored, 240 words)
+  far letters j=8: moved window slots 1.0000 (mean hops 2.68; 1435 scored, 240 words)
+elem-partitioned-1
+  train distribution (val file)    slots 0.9987  moved slots 0.9976  (1500 scored)  by hops 0:1.000/649 1:1.000/93 2:1.000/157 3:1.000/223 4:1.000/148 5:1.000/97 6:1.000/78
+  test file                        slots 1.0000  moved slots 1.0000  (1500 scored)  by hops 0:1.000/218 1:1.000/416 2:1.000/416 3:1.000/267 4:1.000/127 5:1.000/43
+  far letters j=0: moved window slots 0.9993 (mean hops 3.72; 1491 scored, 250 words)
+  far letters j=2: moved window slots 1.0000 (mean hops 3.40; 1254 scored, 211 words)
+  far letters j=8: moved window slots 1.0000 (mean hops 2.22; 1238 scored, 211 words)

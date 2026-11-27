@@ -41,6 +41,9 @@ def _load(p):
 np_transformer.load_safetensors = _load
 
 SNAP, DATA = sys.argv[1], sys.argv[2]
+NW = int(sys.argv[3]) if len(sys.argv) > 3 else 300
+K = 6
+ONLY = sys.argv[4].split(",") if len(sys.argv) > 4 else None
 rng = np.random.default_rng(7)
 
 
@@ -61,20 +64,32 @@ def hops_of(words, G):
     return hops
 
 
-def evaluate(m, words, G, bs=100):
+def evaluate(m, words, G, sel, bs=1200):
     """Teacher forcing as the old models were trained (dataloading.py at 4ee9609): input = word, START, the true
-    permutation tokens so far, then NULL padding to the full context; the prediction is read at the LAST position."""
+    permutation tokens so far, then NULL padding to the full context; the prediction is read at the LAST position.
+    Only the (word, slot) pairs with sel True are scored (each needs its own full forward pass)."""
     P = perms_of(words, G); C = np.zeros(P.shape, bool); T = words.shape[1]
     NULL, START = m.num_normal, m.num_normal + 1
-    for s in range(0, len(words), bs):
-        w, pp = words[s:s + bs], P[s:s + bs]; B = len(w)
-        toks = np.full((B, G, T + 1 + G), NULL, np.int64)
-        toks[:, :, :T] = w[:, None, :]; toks[:, :, T] = START
-        for i in range(G):
-            toks[:, i, T + 1:T + 1 + i] = pp[:, :i] + m.num_trans
-        lg = m.forward(toks.reshape(B * G, -1))[:, -1, :].reshape(B, G, -1)
-        C[s:s + bs] = (lg.argmax(-1) - m.num_trans) == pp
+    pairs = np.argwhere(sel)
+    for s in range(0, len(pairs), bs):
+        pr = pairs[s:s + bs]; b, i = pr[:, 0], pr[:, 1]
+        toks = np.full((len(pr), T + 1 + G), NULL, np.int64)
+        toks[:, :T] = words[b]; toks[:, T] = START
+        for r, (bb, ii) in enumerate(pr):
+            toks[r, T + 1:T + 1 + ii] = P[bb, :ii] + m.num_trans
+        lg = m.forward(toks)[:, -1, :]
+        C[b, i] = (lg.argmax(-1) - m.num_trans) == P[b, i]
     return P, C
+
+
+def pick(mask, k):
+    """k random True entries per row of mask."""
+    sel = np.zeros_like(mask)
+    for b in range(len(mask)):
+        idx = np.nonzero(mask[b])[0]
+        if len(idx):
+            sel[b, rng.choice(idx, size=min(k, len(idx)), replace=False)] = True
+    return sel
 
 
 def load(name, G, T):
@@ -104,35 +119,35 @@ cfg = {"elem-big-1": ("elem_big", 25, 20), "elem-big-2": ("elem_big", 25, 20),
        "elem-partitioned-1": ("elem_partitioned", 16, 16)}
 res = {}
 for name, (folder, G, T) in cfg.items():
+    if ONLY and name not in ONLY:
+        continue
     m = load(name, G, T); r = {}
-    val = np.loadtxt(f"{DATA}/{folder}/val_data.csv", delimiter=",", dtype=np.int64)[:1000]
-    test = np.loadtxt(f"{DATA}/{folder}/test_data.csv", delimiter=",", dtype=np.int64)[:1000]
+    val = np.loadtxt(f"{DATA}/{folder}/val_data.csv", delimiter=",", dtype=np.int64)[:NW]
+    test = np.loadtxt(f"{DATA}/{folder}/test_data.csv", delimiter=",", dtype=np.int64)[:NW]
     for tag, W in (("train distribution (val file)", val), ("test file", test)):
-        P, C = evaluate(m, W, G); H = hops_of(W, G)
-        r[tag] = dict(words=len(W), slot_acc=float(C.mean()), word_acc=float(C.all(1).mean()),
-                      moved_slot_acc=float(C[H > 0].mean()),
-                      by_hops={int(h): [float(C[H == h].mean()), int((H == h).sum())] for h in range(0, 8) if (H == h).sum() >= 30})
-    # far letters inserted into window words (only meaningful for the single-window data; also run for the others)
+        H = hops_of(W, G); S = pick(np.ones_like(H, bool), K)
+        P, C = evaluate(m, W, G, S)
+        r[tag] = dict(words=len(W), scored=int(S.sum()), slot_acc=float(C[S].mean()), moved_slot_acc=float(C[S & (H > 0)].mean()),
+                      by_hops={int(h): [float(C[S & (H == h)].mean()), int((S & (H == h)).sum())] for h in range(0, 8) if (S & (H == h)).sum() >= 30})
+    # far letters inserted into window words: score slots inside the window
     far = {}
-    for j in (0, 1, 2, 4, 8):
-        W, win = far_insert(val[:600], G, j)
+    for j in (0, 2, 8):
+        W, win = far_insert(val[:NW], G, j)
         if len(W) == 0:
             continue
-        P, C = evaluate(m, W, G); H = hops_of(W, G)
-        inwin = np.zeros_like(C)
+        H = hops_of(W, G); inwin = np.zeros(H.shape, bool)
         for b, (lo, hi) in enumerate(win):
             inwin[b, max(lo, 0):hi + 1] = True
-        far[j] = dict(words=len(W), window_slot_acc=float(C[inwin].mean()), window_moved_slot_acc=float(C[inwin & (H > 0)].mean()),
-                      far_slot_acc=float(C[~inwin].mean()), word_acc=float(C.all(1).mean()),
-                      window_slot_mean_hops=float(H[inwin].mean()))
+        S = pick(inwin & (H > 0), K)
+        P, C = evaluate(m, W, G, S)
+        far[j] = dict(words=len(W), scored=int(S.sum()), window_moved_slot_acc=float(C[S].mean()), mean_hops=float(H[S].mean()))
     r["far letters"] = far
     res[name] = r
     print(name)
     for tag in ("train distribution (val file)", "test file"):
-        d = r[tag]; print(f"  {tag:32s} slots {d['slot_acc']:.4f}  words {d['word_acc']:.3f}  moved slots {d['moved_slot_acc']:.4f}  by hops "
-                          + " ".join(f"{h}:{v[0]:.3f}" for h, v in d["by_hops"].items()))
+        d = r[tag]; print(f"  {tag:32s} slots {d['slot_acc']:.4f}  moved slots {d['moved_slot_acc']:.4f}  ({d['scored']} scored)  by hops "
+                          + " ".join(f"{h}:{v[0]:.3f}/{v[1]}" for h, v in d["by_hops"].items()))
     for j, d in far.items():
-        print(f"  far letters j={j}: window slots {d['window_slot_acc']:.4f} (moved {d['window_moved_slot_acc']:.4f}, mean hops {d['window_slot_mean_hops']:.2f})"
-              f"  far slots {d['far_slot_acc']:.4f}  words {d['word_acc']:.3f}  ({d['words']} words)")
+        print(f"  far letters j={j}: moved window slots {d['window_moved_slot_acc']:.4f} (mean hops {d['mean_hops']:.2f}; {d['scored']} scored, {d['words']} words)")
     sys.stdout.flush()
 json.dump(res, open("window_failure.json", "w"), indent=1)

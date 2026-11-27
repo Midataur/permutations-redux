@@ -22,7 +22,7 @@
 \maketitle
 
 \begin{abstract}
-We report a three-day study of the models in~\cite{paper}. We explain the generalisation from $S_{10}$ to $S_{25}$ in terms of the chain of letters that moves each output entry. Every test slot's chain also occurs, up to relabelling, in the training distribution. We prove this with explicit constants. The trained network depends only on the letters of that chain. The elementary model generalises the same way. It also extends modestly past the chain widths it was trained on. We find that the naive window method fails because \textsc{[window result]}. The block structure of the position embeddings in Figure~5(b) appears in about half of the runs with the same configuration, at a different place each time (positions 69 to 81). Chains that cross it are no harder to follow. We think it is a symmetry broken by the first layers' local attention, not a property of the group or the data. Probes, activation patching and head ablation point to an algorithm that builds, at each letter, where a pointer leaving that letter ends up. Its reach grows like pointer jumping with depth. The general model's learned rule is reliable to about 13 hops. It has memorised the longer chains of its own training file. Chains that keep returning to the point they just left are the hardest for every model we tested, except one trained on planted chains.
+We report a three-day study of the models in~\cite{paper}. We explain the generalisation from $S_{10}$ to $S_{25}$ in terms of the chain of letters that moves each output entry. Every test slot's chain also occurs, up to relabelling, in the training distribution. We prove this with explicit constants. The trained network depends only on the letters of that chain. The elementary model generalises the same way. It also extends modestly past the chain widths it was trained on. The naive window method fails for a different reason. Its training words never contain letters far from a chain, so the model never learns to ignore such letters. Its chains are all covered. Two windows at independent offsets are already enough to fix this. The block structure of the position embeddings in Figure~5(b) appears in about half of the runs with the same configuration, at a different place each time (positions 69 to 81). Chains that cross it are no harder to follow. We think it is a symmetry broken by the first layers' local attention, not a property of the group or the data. Probes, activation patching and head ablation point to an algorithm that builds, at each letter, where a pointer leaving that letter ends up. Its reach grows like pointer jumping with depth. The general model's learned rule is reliable to about 13 hops. It has memorised the longer chains of its own training file. Chains that keep returning to the point they just left are the hardest for every model we tested, except one trained on planted chains.
 \end{abstract}
 
 %=====================================================================
@@ -40,7 +40,7 @@ This note summarises what we learned about these questions from the trained chec
 \paragraph{Summary.}
 \begin{enumerate}
   \item \textbf{The block structure} (Section~\ref{sec:blocks}) is not a property of the group, the data or the task. It forms in roughly half the runs with the Figure~5(b) configuration, at different places. The first layers use it, but nothing downstream needs it. Our best explanation is spontaneous symmetry breaking.
-  \item \textbf{The generalisation} (Section~\ref{sec:general}) is explained by locality and coverage. Each output entry depends only on its chain of hop letters. Every chain that occurs in a test word occurs often in training, up to relabelling (Proposition~\ref{prop:coverage}). The elementary model is the same, and in addition extends past the widest chains it saw. The naive window method fails because \textsc{[window result]}.
+  \item \textbf{The generalisation} (Section~\ref{sec:general}) is explained by locality and coverage. Each output entry depends only on its chain of hop letters. Every chain that occurs in a test word occurs often in training, up to relabelling (Proposition~\ref{prop:coverage}). The elementary model is the same, and in addition extends past the widest chains it saw. The naive window method fails because it does not teach locality. A single window covers every chain, but no training word has letters far from the chain, and the model does not learn to ignore them. Two independent windows suffice to fix this.
   \item \textbf{The algorithm} (Section~\ref{sec:algorithm}). The networks link hop letters by the points they share, and compose chains with a reach that grows about like pointer jumping. The answer is read off the word positions in the last block.
 \end{enumerate}
 Section~\ref{sec:open} lists open questions, and Section~\ref{sec:timeline} gives a timeline with the division of work.
@@ -129,6 +129,8 @@ Why the split falls 58--68\% along we cannot derive. The right-hand part of the 
 %=====================================================================
 \section{Why the generalisation happened}\label{sec:general}
 
+The short answer has two parts. Each output entry depends only on a short chain of letters (\emph{locality}). Every chain that occurs in a test word also occurs in the training distribution, up to the symmetry (\emph{coverage}). The elementary model adds a lesson: locality has to be learned, and the naive window method does not teach it (Section~\ref{sec:window}).
+
 \subsection{Locality: the output depends only on the chain}
 
 We replaced every letter of a test word that cannot touch slot $k$'s pointer with another such letter. The prediction at slot $k$ was unchanged in 98--100\% of 800 words per set, for natural words and for planted chains of up to 12 hops. Replacing a single hop letter instead changed it in about 96\%. The token embeddings are also close to $S_{25}$-invariant. So the trained model behaves as a function of the chain up to relabelling, as the pointer picture says it should.
@@ -166,6 +168,61 @@ A simulation of $10^6$ words from each distribution reproduces $R$ in every clas
 \end{itemize}
 So, in the space of chains up to relabelling, generalising from $S_{10}$ to $S_{25}$ needs no extrapolation at all. Every test word lies outside the training support, but every test slot lies inside it. This is the precise form of the density intuition: the training set is dense in the test set as a set of slot chains modulo $S_{25}$, not as a set of words.
 
+\subsection{The elementary model}\label{sec:elem}
+
+For adjacent transpositions the same picture holds, with one difference: there is no relabelling symmetry. The chain of a slot is a walk of $\pm1$ steps, and its natural parameters are the hop count and the width.
+
+\paragraph{Coverage.} In the paper's test words ($n=16$, $N=120$, uniform letters), chains are moderately long but narrow: median 14 hops, at most 29, and median width 5, at most 15. In the training words (partitioned windows), chains are longer but bounded in width:
+\begin{itemize}
+  \item hops: median 16, up to 76;
+  \item width: never more than 11, because a window has at most 10 points.
+\end{itemize}
+Partitioned windows place windows at random offsets, so every chain of width at most 11 occurs at every location. Only the 0.53\% of test slots whose chain is 12 or more wide fall outside training.
+
+\paragraph{Generalisation beyond coverage.} The model is right on 99.99\% of test slots, including those wide ones.
+\begin{itemize}
+  \item \textbf{Width.} On planted chains, accuracy falls only slowly with width beyond 11: 95.6\% at width 16 with 24 hops.
+  \item \textbf{Length.} It follows chains of 100 to 118 hops (92--99\%) inside a narrow window, longer than any chain in our sample of its training data (78).
+  \item \textbf{No memorisation.} Unlike \tb{}, the elementary models are equally accurate on training, validation and fresh slots at every hop count, even when their validation loss ends far above their training loss.
+\end{itemize}
+So the elementary model's rule extends beyond what it saw. In the language of Section~\ref{sec:general}, its ``closure'' is larger than its coverage.
+
+\subsection{Why the naive window method failed}\label{sec:window}
+
+In the naive window method a word of $S_{10}$ is shifted as a whole to a random place in $S_n$. The method's failure is not a coverage failure. The window can sit anywhere, so every chain of width at most 10 occurs at every location. The chains in uniform test words are short: with $n=25$ and $N=20$, almost all have at most 5 hops. All of them are covered.
+
+We tested the January 2025 runs on Spartan that used the naive window. They have $n=25$, $m=10$, $N=20$ and the older four-block architecture, so they are not the paper's final elementary setup. Against them we put three comparisons:
+\begin{itemize}
+  \item a run with the same $n$, $m$, $N$ and architecture whose letters each fall in one of two windows of 5 tokens at independent offsets;
+  \item a partitioned-window run on $S_{16}$ with $m=9$ and $N=16$;
+  \item the paper's elementary model, which uses partitioned windows.
+\end{itemize}
+
+\paragraph{Results} (Figure~\ref{fig:window}).
+\begin{itemize}
+  \item \textbf{The naive models fail on short, covered chains.} Both naive-window models are 100\% right on their own distribution. On the $S_{25}$ test file they get 80--83\% of slots right, and 72--78\% of slots whose chain has a \emph{single} hop. Unmoved slots are always right.
+  \item \textbf{Spread alone causes it.} We spread the letters of otherwise identical words uniformly over a wider range of tokens. Accuracy on slots with 1--3 hops falls steadily: from 1.00 at a range of 10 to 0.74--0.82 at 24.
+  \item \textbf{Letters that cannot touch the chain matter to them.} Take a window word and replace 2 of its letters with letters at least two points away from anything the window can reach. In-window accuracy falls from 1.00 to 0.91--0.96. With 8 such letters it falls to 0.79--0.87, although the chains become shorter.
+  \item \textbf{One extra window fixes it.} The two-window run is 100\% right on the $S_{25}$ test file and in every condition of Figure~\ref{fig:window}. So is the partitioned run on $S_{16}$.
+\end{itemize}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_window.png}
+\caption{Naive against two and partitioned windows. (a) Accuracy at slots whose chain has 1--3 hops, for words whose letters are uniform over a contiguous range of tokens. A range of 10 is the naive training distribution and 24 is the full group. (b) Accuracy at the window's moved slots after inserting $j$ letters that cannot touch any chain in the window. The two-window and partitioned runs coincide at 1.00. 250 words, 6 slots per word, per point.}
+\label{fig:window}
+\end{figure}
+
+\paragraph{Interpretation.} The trained general model is local: its output depends only on the chain. That locality is not given by the architecture, which attends everywhere. The model has to learn it, and it learns to ignore only the kinds of irrelevant letters it has seen.
+\begin{itemize}
+  \item \textbf{General transpositions.} Relabelling into $S_{25}$ makes every non-chain point equivalent to every other. The training words already contain letters on points off the chain.
+  \item \textbf{Adjacent transpositions.} Here distance is not symmetric away. In a naive-window word, every letter lies within 10 points of every chain. The model never meets a letter 15 points away and never learns that such a letter is harmless.
+  \item \textbf{The fix.} Two windows at independent offsets, or partitioned windows, put letters at all distances from every chain. That is what makes the model ignore them.
+\end{itemize}
+The paper's intuition that the naive model ``learns the smaller group'' fits this picture. It learns a function of the whole word that agrees with the group only on words that fit in one window.
+
+For the density argument, this adds a condition to coverage. The training distribution must cover the chains, and also the configurations of the letters around them that the model must learn to ignore. For general transpositions the symmetry provides the second condition for free. For adjacent ones, the windows must be split for it to hold.\footnote{An earlier two-window run (\texttt{elem-wacky-1}, January 2025, before a fix to the window code) did not train: 60\% on moved slots of its own distribution.}
+
 \subsection{Coverage is necessary but not sufficient}
 
 Containment in the training distribution does not guarantee that a model generalises to a chain. Frequency and the training procedure decide the edge (Figure~\ref{fig:memo}).
@@ -201,29 +258,6 @@ The test file never needs more than 9 hops, so this does not affect the paper's 
 \caption{Left: accuracy on natural slots by hop count, for fresh slots of several models and for \tb{}'s own training slots (top line). Middle and right: planted chains by hops $L$ and distinct points $s$ for \tb{} and the fresh-data run.}
 \label{fig:memo}
 \end{figure}
-
-\subsection{The elementary model}\label{sec:elem}
-
-For adjacent transpositions the same picture holds, with one difference: there is no relabelling symmetry. The chain of a slot is a walk of $\pm1$ steps, and its natural parameters are the hop count and the width.
-
-\paragraph{Coverage.} In the paper's test words ($n=16$, $N=120$, uniform letters), chains are moderately long but narrow: median 14 hops, at most 29, and median width 5, at most 15. In the training words (partitioned windows), chains are longer but bounded in width:
-\begin{itemize}
-  \item hops: median 16, up to 76;
-  \item width: never more than 11, because a window has at most 10 points.
-\end{itemize}
-Partitioned windows place windows at random offsets, so every chain of width at most 11 occurs at every location. Only the 0.53\% of test slots whose chain is 12 or more wide fall outside training.
-
-\paragraph{Generalisation beyond coverage.} The model is right on 99.99\% of test slots, including those wide ones.
-\begin{itemize}
-  \item \textbf{Width.} On planted chains, accuracy falls only slowly with width beyond 11: 95.6\% at width 16 with 24 hops.
-  \item \textbf{Length.} It follows chains of 100 to 118 hops (92--99\%) inside a narrow window, longer than any chain in our sample of its training data (78).
-  \item \textbf{No memorisation.} Unlike \tb{}, the elementary models are equally accurate on training, validation and fresh slots at every hop count, even when their validation loss ends far above their training loss.
-\end{itemize}
-So the elementary model's rule extends beyond what it saw. In the language of Section~\ref{sec:general}, its ``closure'' is larger than its coverage.
-
-\subsection{Why the naive window method failed}\label{sec:window}
-
-\textsc{[to be filled from the experiment]}
 
 %=====================================================================
 \section{Interpretability: what algorithm the models learned}\label{sec:algorithm}

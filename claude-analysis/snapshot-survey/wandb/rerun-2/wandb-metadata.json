@@ -1,0 +1,380 @@
+{
+    "os": "Linux-5.14.0-570.30.1.el9_6.x86_64-x86_64-with-glibc2.34",
+    "python": "3.9.21",
+    "heartbeatAt": "2025-12-02T05:30:24.495501",
+    "startedAt": "2025-12-02T05:30:22.443985",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/data/gpfs/projects/punim2163/permutations/scaling-generator/main.py",
+    "codePathLocal": "main.py",
+    "codePath": "scaling-generator/main.py",
+    "git": {
+        "remote": "https://github.com/Midataur/permutations.git",
+        "commit": "54895743a67feaa410400b91326e69b263021fb7"
+    },
+    "email": "maxpetschack2@gmail.com",
+    "root": "/data/gpfs/projects/punim2163/permutations",
+    "host": "spartan-gpgpu187.hpc.unimelb.edu.au",
+    "username": "petschackm",
+    "executable": "/usr/bin/python3",
+    "cpu_count": 64,
+    "cpu_count_logical": 64,
+    "cpu_freq": {
+        "current": 4091.023390625,
+        "min": 4100.0,
+        "max": 4100.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 4099.957,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.041,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 3486.448,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 3484.064,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4099.957,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4083.233,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 3995.853,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4051.776,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4082.478,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4104.408,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        },
+        {
+            "current": 4100.0,
+            "min": 4100.0,
+            "max": 4100.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 444.3737373352051,
+            "used": 15.098533630371094
+        }
+    },
+    "gpu": "NVIDIA L40S",
+    "gpu_count": 4,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA L40S",
+            "memory_total": 48305799168
+        },
+        {
+            "name": "NVIDIA L40S",
+            "memory_total": 48305799168
+        },
+        {
+            "name": "NVIDIA L40S",
+            "memory_total": 48305799168
+        },
+        {
+            "name": "NVIDIA L40S",
+            "memory_total": 48305799168
+        }
+    ],
+    "memory": {
+        "total": 1006.8973159790039
+    }
+}

@@ -3,7 +3,7 @@
 The model folder from Spartan (`model-snapshots.zip`, 206 files, 6.4 GB uncompressed; deleted from the repo again in
 the commit that adds this survey, still in git history) holds the final checkpoint of every run since mid-2024. Each
 file is the last epoch saved, because `training.py` overwrites it every epoch. I can't see how long each run trained:
-that is in wandb. Configs are taken from the git history of `Midataur/permutations` (`configs_from_git.json`; the
+that is in wandb (section 4). Configs are taken from the git history of `Midataur/permutations` (`configs_from_git.json`; the
 commit where the model name first appears, cross-checked by date).
 
 Files here and in `claude-analysis/`:
@@ -142,9 +142,51 @@ The `torn-big-*` (20-letter words), `torn-masked-*` (10-letter words on 16 point
 `small-*`, `window-*` and `.pth` models are other problem sizes or tokenisations. The `reverse-*` models (permutation
 to word) have position embeddings that are still flat, and I did not evaluate them.
 
-## 4. What would make this firmer
+## 4. The wandb histories (export of 27 Nov 2026, in `snapshot-survey/wandb/`)
 
-- **wandb histories** for `boosted-2`, `-3`, `-4`, `rerun-1` to `-4` and `long-5`, `-11`, `-12`, `-14` (the same
-  export script as before, with these run names). They would say how many epochs each run trained and when it left the
-  plateau, which is the missing variable for "boundary or not".
+`long-5` and `torn-bigger-9` were not found. All runs below ran on 4 GPUs (batch 4,096), the reruns included.
+
+| run | data words | epochs logged (hours) | 90% train acc at epoch | final train / val loss | boundary |
+|---|---|---|---|---|---|
+| `boosted-1` (earlier export) | 16M | 96 (27.0) | 6 | 4.3e-9 / 1.0e-8 | 72 |
+| `boosted-2` | 16M | 63 (15.4) | 7 | 4.1e-8 / 2.9e-5 | 81 |
+| `boosted-3` | 16M | 27 (7.0), see below | 6 | | none (snapshot is an early checkpoint) |
+| `boosted-4` | 16M | 341 (95.7) | 5 | 1.2e-8 / 4.7e-7 | none |
+| `rerun-1` | 16M | 7 (3.5), state "failed" | 6 | 1.3e-2 / 1.0e-2 | none (snapshot after about 7 epochs) |
+| `rerun-2` | 16M | 193 (95.6, the 4-day limit) | 6 | 1.1e-8 / 1.1e-5 | weak, 79 |
+| `rerun-3` | 16M | 193 (95.6) | 7 | 2.6e-8 / 2.3e-5 | 78 |
+| `rerun-4` | 16M | 193 (95.6) | 6 | 1.4e-8 / 4.4e-5 | none |
+| `long-11` | 12M | 332 (64.6) | 45 | 9.2e-6 / 1.7e-3 | none |
+| `long-12` | 14M | 276 (62.6) | 33 | 9.8e-6 / 4.0e-4 | none |
+| `long-14` | 18M | 150 (43.8) | 30 | 2.4e-3 / 2.7e-3 | 69 |
+| `torn-bigger-5`, `-7`, `-10`, `-11`, `-12` | 5.6–7.2M | 75–286 | never (at most 73%) | about 0.59 / 0.60 | |
+
+**What it adds.**
+- **The boundary does not depend on how long a run trained.** Runs with one trained for 63, 96, 150 and 193 epochs.
+  Runs without one trained for 193, 276, 332 and 341 epochs. `boosted-4`, the longest at 341 epochs, has none.
+- **Two snapshots are not final models.**
+  - `boosted-3` reached 100% training accuracy by epoch 21, but its last logged epoch repeats epoch 1 exactly (0.6222,
+    loss 0.7994): the run was restarted from scratch under the same id, so the saved file is an early checkpoint of the
+    restart. That explains its 34% and flat position embeddings.
+  - `rerun-1` logged only 7 epochs before failing, so its snapshot is a 7-epoch model, which explains its weaker
+    accuracy and lack of structure.
+  - Leaving both out, the count with `boosted-1`'s config is three clear boundaries, one weak and two none out of six
+    fully trained runs.
+- **The `torn-bigger` runs never left the plateau** (training accuracy at most 73% in all 75–286 epochs), so they say
+  nothing about the cliff.
+- **The training/validation loss gap is not specific to the general model.**
+  - Most elementary runs also end with training loss far below validation loss: ratios of about 40 to 3,000
+    (`boosted-2`, `boosted-4`, the reruns, `long-11`, `long-12`).
+  - `boosted-1` has only 2.4, and `long-14` 1.1.
+  - Yet none of the trained elementary models has a hop-count cliff (all at 0.97–0.99 at 80 hops, width 8). So a large
+    gap in the logged losses is not by itself a sign of the general model's cliff. The specific evidence for
+    memorisation in `torn-bigger-13` remains Test 16: its training slots against fresh slots at the same hop count.
+  - This corrects what I said in chat: that the elementary run's lack of a gap fitted the memorisation reading. It holds
+    for `boosted-1` alone.
+
+## 5. What would make this firmer
+
+- **Test 16 on an elementary model with a large loss gap** (for example `rerun-4`): its own long-chain training slots
+  against fresh ones of the same hop count and width. That would show whether the elementary models memorise long
+  chains too without it costing them on fresh ones.
 - **Snapshots during training** (as in the replication run) would show when a boundary forms and whether it moves.

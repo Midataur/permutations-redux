@@ -1,0 +1,129 @@
+wandb_version: 1
+
+learning_rate:
+  desc: null
+  value: 0.00030000000000000003
+scheduling:
+  desc: null
+  value: plateau
+lr_factor:
+  desc: null
+  value: 0.1
+lr_patience:
+  desc: null
+  value: 10
+threshold:
+  desc: null
+  value: 0.01
+architecture:
+  desc: null
+  value: Transformer
+epochs:
+  desc: null
+  value: 100000000
+optimizer:
+  desc: null
+  value: AdamW
+max_group_size:
+  desc: null
+  value: 16
+dataset_size:
+  desc: null
+  value: 16000000
+input_length:
+  desc: null
+  value: 120
+n_embed:
+  desc: null
+  value: 402
+n_head:
+  desc: null
+  value: 6
+n_blocks:
+  desc: null
+  value: 5
+dropout:
+  desc: null
+  value: 0
+weight_decay:
+  desc: null
+  value: 0.05
+batch_size:
+  desc: null
+  value: 1024
+context_length:
+  desc: null
+  value: 136
+actual_group_size:
+  desc: null
+  value: 10
+window:
+  desc: null
+  value: true
+input_type:
+  desc: null
+  value: elementary
+legacy_override:
+  desc: null
+  value: false
+relabel:
+  desc: null
+  value: false
+floating_point_type:
+  desc: null
+  value: bf16
+deepspeed:
+  desc: null
+  value: enabled
+dataload_workers:
+  desc: null
+  value: 0
+stop_block:
+  desc: null
+  value: null
+window_count:
+  desc: null
+  value: null
+partitioned_windows:
+  desc: null
+  value: true
+masked:
+  desc: null
+  value: true
+legacy_architecture:
+  desc: null
+  value: false
+_wandb:
+  desc: null
+  value:
+    python_version: 3.9.21
+    cli_version: 0.16.1
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1764648286.859414
+    t:
+      1:
+      - 1
+      - 5
+      - 49
+      - 53
+      - 55
+      - 71
+      2:
+      - 1
+      - 5
+      - 49
+      - 53
+      - 55
+      - 71
+      3:
+      - 5
+      - 14
+      - 16
+      - 23
+      4: 3.9.21
+      5: 0.16.1
+      8:
+      - 6
+      13: linux-x86_64

@@ -1,0 +1,49 @@
+{
+    "os": "macOS-14.3.1-arm64-arm-64bit",
+    "python": "3.12.2",
+    "heartbeatAt": "2025-02-06T11:38:36.806152",
+    "startedAt": "2025-02-06T11:38:34.773266",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/Users/midataur/Documents/github/permutations/scaling-generator/main.py",
+    "codePathLocal": "main.py",
+    "codePath": "scaling-generator/main.py",
+    "git": {
+        "remote": "https://github.com/Midataur/permutations.git",
+        "commit": "8c43b2bcdde421c297f6acc90efe9580527f579f"
+    },
+    "email": "18609293+Midataur@users.noreply.github.com",
+    "root": "/Users/midataur/Documents/github/permutations",
+    "host": "Maxs-Air-2",
+    "username": "midataur",
+    "executable": "/Users/midataur/Documents/github/permutations/scaling-generator/.venv/bin/python",
+    "cpu_count": 8,
+    "cpu_count_logical": 8,
+    "cpu_freq": {
+        "current": 3204,
+        "min": 600,
+        "max": 3204
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3204,
+            "min": 600,
+            "max": 3204
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 228.27386474609375,
+            "used": 9.43368148803711
+        }
+    },
+    "gpuapple": {
+        "type": "arm",
+        "vendor": "Apple"
+    },
+    "memory": {
+        "total": 8.0
+    }
+}

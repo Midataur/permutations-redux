@@ -7,7 +7,7 @@
 # Then submit as usual; submit.sh uses this environment and config automatically when they exist:
 #     bash hpc-replication/submit.sh
 #
-# What it makes, in $ENV_DIR (default ./replication-runs/env-torn13):
+# What it makes, in $ENV_DIR (default hpc-replication/replication-runs/env-torn13):
 #   venv/                     Python 3.9 (as the original run: /usr/bin/python3 3.9.18) with torch 1.13.1,
 #                             accelerate 0.32.1, deepspeed 0.14.4, numpy 1.26.3, ... pinned to the versions in the
 #                             original run's wandb requirements.txt (original_requirements.txt)
@@ -19,7 +19,7 @@
 set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ENV_DIR="${ENV_DIR:-$PWD/replication-runs/env-torn13}"
+ENV_DIR="${ENV_DIR:-$HERE/replication-runs/env-torn13}"   # same place whichever folder you run it from
 ZERO_STAGE="${ZERO_STAGE:-2}"
 GRAD_CLIP="${GRAD_CLIP:-none}"
 

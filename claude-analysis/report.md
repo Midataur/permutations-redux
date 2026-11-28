@@ -19,15 +19,15 @@ Code, raw results and the figures are in this folder; commands to reproduce are 
 12. Version 12: a hypothesis for the block structure (§4.3).
 13. Version 13: coverage proved exactly (§3.19), the shape of the walk (§3.20), and why the naive window method failed (§3.21).
 14. Version 14: decompilation to RASP (§3.22), probes between the two models (§3.23), and the full wandb history (§3.24).
-15. Version 15 (this one): probes between the three general models (§3.25), and the decompilation of the two that generalise further (§3.26).
+15. Version 15: probes between the three general models (§3.25), and the decompilation of the two that generalise further (§3.26).
+16. Version 16 (this one): a coverage scaling law for $S_n\to S_N$ (§3.27).
 
 **Who wrote which version.** This report was written by Claude, an AI model made by Anthropic, at your request. Versions 1 to 9 were written by Claude Sonnet 5.5 and versions 10 onwards by Claude Opus 5.5. The switch happened on 27 November between 08:20 (version 9) and 09:16 (Test 16), as the model named in the repository's commit records shows. Version 10 re-examined the earlier conclusions at your request (§5 item 13).
 
-**What is new in this version (version 15).** The markers **[NEW]** and **[UPDATED]** show only what changed since version 14. Text without a marker is unchanged from version 14. Each new version clears the previous version's markers.
+**What is new in this version (version 16).** The markers **[NEW]** and **[UPDATED]** show only what changed since version 15. Text without a marker is unchanged from version 15. Each new version clears the previous version's markers.
 
-- **§3.25 [NEW]:** your experiment: probes between the three general models (`torn-bigger-13`, `g_m10`, `g_plant10`). The early layers are nearly interchangeable; the deep layers share only about half their variance, about as much as the general and the elementary model.
-- **§3.26 [NEW]:** your question: the two models that generalise further, decompiled as in §3.22. They are not sparser; at the same pruning strength they keep as many edges and lose more faithfulness, and `g_plant10` is just below the paper's bar even unpruned.
-- **§1 [UPDATED]:** new items 37 and 38.
+- **§3.27 [NEW]:** your question: the exact coverage count of §3.19 for any $S_n\to S_N$, and the scaling law it gives. The training group needed depends on $N$ only through the test words' hop density $2m/N$; the training set needed grows like $N/n$.
+- **§1 [UPDATED]:** new item 39.
 - **§7 [UPDATED]:** the new scripts.
 ## 1. Summary [UPDATED]
 
@@ -79,8 +79,9 @@ Code, raw results and the figures are in this folder; commands to reproduce are 
 34. **`torn-bigger-13` does not decompile to a short program, and the elementary model does not decompile at all (§3.22).** With the method of Huang et al., the LayerNorms of both models cannot be linearised in the paper's way (one constant each: no word matches). With one constant per position `torn-bigger-13` passes (0.953 of words), and its smallest faithful pruned graph (0.957 of words) decompiles to at most 213,335 lines of D-RASP, 0.13% of the full $1.7	imes10^{8}$ but four orders of magnitude more than the paper's successful decompilations; it keeps 27 of 30 heads and all five MLPs. The elementary model's LayerNorm cannot be linearised even per position (0 of 1,000 words match).
 35. **On the same words, the two models share computed features (§3.23).** Linear maps from one model's layers to the other's explain about half of the variance of the deep layers at the letter positions, against about a third for any linear function of the letters; random pairing explains nothing. The general model is about one layer behind the elementary one. At the output positions the final layers agree because both hold the answer, and the middle layers share information the answer does not explain. The elementary model is thrown off by long runs of identity letters (88.5% of slots with 95 of them).
 36. **Which general runs left the plateau depends on data size and on the learning-rate schedule, which the history cannot separate (§3.24).** In the `torn-big` series no run with 1.2M words or fewer left the 0.72 plateau, and all runs with 2M or more did; but the schedule cuts the learning rate after a fixed number of epochs on the plateau, so small files get fewer steps at a usable rate. Replaying it, the schedule alone could explain the 25-letter series; one comparison in the 20-letter series favours a genuine effect of data size. A few runs at a constant learning rate would settle it.
-37. **[NEW] The three general models share their early layers almost entirely and their deep layers only about half (§3.25).** Linear maps between `torn-bigger-13`, `g_m10` and `g_plant10`, on the same 1,500 words, explain 0.8–0.97 of the variance at layers 1–2 but only 0.31–0.50 at layer 5 of the letter positions (a linear function of the letters: 0.10–0.23), about as much as between the general and the elementary model (§3.23). `torn-bigger-13`'s deep states are better predicted by the other two than they predict theirs, and the two retrained models are closer to each other than to it.
-38. **[NEW] Generalising further does not make the models sparser (§3.26).** At the same pruning strength `g_m10` and `g_plant10` keep as many edges as `torn-bigger-13` (about 580 and 360) but lose more faithfulness: only `torn-bigger-13` stays above the paper's bar at 579 edges (0.957 of words, against 0.836 and 0.830), and its program is the shortest (213,335 lines, against 530,380 and 3.7 million). Unpruned, `g_m10` matches as well as `torn-bigger-13` (0.957), while `g_plant10` reaches only 0.884: its LayerNorm already does work a linear one cannot.
+37. **The three general models share their early layers almost entirely and their deep layers only about half (§3.25).** Linear maps between `torn-bigger-13`, `g_m10` and `g_plant10`, on the same 1,500 words, explain 0.8–0.97 of the variance at layers 1–2 but only 0.31–0.50 at layer 5 of the letter positions (a linear function of the letters: 0.10–0.23), about as much as between the general and the elementary model (§3.23). `torn-bigger-13`'s deep states are better predicted by the other two than they predict theirs, and the two retrained models are closer to each other than to it.
+38. **Generalising further does not make the models sparser (§3.26).** At the same pruning strength `g_m10` and `g_plant10` keep as many edges as `torn-bigger-13` (about 580 and 360) but lose more faithfulness: only `torn-bigger-13` stays above the paper's bar at 579 edges (0.957 of words, against 0.836 and 0.830), and its program is the shortest (213,335 lines, against 530,380 and 3.7 million). Unpruned, `g_m10` matches as well as `torn-bigger-13` (0.957), while `g_plant10` reaches only 0.884: its LayerNorm already does work a linear one cannot.
+39. **[NEW] Coverage gives a scaling law in which the size of the target group drops out (§3.27).** Training words on $S_n$, relabelled, cover test words on $S_N$ of $m$ letters up to a mass $\varepsilon$ iff $n\ge n^*(\lambda,\varepsilon)$, where $\lambda=2m/N$ is the expected number of hops per test slot; as $N\to\infty$ the uncovered mass is $P(\text{Poisson}(\lambda)\ge n)$. For words of $N$ letters ($\lambda\approx2$) $n^*$ is 7, 10 and 13 for $\varepsilon=10^{-2}$, $10^{-4}$ and $10^{-6}$, for every $N$; with a fixed word length larger groups are easier. The rate at which covered chains occur falls like $n/N$, so the training set needed grows linearly in $N/n$. This is a law for coverage, which the models are known both to exceed and, without locality, to fall short of.
 
 ## 2. Setup and provenance
 
@@ -1311,7 +1312,7 @@ Read naively this is a threshold in the number of distinct training words: in th
 
 **Limits.** The learning rate is reconstructed, not logged; the number of scheduler steps per epoch is not recorded; single runs throughout.
 
-### 3.25 Probes between the three general models (Test 21) [NEW]
+### 3.25 Probes between the three general models (Test 21)
 
 **Why.** Your follow-up to §3.23: the three general models (`torn-bigger-13`, `g_m10` and `g_plant10`) share the task, the architecture and nearly the training distribution, so their internal states might be much more alike than those of the general and the elementary model.
 
@@ -1342,7 +1343,7 @@ With the words paired at random every $R^2$ is between $-0.008$ and $0$.
 - **At the query positions the middle layers share much more than the answer** (0.49–0.60 against 0.12–0.24), as in §3.23.
 - **The ceiling is below 1.** Even the embeddings predict each other at only 0.81–0.97 here: 625 token embeddings in 402 dimensions cannot be mapped onto another model's exactly by a linear map.
 
-### 3.26 Do the models that generalise further decompile to sparser programs? (Test 22) [NEW]
+### 3.26 Do the models that generalise further decompile to sparser programs? (Test 22)
 
 **Why.** Your question after §3.22: `g_m10` and `g_plant10` generalise further than `torn-bigger-13` (§3.14, §3.17, §3.20); does that come with a sparser, more compressible model?
 
@@ -1371,6 +1372,53 @@ All five MLPs survive in every pruned graph. Bold: faithful by the paper's bar (
 - **This fits the probes (§3.25).** The deep states of `torn-bigger-13` are largely contained in those of the other two, which hold more besides. Generalising to longer chains (§3.14, §3.17) seems to come with more distributed, not more compact, computation. For reading off an algorithm the difference hardly matters: none of the three decompiles to a program short enough to read (§3.22).
 
 **Limits.** One pruning run per model and $\lambda$, and stage-1 results are somewhat noisy (the batch KL varies by a factor of about 2 between steps); stage 1 only, so the line counts are upper bounds; the per-position linear LayerNorm of §3.22; the `torn-bigger-13` ceiling is from a 100-step fit and could be slightly higher.
+
+### 3.27 A coverage scaling law: which $S_n$ covers which $S_N$ (Test 23) [NEW]
+
+**Why.** Your question: §3.19 counts coverage exactly for $S_{10}\to S_{25}$; does the count give a law for which small groups should generalise to which large ones?
+
+**Setup.** As in §3.19, but with general sizes. Test words: $m_{\text{te}}$ letters, each uniform over the $N^2$ tokens of $S_N$. Training words: $m_{\text{tr}}$ letters uniform over the $n^2$ tokens of $S_n$, relabelled into a random $n$-subset $M$ of the $N$ points. Write $q_k=\big((k-1)^2+1\big)/k^2$ for the probability that a letter leaves a given point alone, and
+$$\lambda_{\text{te}}=\frac{2m_{\text{te}}}{N},\qquad \lambda_{\text{tr}}=\frac{2m_{\text{tr}}}{n}$$
+for the expected number of hops per slot (to leading order), the **hop density** of each distribution.
+
+**The exact ratio.** The argument of §3.19, with the positions of the hop letters summed over, gives for one labelled chain with $L$ hops through $s$ points
+$$R(L,s)=\frac{P_{\text{train}}}{P_{\text{test}}}=\frac{(n)_s}{(N)_s}\,\frac{\binom{m_{\text{tr}}}{L}}{\binom{m_{\text{te}}}{L}}\Big(\frac{N}{n}\Big)^{2L}\frac{q_n^{\,m_{\text{tr}}-L}}{q_N^{\,m_{\text{te}}-L}}\quad(s\le n),\qquad R=0\quad(s>n),$$
+with $(n)_s=n(n-1)\cdots(n-s+1)$. For $n=10$, $N=25$, $m=25$ it reproduces §3.19 ($R(1,2)=0.055$, $R(8,9)=1.52$). For large groups and a chain without revisits ($s=L+1\ll n$):
+$$R(L,L+1)\approx\frac{n}{N}\Big(\frac{\lambda_{\text{tr}}}{\lambda_{\text{te}}}\Big)^{L}e^{\lambda_{\text{te}}-\lambda_{\text{tr}}}.$$
+- $n/N$: a training slot can only move if its point is in $M$; the other $1-n/N$ of training slots are spent on fixed points.
+- $(\lambda_{\text{tr}}/\lambda_{\text{te}})^L$: training words are denser in hops, so long chains are over-represented, by a factor that grows geometrically in $L$ (for the paper, $\lambda_{\text{tr}}=5$ against $\lambda_{\text{te}}\approx2$).
+- $e^{\lambda_{\text{te}}-\lambda_{\text{tr}}}$: the same density makes short chains under-represented.
+
+**Condition 1: support.** A test slot is covered only if its chain visits at most $n$ points. The number of points visited is an exact Markov chain (a hop with probability $2(N-1)/N^2$ per letter, to a new point with probability $(N-s)/(N-1)$; `scaling_law.py`), which gives the uncovered mass $U(n;N,m_{\text{te}})=P_{\text{test}}(s>n)$. For $S_{10}\to S_{25}$ it is $1.1\times10^{-6}$ (the simulation of §3.19: $1.2\times10^{-6}$). As $N\to\infty$ at fixed $\lambda_{\text{te}}$, revisits vanish and the hops per slot become Poisson:
+$$U\;\to\;P\big(\text{Poisson}(\lambda_{\text{te}})\ge n\big)\approx e^{-\lambda_{\text{te}}}\frac{\lambda_{\text{te}}^{\,n}}{n!}.$$
+So the smallest training group $n^*$ that leaves at most a fraction $\varepsilon$ of test slots uncovered depends on $N$ only through the hop density $\lambda_{\text{te}}$, and on $\varepsilon$ roughly as $n^*\sim\ln(1/\varepsilon)\big/\ln\!\big(\ln(1/\varepsilon)/(e\lambda_{\text{te}})\big)$:
+
+| hop density $\lambda_{\text{te}}$ (test letters per point $\times2$) | $n^*$ for $\varepsilon=10^{-2}$ | $\varepsilon=10^{-4}$ | $\varepsilon=10^{-6}$ |
+|---|---|---|---|
+| 1 | 5 | 7 | 10 |
+| 2 (words of $N$ letters) | 7 | 10 | 13 |
+| 4 (words of $2N$ letters) | 10 | 14 | 18 |
+| 8 | 16 | 21 | 26 |
+
+These are the limits as $N\to\infty$; at finite $N$, $n^*$ is slightly smaller (figure below).
+
+![The smallest training group $S_{n^*}$ whose relabelled words cover test words on $S_N$ up to an uncovered mass $\varepsilon$, exactly, for test words of $N$ letters, $2N$ letters and 25 letters. The dot is the paper's $S_{10}\to S_{25}$.](fig_scaling_law.png)
+
+**Condition 2: rate.** Inside the support, each class must occur in training often enough to be learned. With $T$ training words, a class with test probability $P_{\text{test}}$ per slot gets about $T\,m_{\text{tr}}\,R\,P_{\text{test}}$ training slots. The smallest ratio over moved slots is at short chains, about $(n/N)\,(\lambda_{\text{tr}}/\lambda_{\text{te}})\,e^{\lambda_{\text{te}}-\lambda_{\text{tr}}}$, and the largest number of hops needed is set by Condition 1. At fixed densities the ratio falls like $n/N$, so **the number of training words needed to keep every class's count fixed grows like $N/n$**: linearly in the size of the target group.
+
+**The law.** Under the hypothesis that the answer at a slot depends only on its chain (locality, §3.7) and that relabelled training makes the model equivariant to point labels:
+1. $S_n$ covers $S_N$ up to mass $\varepsilon$ iff $n\ge n^*(\lambda_{\text{te}},\varepsilon)$, **independently of $N$** at fixed test hop density. With test words of $N$ letters, $S_{13}$ covers every $S_N$ to $10^{-6}$; $S_{10}$ covers $S_{25}$ to $10^{-6}$ and $S_{1000}$ to $4\times10^{-5}$.
+2. With a fixed test word length, **larger $N$ is easier**: the hop density $2m/N$ falls, and for 25-letter words $S_4$ already covers $S_{1000}$ to $10^{-6}$.
+3. Longer test words need a larger $n$, roughly linearly in $\lambda_{\text{te}}$ at fixed $\varepsilon$.
+4. The training set must grow like $N/n$ at fixed densities. Its hop density $\lambda_{\text{tr}}$ trades short chains against long ones: if the test needs chains of 1 to $L^*$ hops, the Poisson counts of the two ends are equal at $\lambda_{\text{tr}}=(L^*!)^{1/(L^*-1)}\approx L^*/e$, which for $L^*=9$–10 is 5.0–5.4. The paper's training words have $\lambda_{\text{tr}}=5$.
+
+**What it does not say.**
+- **It is a law for coverage, not for generalisation.** Coverage is not necessary: the models extend their rule past their coverage (the elementary model in width, §3.19; `torn-bigger-13` and the retrained models to fresh chains, §3.17). Nor is it sufficient: the naive-window models are covered and fail, because locality was not taught (§3.21), and learning the task at all needed a data size and learning rate that this count does not give (§3.24).
+- **Rate matters where coverage holds.** `torn-bigger-13`'s cliff at 15–20 hops is inside its support (chains of up to 10 points) but where its training counts thin out, and a model trained with more long chains has no cliff (§3.14). Condition 2 is the relevant one there, and it does not say how many examples per class are enough.
+- **Classes, not labelled chains.** The count compares classes $(L,s)$; it relies on the model treating all labellings of a class alike.
+- **Elementary transpositions** need a separate count: there the relevant size is the width of the chain rather than the number of points, and a random walk of $L$ adjacent hops spans only about $\sqrt{L}$ positions, so I would expect a window to cover far more hops than $n$ points do. I have not worked it out.
+
+**Limits.** Test and training letters uniform over tokens, as in the paper; the large-$N$ forms are approximations, and the table and figure use the exact chain.
 
 ## 4. What this means for the density idea
 
@@ -1610,8 +1658,9 @@ Run from this folder (`claude-analysis/`). Scripts find the checkpoint at `../sc
 | `decompile/lines.py`, `decompile/make_decompile_figure.py` | D-RASP line counts of a pruned graph (reproduces the paper's totals); `fig_decompile.png` |
 | `cross_probe.py N`, `make_cross_probe_figure.py` | probes between the two models on shared words (§3.23; I used 2,000 words, about 20 minutes); `cross_probe.json`, `fig_cross_probe.png` |
 | `wandb-history/summarise_runs.py`, `plateau_escape.py`, `lr_replay.py` | the full wandb export (§3.24); `runs_summary.csv`, `plateau_escape.json`, `lr_replay.json` |
-| `cross_probe_general.py N [GROUP]` (GROUP: `letters` or `outputs`), `make_cross_probe_general_figure.py` | probes between the three general models (§3.25; 1,500 words, about 40 minutes per group; the letters needed more than the memory I had with both groups at once); `cross_probe_general.json`, `fig_cross_probe_general.png` **[NEW]** |
-| `decompile/sweep_*.sh`, `decompile/make_decompile_general_figure.py` | the pruning runs of §3.26 (`prune_stage1.py` on `g_m10` and `g_plant10`; at $\lambda=0$ the gates are held open and the fit runs a fixed number of steps); `fig_decompile_general.png` **[NEW]** |
+| `cross_probe_general.py N [GROUP]` (GROUP: `letters` or `outputs`), `make_cross_probe_general_figure.py` | probes between the three general models (§3.25; 1,500 words, about 40 minutes per group; the letters needed more than the memory I had with both groups at once); `cross_probe_general.json`, `fig_cross_probe_general.png` |
+| `decompile/sweep_*.sh`, `decompile/make_decompile_general_figure.py` | the pruning runs of §3.26 (`prune_stage1.py` on `g_m10` and `g_plant10`; at $\lambda=0$ the gates are held open and the fit runs a fixed number of steps); `fig_decompile_general.png` |
+| `scaling_law.py`, `make_scaling_figure.py` | the exact coverage count for any $n$, $N$ and word lengths, $n^*$ and the ratio $R$ (§3.27; seconds); `scaling_law.json`, `fig_scaling_law.png` **[NEW]** |
 
 The data of §3.21 are in `Midataur/permutations` at commit `4ee9609` (`scaling-generator/data/elem_big/`) and `058a27f` (`elem_wacky/`, `elem_partitioned/`); the checkpoints are in the Spartan model folder (`elem-big-1`, `-2`, `elem-wacky-2`, `elem-partitioned-1`).
 

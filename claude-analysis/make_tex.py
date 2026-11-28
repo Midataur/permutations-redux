@@ -20,8 +20,8 @@ DST = sys.argv[2] if len(sys.argv) > 2 else "report.tex"
 
 # ----------------------------------------------------------------------------------------------------------
 # Edit these when a new version of the report is made.
-VERSION = "Version 13"
-SUBTITLE = "Coverage proved, the shape of the walk, and the naive window"
+VERSION = "Version 14"
+SUBTITLE = "Decompilation, probes between the models, and the wandb history"
 DATE = "28 November 2026"
 EXPECTED_TITLE = "Tests on two trained models, and a training experiment on four more: `torn-bigger-13` (general transpositions, $S_{25}$) and `elem-partitioned-long-boosted-1` (elementary transpositions)"
 FIGURE_CAPTION_FOR_FILE_LINE = {
@@ -34,7 +34,8 @@ FIGURE_WIDTH = {"fig_accuracy_vs_hops.png": 0.88, "fig_probe_layers.png": 1.0, "
                 "fig_elem_cells.png": 1.0, "fig_input_positions.png": 1.0, "fig_patching_setup.png": 1.0, "fig_input_positions_elem.png": 1.0,
                 "fig_attention_heads.png": 1.0, "fig_attention_profiles.png": 1.0,
                 "fig_train_learning_curves.png": 1.0, "fig_train_hop_cliff.png": 1.0, "fig_memorisation.png": 1.0, "fig_ebase_blocks.png": 1.0,
-                "fig_pattern_families.png": 1.0, "fig_window.png": 1.0}
+                "fig_pattern_families.png": 1.0, "fig_window.png": 1.0,
+                "fig_decompile.png": 1.0, "fig_cross_probe.png": 1.0}
 
 ARR = r">{\raggedright\arraybackslash}"
 RARR = r">{\raggedleft\arraybackslash}"
@@ -94,9 +95,15 @@ TABLE_SPECS = {
     45: dict(cols=ARR + "p{5.0cm} r r r", size="small"),                       # 3.21 own distribution and test file
     46: dict(cols="l *{5}{r}", size="small"),                                   # 3.21 spread
     47: dict(cols="l r r r", size="small"),                                     # 3.21 far letters
-    48: dict(cols="r " + RARR + "p{1.9cm} " + RARR + "p{2.2cm} " + RARR + "p{2.4cm} " + RARR + "p{2.5cm} " + RARR + "p{2.5cm}", size="small"),   # 4.2: hop counts, data and accuracy
-    49: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
-    50: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
+    # sections 3.22-3.24 (version 14)
+    48: dict(cols=ARR + "p{5.6cm} " + ARR + "p{4.4cm} " + ARR + "p{4.4cm}", size="small"),   # 3.22 LLNA
+    49: dict(cols="r " + RARR + "p{1.7cm} " + RARR + "p{1.9cm} " + RARR + "p{1.5cm} " + RARR + "p{1.5cm} " + RARR + "p{2.4cm} " + RARR + "p{2.3cm}", size="small"),                                             # 3.22 pruning of torn-bigger-13
+    50: dict(cols=ARR + "p{6.2cm} *{6}{r}", size="small"),                                     # 3.23 letters
+    51: dict(cols=ARR + "p{6.2cm} *{6}{r}", size="small"),                                     # 3.23 outputs
+    52: dict(cols=ARR + "p{5.6cm} " + ARR + "p{2.2cm} r " + ARR + "p{5.2cm}", size="small"),   # 3.24 plateau
+    53: dict(cols="r " + RARR + "p{1.9cm} " + RARR + "p{2.2cm} " + RARR + "p{2.4cm} " + RARR + "p{2.5cm} " + RARR + "p{2.5cm}", size="small"),   # 4.2: hop counts, data and accuracy
+    54: dict(cols=ARR + "p{2.9cm} " + ARR + "p{5.8cm} " + ARR + "p{5.2cm}", size="small"),
+    55: dict(cols=ARR + "p{5.6cm} " + ARR + "p{8.6cm}", long=True, size="footnotesize"),
 }
 
 CALLOUTS = {"What it shows": "find", "What this does and does not say": "find",

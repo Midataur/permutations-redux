@@ -1,0 +1,17 @@
+step 50 kl 0.2556 on 1587/1587 undecided 0 104s
+step 100 kl 0.3858 on 953/1587 undecided 295 203s
+step 150 kl 0.2379 on 738/1587 undecided 192 303s
+step 200 kl 0.1587 on 612/1587 undecided 128 404s
+step 250 kl 0.1611 on 536/1587 undecided 104 504s
+step 300 kl 0.1916 on 494/1587 undecided 84 604s
+step 350 kl 0.1596 on 460/1587 undecided 59 706s
+step 400 kl 0.1674 on 433/1587 undecided 51 805s
+step 450 kl 0.1637 on 412/1587 undecided 34 905s
+step 500 kl 0.1601 on 403/1587 undecided 35 1009s
+step 550 kl 0.1541 on 391/1587 undecided 33 1111s
+step 600 kl 0.1292 on 385/1587 undecided 39 1211s
+step 650 kl 0.1534 on 372/1587 undecided 30 1310s
+step 700 kl 0.1502 on 359/1587 undecided 26 1409s
+step 750 kl 0.1527 on 355/1587 undecided 23 1511s
+step 800 kl 0.1425 on 349/1587 undecided 29 1615s
+{'model': 'elem-partitioned-long-boosted-1', 'lamb': 0.003, 'ln': 'real', 'steps': 800, 'seconds': 1742, 'match_word': 0.796999990940094, 'match_slot': 0.9854999780654907, 'kl': 0.04561142511665821, 'task_word_acc': 0.796999990940094, 'edges_total': 1587, 'edges_kept': 335}

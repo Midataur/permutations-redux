@@ -36,7 +36,7 @@
 \usepackage[headsepline,footsepline=false,plainheadsepline=false]{scrlayer-scrpage}
 \clearpairofpagestyles
 \ihead{\sffamily\small Two trained models and a training experiment}
-\ohead{\sffamily\small Version 13 \textperiodcentered{} 28 November 2026}
+\ohead{\sffamily\small Version 14 \textperiodcentered{} 28 November 2026}
 \cfoot*{\sffamily\small\pagemark}
 
 \setkomafont{disposition}{\sffamily\bfseries\color{accent}}
@@ -86,12 +86,12 @@
   left=10pt,right=10pt,top=6pt,bottom=6pt,before skip=10pt,after skip=10pt}
 
 \usepackage[colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent,bookmarksnumbered=true,
-  pdftitle={Tests on two trained models, and a training experiment on four more: torn-bigger-13 and elem-partitioned-long-boosted-1},pdfsubject={Version 13}]{hyperref}
+  pdftitle={Tests on two trained models, and a training experiment on four more: torn-bigger-13 and elem-partitioned-long-boosted-1},pdfsubject={Version 14}]{hyperref}
 
 \begin{document}
 
 \begin{flushleft}
-{\sffamily\bfseries\color{accent}\small\MakeUppercase{Version 13}\hspace{0.7em}\textcolor{rulegray}{\textperiodcentered}\hspace{0.7em}\textcolor{rulegray}{28 November 2026}\par}
+{\sffamily\bfseries\color{accent}\small\MakeUppercase{Version 14}\hspace{0.7em}\textcolor{rulegray}{\textperiodcentered}\hspace{0.7em}\textcolor{rulegray}{28 November 2026}\par}
 \vspace{8pt}
 {\sffamily\bfseries\fontsize{24}{28}\selectfont Tests on two trained models,\par}
 \vspace{0pt}
@@ -101,7 +101,7 @@
 \vspace{3pt}
 {\ttfamily\fontsize{15}{19}\selectfont elem-partitioned-long-boosted-1}\hspace{0.5em}{\sffamily\large (elementary transpositions)\par}
 \vspace{6pt}
-{\sffamily\color{rulegray}Coverage proved, the shape of the walk, and the naive window\par}
+{\sffamily\color{rulegray}Decompilation, probes between the models, and the wandb history\par}
 \vspace{6pt}
 {\color{accent}\rule{\linewidth}{1.1pt}}
 \end{flushleft}
@@ -140,38 +140,38 @@ file and the real test file. Code, raw results and the figures are in this folde
 \item Version 11: the algorithm I think the general model learned (\S\,\ref{sec:4.1}) and the notion of density
   the results support (\S\,\ref{sec:4.2}).
 \item Version 12: a hypothesis for the block structure (\S\,\ref{sec:4.3}).
-\item Version 13 (this one): coverage proved exactly (\S\,\ref{sec:3.19}), the shape of the walk
-  (\S\,\ref{sec:3.20}), and why the naive window method failed (\S\,\ref{sec:3.21}).
+\item Version 13: coverage proved exactly (\S\,\ref{sec:3.19}), the shape of the walk (\S\,\ref{sec:3.20}), and
+  why the naive window method failed (\S\,\ref{sec:3.21}).
+\item Version 14 (this one): decompilation to RASP (\S\,\ref{sec:3.22}), probes between the two models
+  (\S\,\ref{sec:3.23}), and the full wandb history (\S\,\ref{sec:3.24}).
 \end{enumerate}
 
-\lead{Who wrote which version \tagnew{}.} This report was written by Claude, an AI model made by Anthropic, at
-your request. Versions 1 to 9 were written by Claude Sonnet 5.5 and versions 10 onwards by Claude Opus 5.5. The
+\lead{Who wrote which version .} This report was written by Claude, an AI model made by Anthropic, at your
+request. Versions 1 to 9 were written by Claude Sonnet 5.5 and versions 10 onwards by Claude Opus 5.5. The
 switch happened on 27 November between 08:20 (version 9) and 09:16 (Test 16), as the model named in the
 repository’s commit records shows. Version 10 re-examined the earlier conclusions at your request
 (\S\,\ref{sec:5} item 13).
 
-\lead{What is new in this version (version 13).} The markers \textbf{\tagnew{}} and \textbf{\tagupd{}} show only
-what changed since version 12. Text without a marker is unchanged from version 12. Each new version clears the
+\lead{What is new in this version (version 14).} The markers \textbf{\tagnew{}} and \textbf{\tagupd{}} show only
+what changed since version 13. Text without a marker is unchanged from version 13. Each new version clears the
 previous version’s markers.
 
 \begin{itemize}
-\item \lead{\S\,\ref{sec:3.19} \tagnew{}:} the coverage argument written out as an exact count, $R(L,s)$, with a
-  simulation check, the real test file, and the same comparison for the elementary model (Test 17).
-\item \lead{\S\,\ref{sec:3.20} \tagnew{}:} the shape of the walk and the placement of the hop letters at fixed
-  hops and points (Test 18). Going back and forth, not having few points, is what makes long chains hard.
-\item \lead{\S\,\ref{sec:3.21} \tagnew{}:} why the naive window method failed (Test 19). Its chains are all
-  covered; it fails because it never teaches the model to ignore letters far from a chain. Two windows at
-  independent offsets fix it.
-\item \lead{\S\,\ref{sec:1} \tagupd{}:} new items 31 to 33.
-\item \lead{\S\,\ref{sec:4.1}, \S\,\ref{sec:4.2} \tagupd{}:} the reversal result as support for linking by
-  content; coverage now proved; a third ingredient of the density notion (the irrelevant letters must be covered
-  too).
-\item \lead{\S\,\ref{sec:6}, \S\,\ref{sec:7} \tagupd{}:} what is done and what is next; the new scripts.
-\item \lead{Who wrote which version \tagnew{}:} above.
+\item \lead{\S\,\ref{sec:3.22} \tagnew{}:} the two models decompiled to RASP programs with the method of Huang
+  et al. (arXiv:2602.08857), as far as its first stage. \code{torn-\allowbreak{}bigger-\allowbreak{}13} does not
+  simplify to a short program, and the elementary model cannot be decompiled at all, because its LayerNorms
+  cannot be linearised.
+\item \lead{\S\,\ref{sec:3.23} \tagnew{}:} your experiment: on the same words, how well each model’s internal
+  states predict the other’s, layer by layer.
+\item \lead{\S\,\ref{sec:3.24} \tagnew{}:} the full wandb history: which general runs left the plateau, the
+  learning-rate schedule as a confound (your question), and the conditions of the naive-window runs.
+\item \lead{\S\,\ref{sec:3.21} \tagupd{}:} \code{elem-\allowbreak{}wacky-\allowbreak{}1} did train, on its own
+  January data, and is a third naive-window model (version 13 said it never trained, \S\,\ref{sec:5} item 14);
+  the naive and two-window runs were trained identically (wandb).
+\item \lead{\S\,\ref{sec:1} \tagupd{}:} item 33 revised, new items 34 to 36.
+\item \lead{\S\,\ref{sec:4.2}, \S\,\ref{sec:5}, \S\,\ref{sec:6}, \S\,\ref{sec:7} \tagupd{}:} a note on the
+  plateau; a correction; next steps; the new scripts.
 \end{itemize}
-
-The same results are summarised in \code{subreport-\allowbreak{}20261128.\allowbreak{}md} and in a note for the
-co-authors (\code{coauthor-\allowbreak{}note/\allowbreak{}note.\allowbreak{}pdf}).
 \end{frontbox}
 
 \tableofcontents
@@ -426,29 +426,50 @@ co-authors (\code{coauthor-\allowbreak{}note/\allowbreak{}note.\allowbreak{}pdf}
   attention local over a 120-letter word, the place of the split hardly matters to the loss, so it falls where a
   run’s details put it, and some runs never split. Snapshots during training and removing the boundary after
   training would test it.
-\item \lead{\tagnew{} Coverage is now a theorem (\S\,\ref{sec:3.19}).} For a slot whose chain has $L$ hops
-  through $s$ points, the ratio of its probability in the training distribution to that in the test distribution
-  is exactly $R(L,s)=\binom{25-s}{10-s}\binom{25}{10}^{-1}(625/100)^{L}(0.82\cdot625/577)^{25-L}$ for $s\le10$,
-  and 0 for $s\ge11$; a simulation of $10^6$ words from each reproduces it. Chains through 11 or more points are
+\item \lead{Coverage is now a theorem (\S\,\ref{sec:3.19}).} For a slot whose chain has $L$ hops through $s$
+  points, the ratio of its probability in the training distribution to that in the test distribution is exactly
+  $R(L,s)=\binom{25-s}{10-s}\binom{25}{10}^{-1}(625/100)^{L}(0.82\cdot625/577)^{25-L}$ for $s\le10$, and 0 for
+  $s\ge11$; a simulation of $10^6$ words from each reproduces it. Chains through 11 or more points are
   $1.2\times10^{-6}$ of test slots, and the real test file has none; over its slots $R\ge0.055$, and its rarest
   chain class is expected about 27,000 times in the 8M training words. For the elementary model, training chains
   are longer than test chains at every quantile, but never wider than 11, and 0.53\% of test slots are wider;
   the model gets those right too.
-\item \lead{\tagnew{} Going back and forth is what makes long chains hard (\S\,\ref{sec:3.20}).} At fixed hops
-  and points, cycles ($a\,b\,c\,d\,e\,a\ldots$) are easy for every model, and walks that keep returning to the
-  point just left are hard: at 16 hops through 5 points \code{torn-\allowbreak{}bigger-\allowbreak{}13} falls
-  from 0.96 to 0.68 and the fresh-data control from 0.99 to 0.86 ($p<10^{-8}$). The control’s weakness on
-  few-point chains (item 25) is this. \code{g\_\allowbreak{}plant10} is perfect on every shape. Packing the hop
-  letters into one block costs \code{torn-\allowbreak{}bigger-\allowbreak{}13} a little (0.77–0.86 against 0.895
-  spread out).
-\item \lead{\tagnew{} The naive window method failed because it does not teach locality (\S\,\ref{sec:3.21}).}
-  The January 2025 naive-window models (\code{elem-\allowbreak{}big-\allowbreak{}1}, \code{-\allowbreak{}2}) are
-  100\% right on their own distribution but only 72–78\% right on test slots with a single hop, chains they have
-  certainly seen. Inserting letters that cannot touch the chain lowers their accuracy (2 letters: 0.91–0.96; 8
-  letters: 0.79–0.87). A run identical except for using two windows of 5 at independent offsets
-  (\code{elem-\allowbreak{}wacky-\allowbreak{}2}) is 100\% right on the $S_{25}$ test file and in every
-  condition, as is a partitioned run. In a naive-window word every letter is within 10 points of every chain, so
-  the model never learns that distant letters are irrelevant.
+\item \lead{Going back and forth is what makes long chains hard (\S\,\ref{sec:3.20}).} At fixed hops and points,
+  cycles ($a\,b\,c\,d\,e\,a\ldots$) are easy for every model, and walks that keep returning to the point just
+  left are hard: at 16 hops through 5 points \code{torn-\allowbreak{}bigger-\allowbreak{}13} falls from 0.96 to
+  0.68 and the fresh-data control from 0.99 to 0.86 ($p<10^{-8}$). The control’s weakness on few-point chains
+  (item 25) is this. \code{g\_\allowbreak{}plant10} is perfect on every shape. Packing the hop letters into one
+  block costs \code{torn-\allowbreak{}bigger-\allowbreak{}13} a little (0.77–0.86 against 0.895 spread out).
+\item \lead{\tagupd{} The naive window method failed because it does not teach locality (\S\,\ref{sec:3.21}).}
+  Three January 2025 naive-window models (\code{elem-\allowbreak{}big-\allowbreak{}1} and \code{-\allowbreak{}2}
+  with a window of 10 tokens, \code{elem-\allowbreak{}wacky-\allowbreak{}1} with one of 5) are 100\% right on
+  their own distribution but only 44–78\% right on test slots with a single hop, chains they have certainly
+  seen; the narrowest window fails worst. Inserting letters that cannot touch the chain lowers their accuracy (2
+  letters: 0.86–0.96; 8 letters: 0.65–0.87). A run trained identically except for using two windows of 5 at
+  independent offsets (\code{elem-\allowbreak{}wacky-\allowbreak{}2}) is 100\% right on the $S_{25}$ test file
+  and in every condition, as is a partitioned run. In a naive-window word every letter is within 10 points of
+  every chain, so the model never learns that distant letters are irrelevant.
+\item \lead{\tagnew{} \code{torn-\allowbreak{}bigger-\allowbreak{}13} does not decompile to a short program, and
+  the elementary model does not decompile at all (\S\,\ref{sec:3.22}).} With the method of Huang et al., the
+  LayerNorms of both models cannot be linearised in the paper’s way (one constant each: no word matches). With
+  one constant per position \code{torn-\allowbreak{}bigger-\allowbreak{}13} passes (0.953 of words), and its
+  smallest faithful pruned graph (0.957 of words) decompiles to at most 213,335 lines of D-RASP, 0.13\% of the
+  full $1.7 imes10^{8}$ but four orders of magnitude more than the paper’s successful decompilations; it keeps
+  27 of 30 heads and all five MLPs. The elementary model’s LayerNorm cannot be linearised even per position (0
+  of 1,000 words match).
+\item \lead{\tagnew{} On the same words, the two models share computed features (\S\,\ref{sec:3.23}).} Linear
+  maps from one model’s layers to the other’s explain about half of the variance of the deep layers at the
+  letter positions, against about a third for any linear function of the letters; random pairing explains
+  nothing. The general model is about one layer behind the elementary one. At the output positions the final
+  layers agree because both hold the answer, and the middle layers share information the answer does not
+  explain. The elementary model is thrown off by long runs of identity letters (88.5\% of slots with 95 of
+  them).
+\item \lead{\tagnew{} Which general runs left the plateau depends on data size and on the learning-rate
+  schedule, which the history cannot separate (\S\,\ref{sec:3.24}).} In the \code{torn-\allowbreak{}big} series
+  no run with 1.2M words or fewer left the 0.72 plateau, and all runs with 2M or more did; but the schedule cuts
+  the learning rate after a fixed number of epochs on the plateau, so small files get fewer steps at a usable
+  rate. Replaying it, the schedule alone could explain the 25-letter series; one comparison in the 20-letter
+  series favours a genuine effect of data size. A few runs at a constant learning rate would settle it.
 \end{enumerate}
 
 % ====================================================================================================
@@ -2735,7 +2756,7 @@ other structure (the “chevron” patterns of
 \code{fig\_\allowbreak{}block\_\allowbreak{}survey.\allowbreak{}png}).
 \end{limbox}
 
-\subsection{Coverage, exactly (Test 17) \tagnew{}}\label{sec:3.19}
+\subsection{Coverage, exactly (Test 17)}\label{sec:3.19}
 \lead{Why.} \S\,\ref{sec:4.2} (Step 2) argued from counts that every test slot’s chain is inside the training
 data. This section turns that into an exact statement with constants, checks it by simulation, and does the same
 count for the elementary model.
@@ -2849,8 +2870,8 @@ The count assumes the model depends only on the chain. That is measured, not pro
 for chains of up to 12 hops, and \S\,\ref{sec:3.21} shows it can fail when training does not teach it.
 \end{limbox}
 
-\subsection{Beyond hops and points: the shape of the walk and where the hop letters sit (Test 18)
-\tagnew{}}\label{sec:3.20}
+\subsection{Beyond hops and points: the shape of the walk and where the hop letters sit (Test
+18)}\label{sec:3.20}
 \lead{Why.} Until now I described each chain only by $(L,s)$. \S\,\ref{sec:4.2} listed “the order of revisits,
 the gaps between hop letters” as the obvious refinement. The fresh-data control’s weakness on chains through few
 points (\S\,\ref{sec:3.17}) also needed explaining.
@@ -2968,7 +2989,7 @@ reversal share as such, which can be tested.
 construction.
 \end{limbox}
 
-\subsection{Why the naive window method failed (Test 19) \tagnew{}}\label{sec:3.21}
+\subsection{Why the naive window method failed (Test 19) \tagupd{}}\label{sec:3.21}
 \lead{Why.} The paper reports that the naive window method (an $S_m$ word shifted as a whole to a random place
 in $S_n$) “does not perform well in practice when testing on larger groups”, and suggests that the model learns
 the smaller group. Partitioned windows fixed it. The Spartan folder holds the runs that tested this, so the
@@ -2985,6 +3006,7 @@ last position, as \code{transformer.\allowbreak{}py} at commit \code{4ee9609} di
 \hdr{model} & \hdr{trained} & \hdr{data} & \hdr{test words} \\
 \midrule
 \code{elem-\allowbreak{}big-\allowbreak{}1}, \code{elem-\allowbreak{}big-\allowbreak{}2} & 1–6 Jan 2025 & naive window: an $S_{10}$ word of 20 letters shifted by one random offset into $S_{25}$ (tokens shift to shift+9) & 20 letters uniform over the 25 tokens \\
+\code{elem-\allowbreak{}wacky-\allowbreak{}1} \textbf{\tagnew{}} & 5–9 Jan 2025 & meant as two windows of 5, but the January code chose one shift per word: a naive window of 5 tokens ($S_{25}$, 20 letters; its own data, commit \code{aec49bd}) & as above \\
 \code{elem-\allowbreak{}wacky-\allowbreak{}2} & 2–6 Feb 2025 & two windows of 5 tokens at independent offsets; each letter falls in one of them at random ($S_{25}$, 20 letters) & as above \\
 \code{elem-\allowbreak{}partitioned-\allowbreak{}1} & 2–5 Feb 2025 & partitioned windows, $S_{16}$, $m=9$, 16 letters & 16 letters uniform over the 16 tokens \\
 \bottomrule
@@ -2992,7 +3014,11 @@ last position, as \code{transformer.\allowbreak{}py} at commit \code{4ee9609} di
 \end{center}
 
 \code{elem-\allowbreak{}wacky-\allowbreak{}2} matches the naive models in $n$, $m$, word length, architecture,
-learning rate and seed. Only the windows differ.
+learning rate and seed. Only the windows differ. \textbf{\tagnew{}} The wandb history confirms it:
+\code{elem-\allowbreak{}big-\allowbreak{}1}, \code{elem-\allowbreak{}wacky-\allowbreak{}1} and
+\code{elem-\allowbreak{}wacky-\allowbreak{}2} have identical configs (learning rate $3\times10^{-5}$, batch
+1,024, weight decay 0.01, 1.6M training words) and each ran about 96 hours (487–492 epochs) to 100\% training
+accuracy; \code{elem-\allowbreak{}big-\allowbreak{}2} used 3.2M words (244 epochs in the same time).
 
 \lead{Is it coverage?} No. The naive window can sit anywhere, so every chain of width up to 10 occurs at every
 location. Chains in uniform 20-letter test words are short and narrow. In the 1,000-word test file, 99.7\% of
@@ -3021,6 +3047,7 @@ word, teacher-forced as the old models were trained). Three conditions:
 \midrule
 \code{elem-\allowbreak{}big-\allowbreak{}1} (naive) & 1.000 & 0.831 & 0.776 \\
 \code{elem-\allowbreak{}big-\allowbreak{}2} (naive) & 1.000 & 0.803 & 0.721 \\
+\code{elem-\allowbreak{}wacky-\allowbreak{}1} (naive, window of 5) \textbf{\tagnew{}} & 1.000 & 0.599 & 0.438 \\
 \code{elem-\allowbreak{}wacky-\allowbreak{}2} (two windows) & 0.999 & 1.000 & 1.000 \\
 \code{elem-\allowbreak{}partitioned-\allowbreak{}1} (partitioned, $S_{16}$) & 0.999 & 1.000 & 1.000 \\
 \bottomrule
@@ -3045,7 +3072,7 @@ slots with 1 to 4 hops, with no trend in the number of hops.
 \end{center}
 
 \code{elem-\allowbreak{}partitioned-\allowbreak{}1} is at 1.000 for ranges 9, 11, 13 and 15 (its group is
-$S_{16}$).
+$S_{16}$). \code{elem-\allowbreak{}wacky-\allowbreak{}1} was not run in this test.
 
 \lead{Far letters} (accuracy at moved slots in the window; mean hops of those slots in brackets):
 
@@ -3056,6 +3083,7 @@ $S_{16}$).
 \midrule
 \code{elem-\allowbreak{}big-\allowbreak{}1} & 0.999 (3.8) & 0.963 (3.4) & 0.874 (2.5) \\
 \code{elem-\allowbreak{}big-\allowbreak{}2} & 1.000 (3.8) & 0.914 (3.5) & 0.786 (2.5) \\
+\code{elem-\allowbreak{}wacky-\allowbreak{}1} \textbf{\tagnew{}} & 1.000 (6.7) & 0.855 (6.0) & 0.648 (4.1) \\
 \code{elem-\allowbreak{}wacky-\allowbreak{}2} & 0.999 (4.2) & 0.999 (3.8) & 1.000 (2.7) \\
 \code{elem-\allowbreak{}partitioned-\allowbreak{}1} & 0.999 (3.7) & 1.000 (3.4) & 1.000 (2.2) \\
 \bottomrule
@@ -3090,11 +3118,341 @@ $S_{16}$).
 \item \lead{Not the paper’s setup.} These are January–February 2025 runs ($n=25$ with 20 letters, or $n=16$ with
   16 letters), not the final $n=16$, $N=120$ elementary setup. Whether a naive window fails the same way there I
   have not tested; there is no such checkpoint.
-\item \lead{One run per method.} The two naive runs agree with each other.
-\item \lead{An earlier two-window run} (\code{elem-\allowbreak{}wacky-\allowbreak{}1}, January 2025, trained
-  before a fix to the window code) never trained (60\% of moved slots on its own distribution) and is left out.
+\item \lead{\tagupd{} Few runs per method.} The three naive runs agree with each other, and the narrowest window
+  (5 tokens) fails worst; one two-window run and one partitioned run.
 \item \lead{Sampling.} 1,500 sampled slots per condition.
 \end{itemize}
+\end{limbox}
+
+\subsection{Decompiling the two models to RASP (Huang et al. 2026) \tagnew{}}\label{sec:3.22}
+\lead{Why.} Huang, Bakalova, Bhattamishra, Merrill and Hahn (arXiv:2602.08857) decompile small trained
+transformers into programs in D-RASP, a RASP dialect with softmax attention, and then prune those programs until
+only what matters for the output is left. You asked how much our two models simplify under that procedure.
+
+\lead{The method, in brief.}
+
+\begin{itemize}
+\item \lead{Exact translation.} Under the \emph{linear LayerNorm assumption} (LLNA: every LayerNorm’s variance
+  replaced by a constant), a transformer is exactly a D-RASP program. Each variable is a \emph{path}: the token
+  or position embedding carried through a sequence of attention heads’ value inputs. Each head contributes one
+  \emph{selector} (attention score) per query-path and key-path pair, and one \emph{aggregate} per value path;
+  each MLP is one line (or, with \emph{split} MLPs, one per input path); the unembedding projects every
+  surviving path.
+\item \lead{The full program is huge.} For 5 layers and 6 heads the count is $1.66\times10^{8}$ lines with whole
+  MLPs, and $3.6\times10^{10}$ with split MLPs (their \code{determine\_\allowbreak{}total\_\allowbreak{}line};
+  my counter \code{decompile/\allowbreak{}lines.\allowbreak{}py} reproduces both numbers).
+\item \lead{Pruning.} Stage 1 learns a gate for every edge between components (embeddings, head outputs, MLP
+  outputs) and the inputs they feed (query, key and value of every head, every MLP, the unembedding). A closed
+  gate replaces the source by a learned constant; the loss is the KL divergence to the original model plus
+  $\lambda$ times the expected number of open gates. Their stages 2 and 3 then prune individual paths and
+  query-key products, and later steps replace MLPs and attention patterns by named primitives.
+\item \lead{Faithfulness.} A pruned program counts as a decompilation if its \emph{match accuracy} is at least
+  0.9: the share of inputs on which it predicts the same token as the original model at every output position.
+  Their successful decompilations are a few to a few dozen lines long.
+\end{itemize}
+
+{\raggedright \lead{What I did} (\code{decompile/}). A PyTorch port of both models (logits agree with
+\code{np\_\allowbreak{}transformer.\allowbreak{}py} to $3\times10^{-5}$), and a port of their stage 1
+(\code{prune\_\allowbreak{}stage1.\allowbreak{}py}, following \code{MaskSampler} and
+\code{PruningModelWithHooks} in their \code{pruning\_\allowbreak{}model.\allowbreak{}py}: the same gate
+sampling, dangling-edge removal, ablation constants and learning rates for gates and constants) to our
+architecture: an attention mask under which the word positions see each other, ReLU MLPs, no query/key/value
+biases, and an output read at the $n$ output positions. With every gate open and the real LayerNorm the pruned
+graph reproduces the model exactly (KL $10^{-11}$, every prediction the same). Match accuracy here is per word,
+all $n$ output positions teacher-forced with the true permutation, on 1,000 fresh test words. I did not port
+stages 2 and 3 or the primitive matching; the line counts below are those of the stage-1 graph with every
+query-key product kept, so they are upper bounds on what stage 3 would leave.\par}
+
+\lead{The linear LayerNorm assumption fails in the paper’s form}
+(\code{llna\_\allowbreak{}check.\allowbreak{}py}, \code{llna\_\allowbreak{}fit.\allowbreak{}py}).
+
+\begin{center}\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{5.6cm} >{\raggedright\arraybackslash}p{4.4cm}
+>{\raggedright\arraybackslash}p{4.4cm}@{}}
+\toprule
+\hdr{LayerNorm replaced by} & \hdr{\code{torn-\allowbreak{}bigger-\allowbreak{}13}: words / slots matching} & \hdr{elementary model: words / slots matching} \\
+\midrule
+one constant per LayerNorm, its mean variance & 0.000 / 0.126 & 0.000 / 0.178 \\
+one constant per LayerNorm, fitted (200 steps) & 0.000 / 0.227 & not run (20-step fit: 0.000 / 0.200) \\
+one constant per LayerNorm and position, fitted & 0.857 / 0.994 (200 steps); 0.953 / 0.998 inside stage 1 & 0.000 / 0.351 inside stage 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+\item \lead{Why the paper’s version fails here.} The paper’s models are plain decoders in which all positions
+  look alike. In ours, the residual stream at the word positions and at the output positions differs in size by
+  up to a factor of 10 (elementary model, layer 4: mean variance 2.8 against 0.24), and in
+  \code{torn-\allowbreak{}bigger-\allowbreak{}13} the variance also differs by more than 100\% between word
+  positions in the later layers.
+\item \lead{A per-position constant restores it for the general model.} A constant that depends on the position
+  is still linear in each variable, so the program still decomposes exactly into paths; it only adds a
+  position-dependent scale. With it \code{torn-\allowbreak{}bigger-\allowbreak{}13} passes the paper’s bar
+  (0.953 of words).
+\item \lead{The elementary model fails even then} (KL 1.6 against 0.005 for the general model). Its LayerNorm
+  does real work: the variance at a fixed position varies by 20–26\% between words, and the model depends on
+  normalising it. By the paper’s own criterion, the elementary model cannot be decompiled to D-RASP. I still
+  pruned it with the real LayerNorm, which the paper also does as a diagnostic.
+\end{itemize}
+
+\lead{How far \code{torn-\allowbreak{}bigger-\allowbreak{}13} simplifies} (stage 1, per-position linear
+LayerNorm, 24 words per step, at least 400 steps and until every gate is decided; \code{runs/}):
+
+\begin{center}\small
+\begin{tabular}{@{}r >{\raggedleft\arraybackslash}p{1.7cm} >{\raggedleft\arraybackslash}p{1.9cm}
+>{\raggedleft\arraybackslash}p{1.5cm} >{\raggedleft\arraybackslash}p{1.5cm}
+>{\raggedleft\arraybackslash}p{2.4cm} >{\raggedleft\arraybackslash}p{2.3cm}@{}}
+\toprule
+\hdr{$\lambda$} & \hdr{edges kept (of 1,587)} & \hdr{heads with a value input (of 30)} & \hdr{words matching} & \hdr{slots matching} & \hdr{D-RASP lines, each MLP one line} & \hdr{lines, MLPs split by input} \\
+\midrule
+0 & 1,587 & 30 & 0.953 & 0.998 & $1.66\times10^{8}$ & $3.6\times10^{10}$ \\
+0.0003 & 579 & 27 & \textbf{0.957} & 0.998 & \textbf{213,335} & $1.2\times10^{9}$ \\
+0.001 & 361 & 24 & 0.860 & 0.994 & 6,366 & $6.2\times10^{7}$ \\
+0.003 & 254 & 21 & 0.793 & 0.990 & 1,229 & $1.1\times10^{7}$ \\
+0.01 & 166 & 19 & 0.440 & 0.967 & 210 & 130,541 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+All five MLPs survive at every $\lambda$. The unembedding reads the last MLP alone from $\lambda=0.003$ on (and
+the layer-3 MLP and one layer-3 head as well at $\lambda=0.0003$).
+
+\begin{figure}[htbp]\centering\includegraphics[width=1.00\linewidth]{fig_decompile.png}\caption{Match accuracy against the size of the decompiled program for \code{torn-\allowbreak{}bigger-\allowbreak{}13}, counting each MLP as one line (left) or splitting it by input path (right). The dotted line is the paper’s bar for a faithful decompilation.}\end{figure}
+
+\lead{The elementary model, pruned with the real LayerNorm} (a diagnostic only, since it cannot be written in
+D-RASP): at $\lambda=0.003$ and 800 steps, 335 of 1,587 edges survive, all 18 heads of blocks 1–3 and 6 of the
+12 others, and all five MLPs; 0.797 of words and 0.985 of slots match, close to
+\code{torn-\allowbreak{}bigger-\allowbreak{}13} at the same $\lambda$ (0.793 and 0.990).
+
+\begin{findbox}{What it shows}
+\begin{itemize}
+\item \lead{\code{torn-\allowbreak{}bigger-\allowbreak{}13} does not simplify to a short program.} The smallest
+  graph that passes the paper’s bar ($\lambda=0.0003$) decompiles to at most 213,335 lines with whole MLPs:
+  0.13\% of the full program, but four orders of magnitude longer than the paper’s successful decompilations,
+  which are a few to a few dozen lines. The next step ($\lambda=0.001$, 6,366 lines) is already below the bar
+  (0.860).
+\item \lead{Small programs are small only because the MLPs are opaque.} At every $\lambda$ the five MLPs
+  survive, the unembedding reads (almost) only the last MLP, and most heads read the first MLP. Counted as one
+  line each, they hide most of the computation; split by input path, as in the paper’s default, every program
+  here has $10^{5}$ to $10^{9}$ lines.
+\item \lead{The circuit is spread out.} The faithful graph keeps 27 of the 30 heads; even the one at 44\% keeps
+  19. Pruning removes cross-connections between components, not components. This fits \S\,\ref{sec:3.13} and
+  \S\,\ref{sec:3.16} (several heads carry the same links redundantly) and the multi-step composition of
+  \S\,\ref{sec:4.1}.
+\item \lead{Single slots are much easier than whole words.} At $\lambda=0.003$ the program matches 99.0\% of
+  slots but 79.3\% of words; each word has 25 outputs, and a program that is right on 99\% of them fails on
+  about a fifth of words. The paper’s match accuracy also requires every output of an input to agree, on inputs
+  of up to 150 tokens, so this alone does not explain the difference.
+\item \lead{The paper says that models which do not length-generalise prune poorly.} Ours generalise (in the
+  sense of the paper), and still prune poorly; their models are much smaller (at most 4 layers and 256
+  dimensions, against 5 layers and 402 here, with 652 tokens in our vocabulary), and the size of the task and of
+  the model may matter as much as generalisation. This is a guess.
+\item \lead{The elementary model cannot be decompiled in their sense}, because its LayerNorms cannot be
+  linearised; with the real LayerNorm it prunes about as far as the general model.
+\end{itemize}
+\end{findbox}
+
+\begin{limbox}{Limits}
+\begin{itemize}
+\item \lead{Only stage 1.} Stages 2 and 3 (pruning single paths and query-key products) would shorten the
+  programs further; the line counts are upper bounds. I did not attempt the primitive matching, which needs the
+  pruned programs first.
+\item \lead{One seed and one run per $\lambda$}, 1,000 test words for each match accuracy, and shorter training
+  than the original code allows (it trains on a GPU for up to 5,000 steps per stage).
+\item \lead{The per-position LayerNorm is my adaptation.} It keeps the program exactly path-decomposable, but it
+  is not the assumption the paper states.
+\end{itemize}
+\end{limbox}
+
+\subsection{Do the two models represent the same word the same way? (Test 20) \tagnew{}}\label{sec:3.23}
+\lead{Why.} Your suggestion: feed the same words to the general and the elementary model, and see whether one
+model’s internal state predicts the other’s, layer by layer.
+
+\lead{Words} (\code{cross\_\allowbreak{}probe.\allowbreak{}py}, 2,000 words). 25 letters, each an adjacent
+transposition $s_i=(i-1,i)$ with $i$ uniform in $1..15$: words of $S_{16}$ written in adjacent transpositions,
+which both models can read.
+
+\begin{itemize}
+\item \lead{General model:} $s_i$ is the token $(i-1,i)$; the permutation lives on points 0–15, and 16–24 stay
+  fixed. It is right on every slot of every word.
+\item \lead{Elementary model:} the 25 letters sit at word positions 95–119; positions 0–94 hold one identity
+  letter and 47 random cancelling pairs $s_js_j$, which leave the permutation unchanged. It is right on 99.99\%
+  of slots (99.9\% of words). Padding with 95 identity letters instead, which also leaves the permutation
+  unchanged, puts it off: 88.5\% of slots and 13.7\% of words (96\% of slots if the 25 letters are spread out).
+  So the elementary model is not robust to long runs of identity letters, although identity augmentation is part
+  of its training data.
+\end{itemize}
+
+\lead{Probes.} For every pair of layers (0 = embeddings, 1–5 = after each block), a ridge regression from one
+model’s residual stream to the other’s at aligned positions: the 25 letters, and the separator with the outputs
+holding $p_0..p_{14}$. Each position’s mean is removed first, so position alone explains nothing. Fitted on
+1,600 words, scored ($R^2$ over all 402 dimensions) on the other 400. Controls: the same regression with the
+words paired at random; and simple features of the word, namely the letter at the position and all letters by
+relative offset (a linear, translation-equivariant function of the word) at letter positions, and the token fed
+in with the answer at output positions.
+
+Best $R^2$ for each predicted layer (over all predictor layers), against the controls:
+
+\begin{center}\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{6.2cm} *{6}{r}@{}}
+\toprule
+\hdr{letter positions, layer predicted} & \hdr{0} & \hdr{1} & \hdr{2} & \hdr{3} & \hdr{4} & \hdr{5} \\
+\midrule
+elementary, from the best general layer & 1.00 & 0.84 & 0.71 & 0.55 & 0.54 & 0.53 \\
+elementary, from the letters by relative offset & 1.00 & 0.63 & 0.40 & 0.31 & 0.34 & 0.33 \\
+general, from the best elementary layer & 1.00 & 0.90 & 0.74 & 0.59 & 0.51 & 0.43 \\
+general, from the letters by relative offset & 1.00 & 0.80 & 0.54 & 0.33 & 0.28 & 0.23 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{6.2cm} *{6}{r}@{}}
+\toprule
+\hdr{output positions, layer predicted} & \hdr{0} & \hdr{1} & \hdr{2} & \hdr{3} & \hdr{4} & \hdr{5} \\
+\midrule
+elementary, from the best general layer & 1.00 & 0.94 & 0.87 & 0.71 & 0.55 & 0.84 \\
+elementary, from the token fed in and the answer & 1.00 & 0.90 & 0.80 & 0.46 & 0.35 & 0.86 \\
+general, from the best elementary layer & 1.00 & 0.91 & 0.61 & 0.47 & 0.36 & 0.83 \\
+general, from the token fed in and the answer & 1.00 & 0.83 & 0.23 & 0.11 & 0.09 & 0.83 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+With the words paired at random every $R^2$ is between $-0.004$ and $0.000$. The full $6\times6$ matrices are in
+\code{cross\_\allowbreak{}probe.\allowbreak{}json} and the figure.
+
+\begin{figure}[htbp]\centering\includegraphics[width=1.00\linewidth]{fig_cross_probe.png}\caption{Held-out $R^2$ of linear maps between the layers of the general and the elementary model on the same words (left and middle), and the best layer against the controls (right), at the letter positions (top) and the output positions (bottom).}\end{figure}
+
+\begin{findbox}{What it shows}
+\begin{itemize}
+\item \lead{The two models share word-specific information beyond the letters.} At the letter positions, a
+  linear function of the letters (by relative offset) explains about a third of the variance of the deep layers;
+  the other model’s layers explain about half (elementary layers 3–5: 0.53–0.55 against 0.31–0.34; general layer
+  3: 0.59 against 0.33). Random pairing gives zero, so this is not structure common to all words. About 20
+  points of variance in the deep layers are computed features the two models hold in common, readable from one
+  another linearly.
+\item \lead{The general model is about one layer behind.} The elementary model’s deep letter states are best
+  predicted from the general model’s layers 2–3, not 5, and the general model’s layer $\ell$ is best predicted
+  from the elementary model’s layer $\ell-1$ (layer 2 from 1: 0.74; layer 3 from 2: 0.59). A plausible reason,
+  not tested: a general token names an unordered pair of points, and the general model’s first layer has to work
+  out the two points before it can do what the elementary model does with a token that already names a place.
+\item \lead{At the output positions the final layers agree because both hold the answer} (0.83–0.84 in both
+  directions; the answer and the token fed in explain as much). The middle layers are more interesting: the
+  general model’s layers 2–4 there are hardly explained by the token fed in and the answer (0.09–0.23), but the
+  elementary model’s states explain much more of them (0.36–0.61), so the query positions of the two models
+  carry the same intermediate information about the word, not just the answer.
+\item \lead{Not a shared algorithm in full.} Half of the deep variance is not shared, and the deep general
+  layers are the least predictable (0.43 at layer 5). The two models agree on a common core of features; the
+  rest is specific to each.
+\end{itemize}
+\end{findbox}
+
+\begin{limbox}{Limits}
+Linear maps only; one checkpoint per model; words of 25 adjacent letters only, which are far from the general
+model’s training words (10 points, any transpositions) and short for the elementary model (which sees 120
+letters); the padding of the elementary words is itself a choice that matters (above).
+\end{limbox}
+
+\subsection{The full wandb history: leaving the plateau, and the learning-rate schedule
+\tagnew{}}\label{sec:3.24}
+\lead{Why.} You exported the full history of the wandb project (201 runs, 383,154 logged rows, with every run’s
+config) on 28 November 2026. Two things in it bear on the report: the conditions of the naive-window runs
+(\S\,\ref{sec:3.21}, above), and when general-transposition runs leave the plateau at which every failed run
+sits.
+
+\lead{The plateau.} Almost every general-transposition run that never learned the task sits at a validation
+accuracy of 0.70–0.73, whatever its size, data or regularisation (two \code{torn-\allowbreak{}masked} runs are
+partway out, at 0.85 and 0.87)
+(\code{wandb-\allowbreak{}history/\allowbreak{}runs\_\allowbreak{}summary.\allowbreak{}csv}). Which runs left
+it, and when (\code{plateau\_\allowbreak{}escape.\allowbreak{}py}; “left” means validation accuracy reached
+0.9):
+
+{\small\nopagebreak[4]
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{5.6cm} >{\raggedright\arraybackslash}p{2.2cm} r
+>{\raggedright\arraybackslash}p{5.2cm}@{}}
+\toprule
+\hdr{series} & \hdr{words in the training file} & \hdr{runs} & \hdr{left the plateau} \\
+\midrule
+\endfirsthead
+\toprule
+\hdr{series} & \hdr{words in the training file} & \hdr{runs} & \hdr{left the plateau} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\code{torn-\allowbreak{}big} (Nov 2024; $S_{25}$, 20 letters, 4 blocks, learning rate $3\times10^{-5}$) & 0.1–0.4M & 11 & none (up to 292M word presentations) \\
+ & 0.8–1.2M & 3 & none (475M–783M presentations, 58–96 h) \\
+ & 2.0–2.4M & 3 & all three, at epochs 31–37 (68M–77M presentations) \\
+\code{torn-\allowbreak{}bigger-\allowbreak{}1} to \code{-\allowbreak{}4} (Jan 2025; $S_{25}$, 25 letters, legacy architecture, $3\times10^{-5}$) & 2.4M, 4.0M, 4.0M & 3 & none (281M–716M presentations) \\
+ & 5.6M & 1 & yes, at epoch 23 (134M presentations) \\
+\code{torn-\allowbreak{}bigger-\allowbreak{}5} to \code{-\allowbreak{}12} (Feb 2025; legacy architecture, some with other attention masks, \S\,\ref{sec:3.18}) & 5.6–7.2M & 7 & none (1–13 h) \\
+\code{torn-\allowbreak{}bigger-\allowbreak{}13} (Feb 2025; 5 blocks, $3\times10^{-4}$) & 8.0M & 1 & yes, at epoch 10 (88M presentations) \\
+\code{torn-\allowbreak{}masked} (Feb 2025; $S_{16}$, 10 letters, $3\times10^{-4}$) & 0.1M & 6 & none \\
+ & 0.5M & 5 & both runs with weight decay $\le1$ at $3\times10^{-4}$, at epochs 12–14; not the two with weight decay 2, nor the one at $3\times10^{-5}$ \\
+\end{longtable}}
+
+Read naively this is a threshold in the number of distinct training words: in the \code{torn-\allowbreak{}big}
+series the runs with 1.2M words or fewer never left the plateau even after about 780M presentations, while all
+runs with 2.0M or more did after about 70M.
+
+\lead{But the learning-rate schedule is a confound} (your question). Every run used \code{ReduceLROnPlateau}
+with factor 0.1, patience 10 and threshold 0.01, stepped once per epoch on the training loss
+(\code{training.\allowbreak{}py} at commit \code{c78380f}). On the plateau the training loss improves by less
+than 1\% per 11 epochs, so the learning rate is cut about every 11 epochs, and because patience counts epochs, a
+small file reaches its cuts after proportionally fewer optimiser steps. The learning rate is not logged, so I
+replayed the scheduler on each run’s logged training loss (\code{lr\_\allowbreak{}replay.\allowbreak{}py}). The
+runs used 2 GPUs with \code{accelerate}, whose prepared scheduler probably steps once per GPU; with 2 scheduler
+steps per epoch (1,024 words per GPU per step):
+
+\begin{itemize}
+\item \lead{The cuts come before the escapes.} The 2M-word runs left the plateau after 33k–37k optimiser steps,
+  after their first cut (to $3\times10^{-6}$, at epoch 9); the 5.6M run after about 66k steps and two cuts.
+\item \lead{In the 25-letter series the schedule alone could explain the outcome.} The two failed 4.0M runs were
+  cut to $3\times10^{-7}$ by epoch 19–20, about 38k steps in, well before the 66k steps the successful 5.6M run
+  needed.
+\item \lead{In the 20-letter series it does not seem to explain everything.}
+  \code{torn-\allowbreak{}big-\allowbreak{}9} (0.4M words, the same learning rate and weight decay as the
+  successful \code{torn-\allowbreak{}big-\allowbreak{}15}) had about 37k steps at a learning rate of at least
+  $3\times10^{-6}$ and never left the plateau; \code{torn-\allowbreak{}big-\allowbreak{}15} left it after 33k.
+  \code{torn-\allowbreak{}big-\allowbreak{}14} (1.2M) had about 30k such steps and failed, which is close.
+\item \lead{The size of the learning rate matters too.} \code{torn-\allowbreak{}bigger-\allowbreak{}13}, the
+  only general run at $3\times10^{-4}$, left the plateau at epoch 10 and was not cut before epoch 80.
+\item With 1 scheduler step per epoch instead the details move (fewer cuts, more steps at the full rate) but the
+  comparisons above keep their direction.
+\end{itemize}
+
+\begin{findbox}{What it shows}
+Leaving the plateau needs both enough distinct words and enough training at a usable learning rate, and in the
+runs as they were made the two are confounded by a schedule whose patience is measured in epochs. Whether there
+is a genuine data-density threshold for learning the task, separate from the schedule, the history cannot
+settle: there is one fairly clean comparison (\code{torn-\allowbreak{}big-\allowbreak{}9} against
+\code{torn-\allowbreak{}big-\allowbreak{}15}) in its favour. Escaping a plateau is also noisy, and these are
+single runs.
+\end{findbox}
+
+\lead{What would settle it.} A few runs of the \code{torn-\allowbreak{}big} setting at a constant learning rate
+(no scheduler), with 0.4M, 1.2M and 2M words, for a fixed number of optimiser steps. If the small files then
+leave the plateau it was the schedule; if not, it is the density of the data.
+
+\lead{Two smaller things in the history.}
+
+\begin{itemize}
+\item \lead{The naive-window comparison is clean} (\S\,\ref{sec:3.21}):
+  \code{elem-\allowbreak{}big-\allowbreak{}1}, \code{elem-\allowbreak{}wacky-\allowbreak{}1} and
+  \code{elem-\allowbreak{}wacky-\allowbreak{}2} have identical configs (learning rate $3\times10^{-5}$, batch
+  1,024, weight decay 0.01, 1.6M words) and each ran about 96 hours (487–492 epochs) to 100\% training accuracy;
+  \code{elem-\allowbreak{}big-\allowbreak{}2} used 3.2M words (244 epochs in the same time).
+\item \lead{The hybrid tokenisation} (100 runs, July–November 2024, words written as pairs of point tokens)
+  mostly failed: 5 runs reached 99\% validation accuracy, all among the first eight (July 2024, $S_{16}$, batch
+  64, learning rate $3\times10^{-4}$); the 92 later runs, with a wide search over learning rate, weight decay
+  (including a bisection that ended at 0.114), depth (4–16 blocks), width and data size (0.1M–3.6M words), did
+  not.
+\end{itemize}
+
+\begin{limbox}{Limits}
+The learning rate is reconstructed, not logged; the number of scheduler steps per epoch is not recorded; single
+runs throughout.
 \end{limbox}
 
 % ====================================================================================================
@@ -3165,7 +3523,7 @@ $S_{16}$).
   original recipe is fewer than the data contain.
 \end{itemize}
 
-\subsection{What algorithm I think the general model learned \tagupd{}}\label{sec:4.1}
+\subsection{What algorithm I think the general model learned}\label{sec:4.1}
 This is an interpretation that puts together \S\,\ref{sec:3.6}–\ref{sec:3.18}. No single test shows it, and the
 parts I am least sure of are marked.
 
@@ -3227,18 +3585,17 @@ the end of a chain of hop letters, each of which shares a point with the next.
   to 17 hops, and 100\% to 24 hops). Whatever it does is not limited by a reach that grows with depth. I did not
   find its algorithm.
 \item \lead{The fresh-data control (\code{g\_\allowbreak{}m10})} follows chains through 10 points to 22 hops but
-  fails on chains that keep revisiting 3 to 5 points (\S\,\ref{sec:3.17}). \textbf{\tagupd{}} Version 12 guessed
-  that this pointed to a computation organised around points. \S\,\ref{sec:3.20} shows instead that what hurts
-  is going back and forth: cycles through 5 points are easy, ping-pong walks through the same 5 points are hard,
-  for the control and for \code{torn-\allowbreak{}bigger-\allowbreak{}13} alike.
+  fails on chains that keep revisiting 3 to 5 points (\S\,\ref{sec:3.17}). Version 12 guessed that this pointed
+  to a computation organised around points. \S\,\ref{sec:3.20} shows instead that what hurts is going back and
+  forth: cycles through 5 points are easy, ping-pong walks through the same 5 points are hard, for the control
+  and for \code{torn-\allowbreak{}bigger-\allowbreak{}13} alike.
 \end{itemize}
 
-\lead{\tagnew{} Support from the shape of the walk (\S\,\ref{sec:3.20}).} Step 1 above says that letters are
-linked by the points they share. If so, a stretch in which every hop letter is the same pair $\{a,b\}$ should be
-hard, because content then matches every other hop letter equally and the next link has to be found by position
-alone. That is what \S\,\ref{sec:3.20} finds, in both \code{torn-\allowbreak{}bigger-\allowbreak{}13} and the
-control. It also predicts that the cost grows with the length of the longest back-and-forth stretch, which I
-have not tested.
+\lead{Support from the shape of the walk (\S\,\ref{sec:3.20}).} Step 1 above says that letters are linked by the
+points they share. If so, a stretch in which every hop letter is the same pair $\{a,b\}$ should be hard, because
+content then matches every other hop letter equally and the next link has to be found by position alone. That is
+what \S\,\ref{sec:3.20} finds, in both \code{torn-\allowbreak{}bigger-\allowbreak{}13} and the control. It also
+predicts that the cost grows with the length of the longest back-and-forth stretch, which I have not tested.
 
 \subsection{What notion of density fits the results \tagupd{}}\label{sec:4.2}
 The aim is a statement of the form “the training distribution is dense in the test distribution in a sense that
@@ -3265,9 +3622,9 @@ outside the 10-point training support (\S\,\ref{sec:2.3}). But every slot of the
 at most 9 hops through at most 9 points (\S\,\ref{sec:1} item 3). Every such pattern fits in 10 points and
 occurs, under every relabelling, in the training data, and often: 0.8\% of training slots have 10 or more hops
 (Binomial(25, 0.18)), while a slot of a uniform 25-point test word has about 2 hops on average (Binomial(25,
-0.077)). \textbf{\tagupd{}} \S\,\ref{sec:3.19} makes this exact: the ratio of training to test probability of
-every chain class is $R(L,s)$, at least 0.055 over the slots of the real test file, and the uncovered mass is
-$1.2\times10^{-6}$ per test slot.
+0.077)). \S\,\ref{sec:3.19} makes this exact: the ratio of training to test probability of every chain class is
+$R(L,s)$, at least 0.055 over the slots of the real test file, and the uncovered mass is $1.2\times10^{-6}$ per
+test slot.
 
 So the paper’s generalisation from $S_{10}$ to $S_{25}$ needs no extrapolation at all in pattern space:
 $\pi_*\mu_{\text{test}}$ is supported inside $\pi_*T$, and the model is right there (\S\,\ref{sec:3.2}). This is
@@ -3320,7 +3677,7 @@ the two runs on the same distribution disagree.
   (\S\,\ref{sec:3.17}).
 \end{itemize}
 
-\lead{The notion I would propose.} Two parts, and a condition \textbf{\tagupd{}}:
+\lead{The notion I would propose.} Two parts, and a condition:
 
 \begin{enumerate}
 \item \lead{Coverage:} the set $C_N(T)$ of chain patterns, modulo relabelling, that occur at least $N$ times in
@@ -3334,11 +3691,11 @@ the two runs on the same distribution disagree.
   118 hops). If \S\,\ref{sec:4.1} is right, the closure is the set of patterns whose chains fit within the reach
   built by the layers from frequent short segments. That suggests a form: chains that split into at most about
   $2^{\ell}$ frequent segments after $\ell$ layers.
-\item \lead{\tagnew{} Locality has to be covered too.} Coverage of the chains is enough only if the model
-  depends on the chain alone, and the model has to learn that. \S\,\ref{sec:3.21} shows it learns to ignore only
-  the kinds of irrelevant letters it has seen: the naive-window models cover every chain and still fail, because
-  no training word has letters far from a chain. So the training distribution must also cover the configurations
-  of irrelevant letters around the chains. For general transpositions the relabelling symmetry provides this for
+\item \lead{Locality has to be covered too.} Coverage of the chains is enough only if the model depends on the
+  chain alone, and the model has to learn that. \S\,\ref{sec:3.21} shows it learns to ignore only the kinds of
+  irrelevant letters it has seen: the naive-window models cover every chain and still fail, because no training
+  word has letters far from a chain. So the training distribution must also cover the configurations of
+  irrelevant letters around the chains. For general transpositions the relabelling symmetry provides this for
   free (every point off the chain is equivalent to every other); for elementary transpositions it is what
   splitting the window provides.
 \end{enumerate}
@@ -3351,9 +3708,11 @@ closure, is a property of the training procedure as much as of the data, and I c
 \lead{What this leaves open.}
 
 \begin{itemize}
-\item \lead{\tagupd{}} The full pattern matters beyond $(L,s)$ for closure, not for coverage: at the edges the
-  reversal structure of the walk decides accuracy (\S\,\ref{sec:3.20}), while coverage needs only $(L,s)$
-  (\S\,\ref{sec:3.19}).
+\item The full pattern matters beyond $(L,s)$ for closure, not for coverage: at the edges the reversal structure
+  of the walk decides accuracy (\S\,\ref{sec:3.20}), while coverage needs only $(L,s)$ (\S\,\ref{sec:3.19}).
+\item \lead{\tagnew{}} Whether learning the task at all needs a dense enough training set (a number of distinct
+  words) is suggested by the wandb history and confounded there by the learning-rate schedule
+  (\S\,\ref{sec:3.24}); runs at a constant learning rate would separate the two.
 \item The threshold $N$ at which \code{torn-\allowbreak{}bigger-\allowbreak{}13} stops generalising (about
   $10^3$–$10^4$ slots per hop count) comes from one run, and the control shows it is not a property of the data
   alone.
@@ -3450,9 +3809,9 @@ over a long word. It is not a signature of the algebra or of the data. For the d
 (\S\,\ref{sec:4.2}) it is therefore not evidence either way.
 
 % ====================================================================================================
-% 5 Corrections to my earlier messages
+% 5 Corrections to my earlier messages [UPDATED]
 % ====================================================================================================
-\section{Corrections to my earlier messages}\label{sec:5}
+\section{Corrections to my earlier messages \tagupd{}}\label{sec:5}
 \begin{enumerate}
 \item \lead{Ladder hypothesis.} I framed the ladder test around a boundary at 11 distinct points, the first
   beyond the $m=10$ support. That boundary is correct (\S\,\ref{sec:2.3}). There is no collapse at it (summary
@@ -3541,32 +3900,37 @@ over a long word. It is not a signature of the algebra or of the data. For the d
   models “organise the work differently” and that the original “does not keep a step-by-step record”; both rest
   on linear probes, one seed and zero ablation, and are now stated as differences in measurements and as not
   linearly decodable (\S\,\ref{sec:1} items 9 and 22).
+\item \lead{\tagnew{} \code{elem-\allowbreak{}wacky-\allowbreak{}1} did train.} Version 13 (\S\,\ref{sec:3.21})
+  and the note for the co-authors said it never trained, from a test on the two-window data of February 2025. It
+  was trained in January on data from the window code of that time, which chose one shift per word, and on that
+  data it is 100\% right; it is a third naive-window model. The wandb history, which you exported, showed it
+  reaching 100\% validation accuracy.
 \end{enumerate}
 
 % ====================================================================================================
 % 6 Not done, and suggested next steps [UPDATED]
 % ====================================================================================================
 \section{Not done, and suggested next steps \tagupd{}}\label{sec:6}
-\lead{Inference-only tests run so far:} \textbf{\tagupd{}} in version 13, the exact coverage count
-(\S\,\ref{sec:3.19}), walk shape and hop-letter placement (\S\,\ref{sec:3.20}) and the naive-window models
-(\S\,\ref{sec:3.21}); before them, Test 16 and the hops-against-points grid (\S\,\ref{sec:3.17}), and the survey
-of the Spartan model folder (\S\,\ref{sec:3.18}); before them, layer-wise probes (\S\,\ref{sec:3.6}),
-irrelevance interventions (\S\,\ref{sec:3.7}), the elementary-transposition port with baseline, width and
-hop-count tests (\S\,\ref{sec:3.8}, Tests 6a and 6b), probes and activation patching at the word positions
-(\S\,\ref{sec:3.9}, \S\,\ref{sec:3.10}), the same two tests on the elementary model (\S\,\ref{sec:3.11}), and
-attention patterns and single-head ablation of both models (\S\,\ref{sec:3.12}). In this version: the elementary
-model beyond its longest training chase and zeroing groups of heads of the general model (\S\,\ref{sec:3.13}),
-and probes, attention, ablation, greedy ablation and patching on the four retrained models (\S\,\ref{sec:3.16}).
+\lead{Inference-only tests run so far:} in version 13, the exact coverage count (\S\,\ref{sec:3.19}), walk shape
+and hop-letter placement (\S\,\ref{sec:3.20}) and the naive-window models (\S\,\ref{sec:3.21}); before them,
+Test 16 and the hops-against-points grid (\S\,\ref{sec:3.17}), and the survey of the Spartan model folder
+(\S\,\ref{sec:3.18}); before them, layer-wise probes (\S\,\ref{sec:3.6}), irrelevance interventions
+(\S\,\ref{sec:3.7}), the elementary-transposition port with baseline, width and hop-count tests
+(\S\,\ref{sec:3.8}, Tests 6a and 6b), probes and activation patching at the word positions (\S\,\ref{sec:3.9},
+\S\,\ref{sec:3.10}), the same two tests on the elementary model (\S\,\ref{sec:3.11}), and attention patterns and
+single-head ablation of both models (\S\,\ref{sec:3.12}). In this version: the elementary model beyond its
+longest training chase and zeroing groups of heads of the general model (\S\,\ref{sec:3.13}), and probes,
+attention, ablation, greedy ablation and patching on the four retrained models (\S\,\ref{sec:3.16}).
 
-\lead{Inference-only tests not yet run:} \textbf{\tagupd{}} the length of the longest back-and-forth stretch,
-against the reversal share, as the cause of the cost in \S\,\ref{sec:3.20}; a naive window at the paper’s final
-elementary setup (no such checkpoint exists, so this needs training); weight-level equivariance; removing the
-block structure itself from the elementary model’s position embeddings (for example by projecting out the
-directions that separate the blocks), and swaps involving the 16 output positions (\S\,\ref{sec:3.8}). Patching
-the general model for $L=20$ and above (the elementary model is patched up to $L=80$, \S\,\ref{sec:3.11}).
-Patching one head or one component at a time (head groups are now ablated, \S\,\ref{sec:3.13} and
-\S\,\ref{sec:3.16}), which would say what the heads of \S\,\ref{sec:3.12} carry and how 24 hops (the planted
-models) and 80 hops (the elementary model) are composed.
+\lead{Inference-only tests not yet run:} the length of the longest back-and-forth stretch, against the reversal
+share, as the cause of the cost in \S\,\ref{sec:3.20}; a naive window at the paper’s final elementary setup (no
+such checkpoint exists, so this needs training); weight-level equivariance; removing the block structure itself
+from the elementary model’s position embeddings (for example by projecting out the directions that separate the
+blocks), and swaps involving the 16 output positions (\S\,\ref{sec:3.8}). Patching the general model for $L=20$
+and above (the elementary model is patched up to $L=80$, \S\,\ref{sec:3.11}). Patching one head or one component
+at a time (head groups are now ablated, \S\,\ref{sec:3.13} and \S\,\ref{sec:3.16}), which would say what the
+heads of \S\,\ref{sec:3.12} carry and how 24 hops (the planted models) and 80 hops (the elementary model) are
+composed.
 
 \lead{Needs training (not possible in my environment):} done once on Spartan (\S\,\ref{sec:3.14}):
 long-chain-enriched data, an 8-block model and a control, one seed each. Still open: more seeds; a model with
@@ -3575,7 +3939,7 @@ learning rate (its planted-slot accuracy was still rising); a control with the o
 and repeated 8M-word file, to see whether the cliff comes back; the support-size sweep (planted chains on 5
 points); and \code{e\_\allowbreak{}base} run to its full length (the block at 72).
 
-Given \S\,\ref{sec:3.6}–\ref{sec:3.21}, and with the density argument as the aim, I would prioritise
+Given \S\,\ref{sec:3.6}–\ref{sec:3.24}, and with the density argument as the aim, I would prioritise
 \textbf{\tagupd{}}:
 
 \begin{enumerate}
@@ -3592,9 +3956,13 @@ Given \S\,\ref{sec:3.6}–\ref{sec:3.21}, and with the density argument as the a
   boundary of \S\,\ref{sec:3.18} shows how much one seed can differ from another.
 \item \lead{Head-level patching} of \code{g\_\allowbreak{}plant10} and \code{e\_\allowbreak{}base}, to find how
   24 and 80 hops are composed.
-\item \lead{\tagnew{} A theory of closure.} Coverage is now proved (\S\,\ref{sec:3.19}); which chains a training
-  procedure extends to (\S\,\ref{sec:3.17}, \S\,\ref{sec:3.20}) is only measured. A description in terms of
-  frequent short segments composed by the layers would complete the density argument.
+\item \lead{A theory of closure.} Coverage is now proved (\S\,\ref{sec:3.19}); which chains a training procedure
+  extends to (\S\,\ref{sec:3.17}, \S\,\ref{sec:3.20}) is only measured. A description in terms of frequent short
+  segments composed by the layers would complete the density argument.
+\item \lead{\tagnew{} A few runs of the \code{torn-\allowbreak{}big} setting at a constant learning rate} (0.4M,
+  1.2M and 2M words, a fixed number of steps; \S\,\ref{sec:3.24}): it separates a data-density threshold for
+  learning the task from the learning-rate schedule, and it is the cheapest and, for the density argument,
+  perhaps the most useful next step.
 \end{enumerate}
 
 \subsection{The training experiment
@@ -3739,18 +4107,22 @@ in a clone of \code{Midataur/\allowbreak{}permutations} for \code{train\_\allowb
 \code{block\_\allowbreak{}survey.\allowbreak{}py}, \code{make\_\allowbreak{}block\_\allowbreak{}boundary\_\allowbreak{}figure.\allowbreak{}py}, \code{block\_\allowbreak{}attention.\allowbreak{}py}, \code{block\_\allowbreak{}crossing\_\allowbreak{}test.\allowbreak{}py}, \code{elem\_\allowbreak{}model\_\allowbreak{}survey.\allowbreak{}py}, \code{cliff\_\allowbreak{}survey.\allowbreak{}py} & the survey of the Spartan model folder (\S\,\ref{sec:3.18}); write-up in \code{snapshot-\allowbreak{}survey/\allowbreak{}README.\allowbreak{}md} \\
 \code{block\_\allowbreak{}query\_\allowbreak{}read.\allowbreak{}py TEST\_\allowbreak{}CSV N name=\allowbreak{}path:\allowbreak{}blocks:\allowbreak{}b ...} & where the query positions read, relative to the block boundary (\S\,\ref{sec:4.3}) \\
 \code{block\_\allowbreak{}pc\_\allowbreak{}step.\allowbreak{}py name=\allowbreak{}path:\allowbreak{}b ...} & are the leading principal components of the position table a step at the boundary (\S\,\ref{sec:4.3}) \\
-\code{coverage.\allowbreak{}py N\_\allowbreak{}WORDS TEST\_\allowbreak{}CSV} & the exact coverage ratio $R(L,s)$, its simulation check and the real test file (\S\,\ref{sec:3.19}; I used \code{1000000}, about 30 s); \code{coverage\_\allowbreak{}results.\allowbreak{}json} \textbf{\tagnew{}} \\
-\code{elem\_\allowbreak{}coverage\_\allowbreak{}stats.\allowbreak{}py TEST\_\allowbreak{}CSV TRAIN\_\allowbreak{}CSV [N]} & hops and widths of every slot’s chain in the elementary test and training words (\S\,\ref{sec:3.19}); \code{elem\_\allowbreak{}coverage\_\allowbreak{}stats.\allowbreak{}json} \textbf{\tagnew{}} \\
-\code{pattern\_\allowbreak{}families.\allowbreak{}py N name=\allowbreak{}path:\allowbreak{}blocks ...}, \code{make\_\allowbreak{}pattern\_\allowbreak{}figure.\allowbreak{}py} & walk shape and hop-letter placement at fixed hops and points, and natural slots (\S\,\ref{sec:3.20}; I used 200 words per cell); \code{pattern\_\allowbreak{}families.\allowbreak{}json}, \code{fig\_\allowbreak{}pattern\_\allowbreak{}families.\allowbreak{}png} \textbf{\tagnew{}} \\
-\code{window\_\allowbreak{}failure.\allowbreak{}py SNAPDIR DATADIR N [models]} & the naive-window, two-window and partitioned models on their own data, the test file and with far letters inserted (\S\,\ref{sec:3.21}; I used 250 words); \code{window\_\allowbreak{}failure.\allowbreak{}json}, \code{window\_\allowbreak{}failure\_\allowbreak{}log.\allowbreak{}txt} \textbf{\tagnew{}} \\
-\code{window\_\allowbreak{}width\_\allowbreak{}sweep.\allowbreak{}py SNAPDIR DATADIR N}, \code{make\_\allowbreak{}window\_\allowbreak{}figure.\allowbreak{}py} & the same models on words spread over a wider range of tokens (\S\,\ref{sec:3.21}); \code{window\_\allowbreak{}width\_\allowbreak{}sweep.\allowbreak{}json}, \code{fig\_\allowbreak{}window.\allowbreak{}png} \textbf{\tagnew{}} \\
+\code{coverage.\allowbreak{}py N\_\allowbreak{}WORDS TEST\_\allowbreak{}CSV} & the exact coverage ratio $R(L,s)$, its simulation check and the real test file (\S\,\ref{sec:3.19}; I used \code{1000000}, about 30 s); \code{coverage\_\allowbreak{}results.\allowbreak{}json} \\
+\code{elem\_\allowbreak{}coverage\_\allowbreak{}stats.\allowbreak{}py TEST\_\allowbreak{}CSV TRAIN\_\allowbreak{}CSV [N]} & hops and widths of every slot’s chain in the elementary test and training words (\S\,\ref{sec:3.19}); \code{elem\_\allowbreak{}coverage\_\allowbreak{}stats.\allowbreak{}json} \\
+\code{pattern\_\allowbreak{}families.\allowbreak{}py N name=\allowbreak{}path:\allowbreak{}blocks ...}, \code{make\_\allowbreak{}pattern\_\allowbreak{}figure.\allowbreak{}py} & walk shape and hop-letter placement at fixed hops and points, and natural slots (\S\,\ref{sec:3.20}; I used 200 words per cell); \code{pattern\_\allowbreak{}families.\allowbreak{}json}, \code{fig\_\allowbreak{}pattern\_\allowbreak{}families.\allowbreak{}png} \\
+\code{window\_\allowbreak{}failure.\allowbreak{}py SNAPDIR DATADIR N [models]} & the naive-window, two-window and partitioned models on their own data, the test file and with far letters inserted (\S\,\ref{sec:3.21}; I used 250 words); \code{window\_\allowbreak{}failure.\allowbreak{}json}, \code{window\_\allowbreak{}failure\_\allowbreak{}log.\allowbreak{}txt} \\
+\code{window\_\allowbreak{}width\_\allowbreak{}sweep.\allowbreak{}py SNAPDIR DATADIR N}, \code{make\_\allowbreak{}window\_\allowbreak{}figure.\allowbreak{}py} & the same models on words spread over a wider range of tokens (\S\,\ref{sec:3.21}); \code{window\_\allowbreak{}width\_\allowbreak{}sweep.\allowbreak{}json}, \code{fig\_\allowbreak{}window.\allowbreak{}png} \\
+\code{decompile/\allowbreak{}dmodel.\allowbreak{}py}, \code{decompile/\allowbreak{}llna\_\allowbreak{}check.\allowbreak{}py}, \code{decompile/\allowbreak{}llna\_\allowbreak{}fit.\allowbreak{}py} & PyTorch port of both models; the linear-LayerNorm checks (\S\,\ref{sec:3.22}) \textbf{\tagnew{}} \\
+\code{decompile/\allowbreak{}prune\_\allowbreak{}stage1.\allowbreak{}py MODEL LAMBDA LN STEPS OUT [UNIQ REPEAT WARMUP]} (LN: \code{lin} or \code{real}) & stage 1 of the decompilation pipeline (\S\,\ref{sec:3.22}; about 1.2 s per step for the general model on 2 CPUs); results in \code{decompile/\allowbreak{}runs/} \textbf{\tagnew{}} \\
+\code{decompile/\allowbreak{}lines.\allowbreak{}py}, \code{decompile/\allowbreak{}make\_\allowbreak{}decompile\_\allowbreak{}figure.\allowbreak{}py} & D-RASP line counts of a pruned graph (reproduces the paper’s totals); \code{fig\_\allowbreak{}decompile.\allowbreak{}png} \textbf{\tagnew{}} \\
+\code{cross\_\allowbreak{}probe.\allowbreak{}py N}, \code{make\_\allowbreak{}cross\_\allowbreak{}probe\_\allowbreak{}figure.\allowbreak{}py} & probes between the two models on shared words (\S\,\ref{sec:3.23}; I used 2,000 words, about 20 minutes); \code{cross\_\allowbreak{}probe.\allowbreak{}json}, \code{fig\_\allowbreak{}cross\_\allowbreak{}probe.\allowbreak{}png} \textbf{\tagnew{}} \\
+\code{wandb-\allowbreak{}history/\allowbreak{}summarise\_\allowbreak{}runs.\allowbreak{}py}, \code{plateau\_\allowbreak{}escape.\allowbreak{}py}, \code{lr\_\allowbreak{}replay.\allowbreak{}py} & the full wandb export (\S\,\ref{sec:3.24}); \code{runs\_\allowbreak{}summary.\allowbreak{}csv}, \code{plateau\_\allowbreak{}escape.\allowbreak{}json}, \code{lr\_\allowbreak{}replay.\allowbreak{}json} \textbf{\tagnew{}} \\
 \end{longtable}}
 
-{\raggedright \lead{\tagnew{}} The data of \S\,\ref{sec:3.21} are in \code{Midataur/\allowbreak{}permutations}
-at commit \code{4ee9609}
-(\code{scaling-\allowbreak{}generator/\allowbreak{}data/\allowbreak{}elem\_\allowbreak{}big/}) and
-\code{058a27f} (\code{elem\_\allowbreak{}wacky/}, \code{elem\_\allowbreak{}partitioned/}); the checkpoints are
-in the Spartan model folder (\code{elem-\allowbreak{}big-\allowbreak{}1}, \code{-\allowbreak{}2},
+{\raggedright The data of \S\,\ref{sec:3.21} are in \code{Midataur/\allowbreak{}permutations} at commit
+\code{4ee9609} (\code{scaling-\allowbreak{}generator/\allowbreak{}data/\allowbreak{}elem\_\allowbreak{}big/})
+and \code{058a27f} (\code{elem\_\allowbreak{}wacky/}, \code{elem\_\allowbreak{}partitioned/}); the checkpoints
+are in the Spartan model folder (\code{elem-\allowbreak{}big-\allowbreak{}1}, \code{-\allowbreak{}2},
 \code{elem-\allowbreak{}wacky-\allowbreak{}2}, \code{elem-\allowbreak{}partitioned-\allowbreak{}1}).\par}
 
 {\raggedright The elementary data is in \code{Midataur/\allowbreak{}permutations} at commit \code{fdefb8c},

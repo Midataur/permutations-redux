@@ -1,0 +1,42 @@
+{
+ "torn-bigger-13": {
+  "per_ln": {
+   "word_match": 0.0,
+   "slot_match": 0.19803999364376068,
+   "final_train_kl": 3.4164841175079346,
+   "seconds": 21
+  },
+  "per_type": {
+   "word_match": 0.0,
+   "slot_match": 0.3246400058269501,
+   "final_train_kl": 2.5359814167022705,
+   "seconds": 21
+  },
+  "per_pos": {
+   "word_match": 0.42500001192092896,
+   "slot_match": 0.9656000137329102,
+   "final_train_kl": 0.14861713349819183,
+   "seconds": 21
+  }
+ },
+ "elem-partitioned-long-boosted-1": {
+  "per_ln": {
+   "word_match": 0.0,
+   "slot_match": 0.20006249845027924,
+   "final_train_kl": 2.5028040409088135,
+   "seconds": 65
+  },
+  "per_type": {
+   "word_match": 0.0,
+   "slot_match": 0.31424999237060547,
+   "final_train_kl": 1.9178231954574585,
+   "seconds": 60
+  },
+  "per_pos": {
+   "word_match": 0.0,
+   "slot_match": 0.32206249237060547,
+   "final_train_kl": 1.8046989440917969,
+   "seconds": 59
+  }
+ }
+}

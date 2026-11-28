@@ -1,0 +1,7 @@
+warm-up 50 kl 1.6777
+warm-up 100 kl 1.6108
+warm-up 150 kl 1.6352
+warm-up 200 kl 1.6056
+step 50 kl 1.6787 on 1587/1587 undecided 0 82s
+step 100 kl 1.6534 on 1587/1587 undecided 0 166s
+{'model': 'elem-partitioned-long-boosted-1', 'lamb': 0.0, 'ln': 'lin', 'steps': 100, 'seconds': 269, 'match_word': 0.0, 'match_slot': 0.351375013589859, 'kl': 1.6426651060581208, 'task_word_acc': 0.0, 'edges_total': 1587, 'edges_kept': 1587}

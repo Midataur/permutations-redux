@@ -179,87 +179,80 @@
   "train distribution (val file)": {
    "words": 250,
    "scored": 1500,
-   "slot_acc": 0.834,
-   "moved_slot_acc": 0.6012965964343598,
+   "slot_acc": 1.0,
+   "moved_slot_acc": 1.0,
    "by_hops": {
     "0": [
-     0.9966024915062288,
-     883
-    ],
-    "1": [
-     0.4626865671641791,
-     67
-    ],
-    "2": [
-     0.6814159292035398,
-     113
-    ],
-    "3": [
-     0.6111111111111112,
-     108
+     1.0,
+     1154
     ],
     "4": [
-     0.6460176991150443,
-     113
+     1.0,
+     39
     ],
     "5": [
-     0.5061728395061729,
-     81
+     1.0,
+     41
     ],
     "6": [
-     0.532258064516129,
-     62
+     1.0,
+     55
+    ],
+    "7": [
+     1.0,
+     49
     ]
    }
   },
   "test file": {
    "words": 250,
    "scored": 1500,
-   "slot_acc": 0.596,
-   "moved_slot_acc": 0.4793459552495697,
+   "slot_acc": 0.5986666666666667,
+   "moved_slot_acc": 0.5020746887966805,
    "by_hops": {
     "0": [
-     0.9970414201183432,
-     338
+     0.9932203389830508,
+     295
     ],
     "1": [
-     0.4012605042016807,
-     476
+     0.4376278118609407,
+     489
     ],
     "2": [
-     0.608355091383812,
-     383
+     0.6146095717884131,
+     397
     ],
     "3": [
-     0.4084507042253521,
-     213
+     0.4230769230769231,
+     208
     ],
     "4": [
-     0.5606060606060606,
-     66
+     0.5061728395061729,
+     81
     ]
    }
   },
   "far letters": {
    "0": {
     "words": 250,
-    "scored": 1498,
-    "window_moved_slot_acc": 0.5720961281708945,
-    "mean_hops": 4.099465954606141
+    "scored": 1483,
+    "window_moved_slot_acc": 1.0,
+    "mean_hops": 6.683749157113958
    },
    "2": {
-    "words": 240,
-    "scored": 1438,
-    "window_moved_slot_acc": 0.5771905424200278,
-    "mean_hops": 3.713490959666203
+    "words": 250,
+    "scored": 1478,
+    "window_moved_slot_acc": 0.8552097428958051,
+    "mean_hops": 6.031123139377537
    },
    "8": {
-    "words": 240,
-    "scored": 1435,
-    "window_moved_slot_acc": 0.5170731707317073,
-    "mean_hops": 2.7233449477351916
+    "words": 250,
+    "scored": 1442,
+    "window_moved_slot_acc": 0.6484049930651873,
+    "mean_hops": 4.116504854368932
    }
-  }
+  },
+  "note": "evaluated on its own January 2025 data (commit aec49bd), where the window code chose one shift per word: effectively a naive window of 5 tokens"
  },
  "elem-wacky-2": {
   "train distribution (val file)": {

@@ -1,0 +1,6 @@
+elem-wacky-1
+  train distribution (val file)    slots 1.0000  moved slots 1.0000  (1500 scored)  by hops 0:1.000/1154 4:1.000/39 5:1.000/41 6:1.000/55 7:1.000/49
+  test file                        slots 0.5987  moved slots 0.5021  (1500 scored)  by hops 0:0.993/295 1:0.438/489 2:0.615/397 3:0.423/208 4:0.506/81
+  far letters j=0: moved window slots 1.0000 (mean hops 6.68; 1483 scored, 250 words)
+  far letters j=2: moved window slots 0.8552 (mean hops 6.03; 1478 scored, 250 words)
+  far letters j=8: moved window slots 0.6484 (mean hops 4.12; 1442 scored, 250 words)

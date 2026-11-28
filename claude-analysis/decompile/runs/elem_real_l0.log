@@ -1,0 +1,2 @@
+step 50 kl 0.0059 on 1587/1587 undecided 0 99s
+{'model': 'elem-partitioned-long-boosted-1', 'lamb': 0.0, 'ln': 'real', 'steps': 50, 'seconds': 233, 'match_word': 1.0, 'match_slot': 1.0, 'kl': 2.3155091668353166e-05, 'task_word_acc': 0.9980000257492065, 'edges_total': 1587, 'edges_kept': 1587}

@@ -115,7 +115,7 @@ def far_insert(words, G, j):
 
 
 cfg = {"elem-big-1": ("elem_big", 25, 20), "elem-big-2": ("elem_big", 25, 20),
-       "elem-wacky-1": ("elem_wacky", 25, 20), "elem-wacky-2": ("elem_wacky", 25, 20),
+       "elem-wacky-1": ("elem_wacky_jan", 25, 20), "elem-wacky-2": ("elem_wacky", 25, 20),
        "elem-partitioned-1": ("elem_partitioned", 16, 16)}
 res = {}
 for name, (folder, G, T) in cfg.items():

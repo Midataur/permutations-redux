@@ -1,0 +1,2 @@
+torn-bigger-13 per_ln {'word_match': 0.0, 'slot_match': 0.2274399995803833, 'final_train_kl': 2.622114896774292, 'seconds': 468}
+torn-bigger-13 per_pos {'word_match': 0.8569999933242798, 'slot_match': 0.9935200214385986, 'final_train_kl': 0.01603265106678009, 'seconds': 168}

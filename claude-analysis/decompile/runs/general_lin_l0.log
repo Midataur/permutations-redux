@@ -1,0 +1,7 @@
+warm-up 50 kl 0.0503
+warm-up 100 kl 0.0054
+warm-up 150 kl 0.0227
+warm-up 200 kl 0.0052
+step 50 kl 0.0315 on 1587/1587 undecided 0 58s
+step 100 kl 0.0042 on 1587/1587 undecided 0 116s
+{'model': 'torn-bigger-13', 'lamb': 0.0, 'ln': 'lin', 'steps': 100, 'seconds': 145, 'match_word': 0.953000009059906, 'match_slot': 0.9980000257492065, 'kl': 0.01038334743498126, 'task_word_acc': 0.953000009059906, 'edges_total': 1587, 'edges_kept': 1587}

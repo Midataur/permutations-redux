@@ -235,14 +235,17 @@ for step in range(4 * STEPS):
     loss_kl = kl(lg, tgt)
     pen = torch.sigmoid(gate).sum()
     loss = loss_kl + lamb * pen
-    opt_g.zero_grad(); opt_o.zero_grad(); loss.backward(); opt_g.step(); opt_o.step()
+    opt_g.zero_grad(); opt_o.zero_grad(); loss.backward()
+    if lamb != 0:                    # with no penalty the gates stay open: only the LN and ablation constants are fitted
+        opt_g.step()
+    opt_o.step()
     log.append(loss_kl.item())
     if (step + 1) % 50 == 0:
         g = gate.detach()
         undecided = int(((g > -1) & (g < 1)).sum())
         print(f"step {step+1} kl {np.mean(log[-50:]):.4f} on {int((g > 0).sum())}/{E} undecided {undecided} "
               f"{time.time()-t0:.0f}s", flush=True)
-        if undecided > 0:
+        if undecided > 0 and lamb != 0:
             countdown = STEPS + 1
         if g.max() < -2:
             print("all pruned"); break

@@ -1,0 +1,7 @@
+warm-up 50 kl 0.1282
+warm-up 100 kl 0.0399
+warm-up 150 kl 0.0314
+warm-up 200 kl 0.0245
+step 50 kl 0.0371 on 1587/1587 undecided 0 51s
+step 100 kl 0.0225 on 1587/1587 undecided 0 102s
+{'model': 'g_m10', 'lamb': 0.0, 'ln': 'lin', 'steps': 100, 'seconds': 127, 'match_word': 0.8550000190734863, 'match_slot': 0.9937200546264648, 'kl': 0.037961751548573376, 'task_word_acc': 0.8569999933242798, 'edges_total': 1587, 'edges_kept': 1587}

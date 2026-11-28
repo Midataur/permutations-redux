@@ -1,0 +1,37 @@
+warm-up 50 kl 0.1282
+warm-up 100 kl 0.0399
+warm-up 150 kl 0.0314
+warm-up 200 kl 0.0245
+step 50 kl 0.0776 on 1587/1587 undecided 0 54s
+step 100 kl 0.0908 on 982/1587 undecided 210 107s
+step 150 kl 0.0691 on 775/1587 undecided 163 160s
+step 200 kl 0.0906 on 692/1587 undecided 101 210s
+step 250 kl 0.0762 on 632/1587 undecided 87 261s
+step 300 kl 0.0714 on 596/1587 undecided 76 311s
+step 350 kl 0.0588 on 556/1587 undecided 59 361s
+step 400 kl 0.0746 on 537/1587 undecided 65 412s
+step 450 kl 0.0775 on 512/1587 undecided 51 463s
+step 500 kl 0.0665 on 501/1587 undecided 39 513s
+step 550 kl 0.0738 on 486/1587 undecided 34 561s
+step 600 kl 0.0550 on 470/1587 undecided 38 610s
+step 650 kl 0.0695 on 459/1587 undecided 37 660s
+step 700 kl 0.0563 on 448/1587 undecided 33 711s
+step 750 kl 0.0575 on 434/1587 undecided 28 761s
+step 800 kl 0.0514 on 427/1587 undecided 24 810s
+step 850 kl 0.0570 on 423/1587 undecided 21 858s
+step 900 kl 0.0517 on 416/1587 undecided 18 906s
+step 950 kl 0.0577 on 412/1587 undecided 19 956s
+step 1000 kl 0.0419 on 402/1587 undecided 19 1006s
+step 1050 kl 0.0426 on 393/1587 undecided 22 1054s
+step 1100 kl 0.0542 on 386/1587 undecided 15 1103s
+step 1150 kl 0.0518 on 384/1587 undecided 18 1151s
+step 1200 kl 0.0520 on 376/1587 undecided 13 1204s
+step 1250 kl 0.0667 on 372/1587 undecided 13 1255s
+step 1300 kl 0.0576 on 368/1587 undecided 15 1304s
+step 1350 kl 0.0690 on 364/1587 undecided 9 1353s
+step 1400 kl 0.0703 on 361/1587 undecided 10 1403s
+step 1450 kl 0.0599 on 360/1587 undecided 8 1451s
+step 1500 kl 0.0686 on 357/1587 undecided 13 1499s
+step 1550 kl 0.0616 on 354/1587 undecided 11 1547s
+step 1600 kl 0.4086 on 353/1587 undecided 10 1599s
+{'model': 'g_m10', 'lamb': 0.001, 'ln': 'lin', 'steps': 1600, 'seconds': 1623, 'match_word': 0.289000004529953, 'match_slot': 0.9502000212669373, 'kl': 0.2176298677921295, 'task_word_acc': 0.28999999165534973, 'edges_total': 1587, 'edges_kept': 353}

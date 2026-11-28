@@ -8,6 +8,7 @@
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
 \usepackage{caption}
+\usepackage{float}
 \captionsetup{font=small,labelfont=bf}
 \setlist{itemsep=2pt,topsep=4pt}
 \setlength{\parindent}{0pt}
@@ -32,7 +33,7 @@
 \end{center}
 
 \begin{abstract}
-In this note I summarise a three-day study of the models from~\cite{paper}. The main result is an explanation of the generalisation from $S_{10}$ to $S_{25}$: each output entry depends only on a short chain of letters, and every chain that appears in a test word also appears, up to relabelling, in the training distribution. I prove the second statement with explicit constants. The elementary model generalises in the same way, and also extends somewhat past the chains it was trained on. The naive window method fails for a different reason; its chains are all covered, but its training words never contain letters far from a chain, so the model never learns to ignore them. Two windows at independent offsets are already enough to fix this. The block structure in Figure~5(b) turns out to appear in about half the runs with the same configuration, at a different place each time, and chains that cross it are no harder to follow. I suspect it is a symmetry broken by the first layers' local attention rather than anything to do with the group or the data. Finally, probes, activation patching and head ablation point to an algorithm that builds, at every letter, where a pointer leaving that letter ends up, with a reach that grows like pointer jumping.
+In this note I summarise a three-day study of the models from~\cite{paper}. The main result is an explanation of the generalisation from $S_{10}$ to $S_{25}$: each output entry depends only on a short chain of letters, and every chain that appears in a test word also appears, up to relabelling, in the training distribution. I prove the second statement with explicit constants. The elementary model generalises in the same way, and also extends somewhat past the chains it was trained on. The naive window method fails for a different reason; its chains are all covered, but its training words never contain letters far from a chain, so the model never learns to ignore them. Two windows at independent offsets are already enough to fix this. The block structure in the paper's Figure~5(b) turns out to appear in about half the runs with the same configuration, at a different place each time, and chains that cross it are no harder to follow. I suspect it is a symmetry broken by the first layers' local attention rather than anything to do with the group or the data. Finally, probes, activation patching and head ablation point to an algorithm that builds, at every letter, where a pointer leaving that letter ends up, with a reach that grows like pointer jumping.
 \end{abstract}
 
 \clearpage
@@ -40,9 +41,29 @@ In this note I summarise a three-day study of the models from~\cite{paper}. The 
 \clearpage
 
 %=====================================================================
+\section{The original paper in brief}\label{sec:recap}
+
+For readers who want a reminder, this section recaps~\cite{paper}. The paper asks whether a transformer trained on a small symmetric group can compute permutations in a much larger one. A \emph{word} is a sequence of $N$ transpositions, each written as one token; the model reads the word and then outputs the permutation it represents, one entry at a time, after a separator token. The model is a standard transformer with learned token and position embeddings (5 blocks, 6 heads and embedding dimension 402 for the two models studied here), with an attention mask under which the word positions attend to each other and each output position attends to the whole word and to the earlier outputs.
+
+There are two experiments.
+\begin{enumerate}
+  \item \textbf{General transpositions.} Training words are built in $S_{10}$ and relabelled into $S_{25}$ by a random permutation, so each training word only ever touches 10 of the 25 points. Shorter words are padded to a fixed length with letters that cancel (\emph{identity augmentation}). The test words are drawn from the whole of $S_{25}$, and the model is right on nearly all of them.
+  \item \textbf{Adjacent transpositions} ($n=16$, words of $N=n(n-1)/2=120$ letters). Here relabelling is not available, because it would not preserve adjacency. The naive approach, shifting a whole $S_{10}$ word to a random place in $S_{16}$, did not generalise. \emph{Partitioned windows} did: the 10 points are split into several windows of at least 3 points, each placed at a random offset, and each letter is assigned to a random window. With these, a model trained on $S_{10}$ works on $S_{16}$ with similar performance.
+\end{enumerate}
+
+The paper's interpretation section shows self-similarity maps of the learned token and position embeddings. Figure~5(b) of the paper, reproduced here as Figure~\ref{fig:5b}, is the position embedding of the elementary model. Its 120 word positions split into two blocks, which the paper notes ``was not always observed in experiments with other group sizes'', adding that it is unclear what meaning, if any, should be attributed to it. The paper also leaves open whether the models found a general algorithm or learned specific representations. Sections~\ref{sec:blocks} to~\ref{sec:algorithm} of this note return to each of these points.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{fig5b_original.png}
+\caption{Figure~5(b) of~\cite{paper}: cosine similarity between the position embeddings of the elementary model (\texttt{elem-partitioned-long-boosted-1}), as saved by the training code. Rows and columns 0--119 are the positions of the word's letters and 120--135 those of the output permutation. The boundary between the two blocks of word positions is at 72.}
+\label{fig:5b}
+\end{figure}
+
+%=====================================================================
 \section{Summary and scope}
 
-In~\cite{paper}, a transformer trained on words of transpositions in $S_{10}$ (relabelled into $S_{25}$) computes the permutation of words in $S_{25}$ with near-perfect accuracy. With adjacent transpositions and partitioned windows, a model trained on $S_{10}$ works on $S_{16}$. The paper left several things open: why this works, whether the models found a general algorithm, why the naive window method failed, and what the block substructure of Figure~5(b) means. This note covers what I found on each of these, using the paper's two trained models, about 200 other checkpoints from Max's earlier runs, and four new training runs.
+The paper left several things open: why the generalisation works, whether the models found a general algorithm, why the naive window method failed, and what the block substructure of Figure~\ref{fig:5b} means. This note covers what I found on each of these, using the paper's two trained models, about 200 other checkpoints from Max's earlier runs, and four new training runs.
 
 In short, I found the following.
 \begin{enumerate}
@@ -78,7 +99,7 @@ The models I use are \tb{} (the paper's general model: 5 blocks, trained for 161
 %=====================================================================
 \section{The block structure of Figure 5(b)}\label{sec:blocks}
 
-In Figure~5(b) the 120 word positions split into two blocks, positions $0$--$71$ and $72$--$119$, and the output positions form a third block. The first question is whether this comes from the data, the task, or the particular run.
+In Figure~5(b) of the paper (Figure~\ref{fig:5b} here) the 120 word positions split into two blocks, positions $0$--$71$ and $72$--$119$, and the output positions form a third block. The first question is whether this comes from the data, the task, or the particular run.
 
 It does not come from the data. The training words are position-stationary, meaning that every letter is drawn in the same way regardless of where it sits, and a per-position check of token frequencies, chain statistics and window spans finds nothing special at position 72.
 

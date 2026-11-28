@@ -28,7 +28,11 @@ which, lamb, lnmode, STEPS, OUT = sys.argv[1], float(sys.argv[2]), sys.argv[3], 
 UNIQ = int(sys.argv[6]) if len(sys.argv) > 6 else 6
 REP = int(sys.argv[7]) if len(sys.argv) > 7 else 6
 torch.manual_seed(0); rng = np.random.default_rng(0)
-m = Weights(GENERAL if which == "general" else ELEM)
+_X = "/home/claude/permutations-redux/claude-analysis/analysis-20261126-121524/_unzipped/hpc-run-20261126-121524-extras"
+SPECS = {"general": GENERAL, "elem": ELEM,
+         "g_m10": dict(GENERAL, name="g_m10", path=f"{_X}/g_m10/ckpt/step_00200000.safetensors"),
+         "g_plant10": dict(GENERAL, name="g_plant10", path=f"{_X}/g_plant10/ckpt/step_00200000.safetensors")}
+m = Weights(SPECS[which])
 L, H, D, T = m.L, m.H, m.D, m.T
 
 # ------------------------------------------------------------------ graph
